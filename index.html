@@ -25,9 +25,9 @@
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app{max-width:1680px;margin:0 auto;padding:18px}
+.app{max-width:1380px;margin:0 auto;padding:16px}
 .topbar{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}
-.title h1{font-size:25px;margin:0 0 4px}
+.title h1{font-size:24px;margin:0 0 4px}
 .title p{margin:0;color:var(--muted);font-size:13px;max-width:920px}
 .security{font-size:11px;color:var(--muted);text-align:right}
 .stepgrid{display:grid;grid-template-columns:1fr;gap:14px}
@@ -36,6 +36,66 @@ button{cursor:pointer}
 .panelhead h2{font-size:16px;margin:0}
 .panelhead p{margin:3px 0 0;font-size:12px;color:var(--muted)}
 .panelbody{padding:14px}
+.stepintro{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stepintro-left{display:flex;align-items:center;gap:10px}
+.stepintro h2{margin:0;font-size:16px}
+.stepintro p{margin:2px 0 0;color:var(--muted);font-size:11px}
+.heroaction{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.compactcard{border:1px solid var(--line);border-radius:10px;background:#fbfdff;padding:10px}
+.connect-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:14px;align-items:start}
+.connect-form{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.connect-form h3,.setup-card h3{font-size:14px;margin:0 0 4px}
+.connect-form .subtext,.setup-card .subtext{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.45}
+.credential-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setup-card{border:1px solid #bfdbfe;border-radius:12px;padding:14px;background:#f8fbff}
+.setup-list{display:grid;gap:10px;margin:11px 0}
+.setup-step{display:grid;grid-template-columns:24px 1fr;gap:9px;align-items:start}
+.setup-number{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#dbeafe;color:#1d4ed8;font-weight:850;font-size:11px}
+.setup-step b{font-size:12px}
+.setup-step p{margin:2px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
+.redirect-box{display:flex;gap:7px;align-items:center;margin-top:6px}
+.redirect-box code{display:block;flex:1;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 9px;overflow:auto;white-space:nowrap}
+.textlink{color:var(--accent);text-decoration:none;font-weight:750}
+.textlink:hover{text-decoration:underline}
+.token-details{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.token-details summary{cursor:pointer;color:var(--muted);font-size:11px;font-weight:700}
+.token-details[open] summary{margin-bottom:8px}
+.connected-card{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px;padding:12px 14px}
+.connected-left{display:flex;align-items:center;gap:10px}
+.connected-dot{width:10px;height:10px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 4px rgba(22,163,74,.12)}
+.connected-card b{font-size:13px}
+.connected-card .sub{font-size:11px;color:#4b5563;margin-top:2px}
+.step-complete .stepbadge{background:#16a34a}
+.step-complete .stepbadge:after{content:"✓"}
+.step-complete .stepbadge{font-size:0}
+.step-complete .stepbadge:after{font-size:12px}
+@media(max-width:900px){
+  .connect-layout{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .credential-grid{grid-template-columns:1fr}
+}
+
+.advanced-toggle{font-size:11px;color:var(--accent);background:none;border:0;padding:0;cursor:pointer;font-weight:700}
+.primaryrow{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+.primaryrow .field{min-width:220px;flex:1}
+.primaryrow .btn{height:39px}
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.filterbar .field{min-width:150px;flex:1}
+.filterbar .wide{min-width:240px;flex:2}
+.summaryline{font-size:12px;color:var(--muted);margin-top:8px}
+.section-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.kpis.simple{grid-template-columns:repeat(3,minmax(140px,1fr))}
+.kpis.simple .secondary{display:none}
+@media(max-width:700px){
+  .stepintro{align-items:flex-start;display:block}
+  .heroaction{margin-top:8px}
+  .primaryrow{display:block}
+  .primaryrow .field{margin-bottom:8px}
+  .filterbar{display:grid;grid-template-columns:1fr 1fr}
+  .filterbar .wide{grid-column:1/-1}
+}
+
 .stepbadge{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:#172033;color:#fff;font-size:12px;font-weight:800;margin-right:8px}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}
 .field label{display:block;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
@@ -155,6 +215,257 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
   .dashboardfilters{grid-template-columns:repeat(2,1fr)}
   .exclusion-list{grid-template-columns:1fr}
 }
+
+/* Mobile usability pass */
+@media(max-width:900px){
+  .app{padding:10px}
+  .topbar{display:block;margin-bottom:10px}
+  .title h1{font-size:21px;line-height:1.15}
+  .title p{font-size:12px;line-height:1.4}
+  .security{margin-top:6px;text-align:left;font-size:10px}
+
+  .panel{border-radius:11px}
+  .panelhead{padding:11px 12px}
+  .panelbody{padding:11px}
+  .stepintro{align-items:flex-start}
+  .stepintro-left{align-items:flex-start}
+  .stepbadge{flex:0 0 auto}
+  .stepintro h2{font-size:15px}
+  .stepintro p{font-size:11px;line-height:1.35}
+
+  .connect-layout{grid-template-columns:1fr}
+  .credential-grid{grid-template-columns:1fr}
+  .connect-form,.setup-card{padding:12px}
+  .connected-card{align-items:flex-start;flex-direction:column}
+  .connected-card .btn{width:100%}
+
+  .primaryrow{display:grid;grid-template-columns:1fr;gap:8px}
+  .primaryrow .field{min-width:0;width:100%;margin:0}
+  .primaryrow .btn{width:100%;height:42px}
+  .actions{gap:7px}
+  .actions .btn{min-height:40px}
+  .heroaction{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .heroaction .btn{width:100%}
+
+  .filterbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .filterbar .field{min-width:0}
+  .filterbar .wide{grid-column:1/-1;min-width:0}
+  .filterbar .btn{grid-column:1/-1;width:100%}
+  .field input,.field select{height:42px;font-size:16px}
+  .field label{font-size:10px}
+  .togglewrap{height:42px}
+
+  .eventsummary{grid-template-columns:repeat(3,1fr)!important;gap:6px}
+  .mini{padding:8px}
+  .mini .value{font-size:17px}
+  .mini .label{font-size:9px}
+
+  .section-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .section-actions .btn{width:100%;min-height:42px}
+  #loadAvailabilityBtn{grid-column:1/-1;margin-left:0!important}
+
+  .kpis{grid-template-columns:repeat(2,1fr);gap:7px}
+  .kpi{padding:9px}
+  .kpi .value{font-size:19px}
+  .kpi .label{font-size:9px}
+
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:5px;
+    overflow:visible;
+  }
+  .tab{
+    padding:8px 5px;
+    font-size:10px;
+    white-space:normal;
+    line-height:1.15;
+    text-align:center;
+  }
+
+  .exclusions-head{align-items:flex-start;flex-direction:column}
+  .exclusions-head .actions{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .exclusions-head .btn{width:100%}
+  .exclusion-list{grid-template-columns:1fr}
+  .exclusion-item{min-height:42px}
+  .exclusion-item input{width:18px;height:18px}
+
+  .redirect-box{display:grid;grid-template-columns:1fr auto}
+  .redirect-box code{font-size:10px}
+  .setup-step{grid-template-columns:24px minmax(0,1fr)}
+
+  .tablewrap{
+    max-height:none!important;
+    overflow-x:auto;
+    overflow-y:visible;
+    -webkit-overflow-scrolling:touch;
+    border-radius:9px;
+  }
+  table{min-width:860px}
+  th,td{padding:8px 8px;font-size:11px}
+  th{font-size:9px}
+
+  #eventTable{min-width:920px}
+  #analysisTable table{min-width:960px}
+
+  .bar{min-width:110px}
+  .breakdown{min-width:190px}
+}
+
+@media(max-width:600px){
+  .app{padding:7px}
+  .panelhead{padding:10px}
+  .panelbody{padding:9px}
+  .title h1{font-size:19px}
+
+  .filterbar{grid-template-columns:1fr}
+  .filterbar .wide,.filterbar .btn{grid-column:auto}
+
+  .eventsummary{grid-template-columns:1fr 1fr 1fr!important}
+  .mini{padding:7px 6px}
+  .mini .value{font-size:15px}
+  .mini .label{font-size:8px;line-height:1.15}
+
+  .section-actions{grid-template-columns:1fr 1fr}
+  #exportEventsBtn{display:none}
+  #loadAvailabilityBtn{grid-column:1/-1}
+
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .sub{display:none}
+
+  .tabs{grid-template-columns:repeat(2,1fr)}
+  .tab{min-height:40px;font-size:11px}
+
+  .heroaction{grid-template-columns:1fr 1fr}
+  .setup-card .btn.primary{width:100%}
+
+  .tablewrap{
+    border-left:0;
+    border-right:0;
+    border-radius:0;
+    margin-left:-9px;
+    margin-right:-9px;
+    padding-left:9px;
+  }
+
+  .connected-left{align-items:flex-start}
+  .connected-card{padding:10px}
+
+  .warningbox{font-size:10px;line-height:1.35}
+  .footer{font-size:10px;line-height:1.35}
+}
+
+@media(max-width:420px){
+  .eventsummary{grid-template-columns:1fr 1fr!important}
+  .eventsummary .mini:last-child{grid-column:1/-1}
+  .section-actions{grid-template-columns:1fr}
+  #loadAvailabilityBtn{grid-column:auto}
+  .heroaction{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .tabs{grid-template-columns:1fr 1fr}
+  .redirect-box{grid-template-columns:1fr}
+  .redirect-box .btn{width:100%}
+}
+
+/* UX review pass */
+.mobile-cards{display:none}
+.empty-state{padding:28px 16px;text-align:center;color:var(--muted)}
+.empty-state b{display:block;color:var(--text);font-size:13px;margin-bottom:3px}
+.filter-button-active{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
+.event-card,.player-card,.record-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  padding:11px;
+  box-shadow:0 2px 8px rgba(15,23,42,.04);
+}
+.event-card.selected{border-color:#60a5fa;background:#f8fbff;box-shadow:0 0 0 2px rgba(37,99,235,.08)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.card-title{font-size:13px;font-weight:800;line-height:1.3}
+.card-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}
+.card-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.card-stat{border-top:1px solid #edf1f5;padding-top:7px}
+.card-stat .label{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:800}
+.card-stat .value{font-size:13px;font-weight:800;margin-top:2px}
+.card-check{width:22px;height:22px;flex:0 0 auto;margin-top:1px}
+.card-breakdown{font-size:10px;color:var(--muted);line-height:1.5;margin-top:8px}
+.mobile-actions-note{font-size:10px;color:var(--muted);text-align:center}
+.result-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.result-count{font-size:11px;color:var(--muted)}
+.result-count b{color:var(--text)}
+.rating-help{font-size:10px;color:var(--muted)}
+#eventStatus[aria-live],#authStatus[aria-live]{min-height:18px}
+.btn.primary:disabled{background:#94a3b8;border-color:#94a3b8}
+
+@media(max-width:700px){
+  .desktop-only{display:none!important}
+  .mobile-cards{display:grid;gap:8px}
+  .mobile-table-hint{display:none!important}
+
+  #eventCards,#analysisCards{margin-top:9px}
+  .event-card{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+  .event-card:active{transform:scale(.995)}
+
+  .section-actions{
+    position:sticky;
+    bottom:0;
+    z-index:8;
+    background:rgba(244,246,248,.96);
+    backdrop-filter:blur(10px);
+    margin:10px -9px -9px;
+    padding:8px 9px calc(8px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);
+    box-shadow:0 -8px 20px rgba(15,23,42,.06);
+  }
+  #selectVisibleBtn,#clearSelectionBtn{min-height:40px}
+  #loadAvailabilityBtn{font-weight:800}
+
+  .eventsummary{position:sticky;top:0;z-index:5;background:var(--panel);padding:3px 0}
+  .card-grid{grid-template-columns:1fr 1fr}
+  .player-card .bar{width:100%;min-width:0;height:10px;margin-top:8px}
+  .player-card .availability{font-size:22px}
+  .player-card .rating{min-width:76px}
+  .card-breakdown .reason{white-space:normal}
+
+  .result-toolbar{align-items:flex-start}
+}
+
+/* Compact authenticated state */
+#connectPanel.step-complete .panelhead{display:none}
+#connectPanel.step-complete .panelbody{padding:8px 12px}
+#connectPanel.step-complete{box-shadow:0 4px 14px rgba(15,23,42,.06)}
+.connected-card{
+  min-height:42px;
+  padding:7px 10px;
+  border-radius:9px;
+}
+.connected-card .connected-left{gap:8px}
+.connected-card b{font-size:12px}
+.connected-card .sub{display:none}
+.connected-card .btn{min-height:32px;padding:5px 9px}
+
+@media(max-width:700px){
+  #connectPanel.step-complete .panelbody{padding:7px 9px}
+  .connected-card{
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .connected-card .btn{
+    width:auto;
+    flex:0 0 auto;
+  }
+  .connected-left{min-width:0}
+  .connected-card b{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    max-width:65vw;
+  }
+}
 </style>
 </head>
 <body>
@@ -162,139 +473,214 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 <div class="app">
   <div class="topbar">
     <div class="title">
-      <h1>TeamSnap Availability Analyzer</h1>
-      <p>Connect to TeamSnap, choose exactly which events you want, then load availability only for those events. No Python, server, database, or Excel file is required.</p>
+      <h1>TeamSnap Availability</h1>
+      <p>Connect, choose the events you care about, and review player availability.</p>
     </div>
     <div class="security">
-      Single HTML file · credentials kept in browser memory only<br>
-      No localStorage · no cookies · no third-party JavaScript
+      Single-file app · credentials stay in browser memory
     </div>
   </div>
 
   <div class="stepgrid">
-    <section class="panel">
-      <div class="panelhead">
-        <div>
-          <h2><span class="stepbadge">1</span>TeamSnap connection</h2>
-          <p>Use your TeamSnap OAuth application credentials, or paste an existing access token.</p>
+    <section id="connectPanel" class="panel">
+      <div class="panelhead stepintro">
+        <div class="stepintro-left">
+          <span class="stepbadge">1</span>
+          <div>
+            <h2>Connect TeamSnap</h2>
+            <p>Use a TeamSnap OAuth app to securely access your own teams.</p>
+          </div>
         </div>
-        <button id="toggleAuthDetails" class="btn small" type="button">Hide setup</button>
       </div>
-      <div id="authBody" class="panelbody">
-        <div class="grid">
-          <div class="field span2">
-            <label>Client ID / UID</label>
-            <input id="clientId" autocomplete="off" placeholder="TeamSnap OAuth application UID">
+
+      <div class="panelbody">
+        <div id="connectSetup" class="connect-layout">
+          <div class="connect-form">
+            <h3>Connect your account</h3>
+            <p class="subtext">Enter the Client ID and Client Secret from your TeamSnap OAuth application.</p>
+
+            <div class="credential-grid">
+              <div class="field">
+                <label>Client ID / UID</label>
+                <input id="clientId" autocomplete="off" placeholder="Paste Client ID / UID">
+              </div>
+              <div class="field">
+                <label>Client Secret</label>
+                <input id="clientSecret" type="password" autocomplete="off" placeholder="Paste Client Secret">
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="connectOAuthBtn" class="btn primary" type="button">Connect TeamSnap</button>
+            </div>
+
+            <details class="token-details">
+              <summary>Use an existing access token instead</summary>
+              <div class="primaryrow">
+                <div class="field">
+                  <label>Access Token</label>
+                  <input id="accessToken" type="password" autocomplete="off" placeholder="Paste access token">
+                </div>
+                <button id="useTokenBtn" class="btn" type="button">Use Token</button>
+              </div>
+            </details>
+
+            <input id="redirectUri" value="https://kakrami.github.io/myts" readonly hidden>
+            <div id="authStatus" class="status" aria-live="polite">Not connected.</div>
           </div>
-          <div class="field span2">
-            <label>Client Secret</label>
-            <input id="clientSecret" type="password" autocomplete="off" placeholder="Not saved anywhere">
+
+          <aside class="setup-card">
+            <h3>First time? Get your Client ID and Secret</h3>
+            <p class="subtext">This takes a minute and only needs to be done once for your TeamSnap OAuth application.</p>
+
+            <a class="btn primary" href="https://auth.teamsnap.com/oauth/applications" target="_blank" rel="noopener noreferrer">
+              Open TeamSnap OAuth Applications
+            </a>
+
+            <div class="setup-list">
+              <div class="setup-step">
+                <div class="setup-number">1</div>
+                <div>
+                  <b>Sign in and create an application</b>
+                  <p>If prompted, sign in with your normal TeamSnap account, then create a new OAuth application.</p>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <div class="setup-number">2</div>
+                <div>
+                  <b>Use this redirect URI</b>
+                  <p>Enter this exact HTTPS address in the application's Redirect URI field.</p>
+                  <div class="redirect-box">
+                    <code id="redirectDisplay">https://kakrami.github.io/myts</code>
+                    <button id="copyRedirectBtn" class="btn small" type="button">Copy</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setup-step">
+                <div class="setup-number">3</div>
+                <div>
+                  <b>Copy the UID / Client ID and Secret</b>
+                  <p>After saving the application, paste those two values into the fields on the left. Do not use your TeamSnap email address as the Client ID.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="note">
+              Your Client Secret is only held in this page's memory long enough to finish authorization. It is not saved in localStorage, cookies, or GitHub.
+            </div>
+          </aside>
+        </div>
+
+        <div id="connectedState" class="connected-card hidden">
+          <div class="connected-left">
+            <div class="connected-dot"></div>
+            <div>
+              <b id="connectedUser">TeamSnap connected</b>
+            </div>
           </div>
-          <div class="field span2">
-            <label>Redirect URI</label>
-            <input id="redirectUri" value="https://kakrami.github.io/myts" readonly>
-          </div>
+          <button id="disconnectBtn" class="btn small danger" type="button" disabled>Disconnect</button>
         </div>
-        <div class="actions">
-          <button id="connectOAuthBtn" class="btn primary" type="button">Connect TeamSnap</button>
-          <span style="font-size:11px;color:var(--muted)">or</span>
-          <input id="accessToken" type="password" autocomplete="off" placeholder="Existing access token" style="height:38px;min-width:260px;border:1px solid var(--line);border-radius:8px;padding:0 10px">
-          <button id="useTokenBtn" class="btn" type="button">Use Token</button>
-          <button id="disconnectBtn" class="btn danger" type="button" disabled>Disconnect</button>
-        </div>
-        <div class="note" style="margin-top:10px">
-          Register <code>https://kakrami.github.io/myts</code> as the TeamSnap OAuth application's redirect URI. Authorization opens in a popup; the code is captured automatically when TeamSnap redirects back here.
-        </div>
-        <div id="authStatus" class="status">Not connected.</div>
       </div>
     </section>
 
     <section id="eventPanel" class="panel hidden">
-      <div class="panelhead">
-        <div>
-          <h2><span class="stepbadge">2</span>Choose events</h2>
-          <p>Only the lightweight event list is loaded here. Availability is fetched later only for selected events.</p>
+      <div class="panelhead stepintro">
+        <div class="stepintro-left">
+          <span class="stepbadge">2</span>
+          <div>
+            <h2>Choose Events</h2>
+            <p>Choose a team, confirm the date range, then select the events you want included.</p>
+          </div>
         </div>
-        <div class="actions" style="margin-top:0">
-          <button id="refreshTeamsBtn" class="btn small" type="button">Refresh teams</button>
-        </div>
+        <button id="refreshTeamsBtn" class="btn small" type="button">Refresh</button>
       </div>
       <div class="panelbody">
-        <div class="grid">
-          <div class="field span2">
+        <div class="primaryrow">
+          <div class="field">
             <label>Team</label>
             <select id="teamSelect"><option value="">Select a team...</option></select>
           </div>
           <div class="field">
-            <label>Date From</label>
-            <input id="dateFrom" type="date">
-          </div>
-          <div class="field">
-            <label>Date To</label>
-            <input id="dateTo" type="date">
-          </div>
-          <div class="field">
-            <label>Month</label>
-            <select id="eventMonth"><option value="">All months</option></select>
-          </div>
-          <div class="field">
-            <label>Event Type</label>
-            <select id="eventType">
-              <option value="">All types</option>
-              <option value="Practice">Practice</option>
-              <option value="Game">Game</option>
-              <option value="Other">Other</option>
+            <label>Quick Date Range</label>
+            <select id="quickView">
+              <option value="">All Events</option>
+              <option value="thisMonth">This Month</option>
+              <option value="lastMonth">Last Month</option>
+              <option value="last30">Last 30 Days</option>
+              <option value="next30">Next 30 Days</option>
+              <option value="season">Current Season</option>
+              <option value="lastSeason">Last Season</option>
             </select>
           </div>
-          <div class="field">
-            <label>Season Phase</label>
-            <select id="eventPhase">
-              <option value="">All phases</option>
-              <option value="Regular Season">Regular Season</option>
-              <option value="Postseason">Postseason</option>
-              <option value="Outside Season">Outside Season</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Opponent</label>
-            <select id="opponentFilter"><option value="">All opponents</option></select>
-          </div>
-          <div class="field">
-            <label>Location</label>
-            <select id="locationFilter"><option value="">All locations</option></select>
-          </div>
-          <div class="field span2">
-            <label>Event Search</label>
-            <input id="eventSearch" placeholder="Practice, tournament, opponent...">
-          </div>
+          <button id="toggleEventFilters" class="btn" type="button" aria-expanded="false" aria-controls="advancedEventFilters">More Filters</button>
         </div>
 
-        <div class="quickbar">
-          <span class="label">Quick filters</span>
-          <button class="btn small preset" data-preset="thisMonth" type="button">This Month</button>
-          <button class="btn small preset" data-preset="lastMonth" type="button">Last Month</button>
-          <button class="btn small preset" data-preset="last30" type="button">Last 30 Days</button>
-          <button class="btn small preset" data-preset="next30" type="button">Next 30 Days</button>
-          <button class="btn small preset" data-preset="season" type="button">Current Season</button>
-          <button class="btn small preset" data-preset="clear" type="button">Clear Filters</button>
+        <div id="advancedEventFilters" class="compactcard hidden" style="margin-top:10px">
+          <div class="filterbar">
+            <div class="field">
+              <label>Date From</label>
+              <input id="dateFrom" type="date">
+            </div>
+            <div class="field">
+              <label>Date To</label>
+              <input id="dateTo" type="date">
+            </div>
+            <div class="field">
+              <label>Month</label>
+              <select id="eventMonth"><option value="">All months</option></select>
+            </div>
+            <div class="field">
+              <label>Type</label>
+              <select id="eventType">
+                <option value="">All types</option>
+                <option value="Practice">Practice</option>
+                <option value="Game">Game</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Phase</label>
+              <select id="eventPhase">
+                <option value="">All phases</option>
+                <option value="Regular Season">Regular Season</option>
+                <option value="Postseason">Postseason</option>
+                <option value="Outside Season">Outside Season</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Opponent</label>
+              <select id="opponentFilter"><option value="">All opponents</option></select>
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <select id="locationFilter"><option value="">All locations</option></select>
+            </div>
+            <div class="field wide">
+              <label>Search</label>
+              <input id="eventSearch" placeholder="Practice, tournament, opponent...">
+            </div>
+            <button id="clearEventFiltersBtn" class="btn small" type="button">Clear Filters</button>
+          </div>
+        </div>
+<div class="eventsummary" style="grid-template-columns:repeat(3,minmax(130px,1fr))">
+          <div class="mini"><div class="label">Shown</div><div id="visibleEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Selected</div><div id="selectedEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Season</div><div id="teamSeason" class="value" style="font-size:17px">—</div></div>
         </div>
 
-        <div class="eventsummary">
-          <div class="mini"><div class="label">Loaded Events</div><div id="loadedEvents" class="value">0</div></div>
-          <div class="mini"><div class="label">Visible Events</div><div id="visibleEvents" class="value">0</div></div>
-          <div class="mini"><div class="label">Selected Events</div><div id="selectedEvents" class="value">0</div></div>
-          <div class="mini"><div class="label">Team Season</div><div id="teamSeason" class="value" style="font-size:17px">—</div></div>
-        </div>
-
-        <div class="actions">
-          <button id="selectVisibleBtn" class="btn" type="button">Select Visible</button>
+        <div id="loadedEvents" class="hidden">0</div>
+        <div class="section-actions">
+          <button id="selectVisibleBtn" class="btn" type="button">Select All Shown</button>
           <button id="clearSelectionBtn" class="btn" type="button">Clear Selection</button>
-          <button id="exportEventsBtn" class="btn" type="button" disabled>Download Selected Events CSV</button>
-          <button id="loadAvailabilityBtn" class="btn primary" type="button" disabled>Load Availability for Selected</button>
+          <button id="exportEventsBtn" class="btn" type="button" disabled>Export Selected</button>
+          <button id="loadAvailabilityBtn" class="btn primary" type="button" disabled style="margin-left:auto">Analyze Selected</button>
         </div>
-        <div id="eventStatus" class="status">Choose a team to load its events.</div>
+        <div id="eventStatus" class="status" aria-live="polite">Choose a team to load its events.</div>
 
-        <div class="tablewrap" style="margin-top:10px;max-height:52vh">
+        <div id="eventCards" class="mobile-cards"></div>
+        <div class="tablewrap mobile-scroll desktop-only" style="margin-top:10px;max-height:52vh">
           <table id="eventTable">
             <thead>
               <tr>
@@ -318,22 +704,25 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     </section>
 
     <section id="dashboardPanel" class="panel hidden">
-      <div class="panelhead">
-        <div>
-          <h2><span class="stepbadge">3</span>Availability analysis</h2>
-          <p id="analysisSubtitle">Selected TeamSnap events.</p>
+      <div class="panelhead stepintro">
+        <div class="stepintro-left">
+          <span class="stepbadge">3</span>
+          <div>
+            <h2>Player Availability</h2>
+            <p id="analysisSubtitle">Availability across the selected TeamSnap events.</p>
+          </div>
         </div>
-        <div class="actions" style="margin-top:0">
-          <button id="exportAvailabilityBtn" class="btn small" type="button">Download Availability CSV</button>
+        <div class="heroaction">
           <button id="backEventsBtn" class="btn small" type="button">Change Events</button>
+          <button id="exportAvailabilityBtn" class="btn small" type="button">Export CSV</button>
         </div>
       </div>
       <div class="panelbody">
         <div id="availabilityWarning" class="warningbox hidden"></div>
 
-        <div class="dashboardfilters">
+        <div class="primaryrow" style="margin-bottom:10px">
           <div class="field">
-            <label>Analysis Type</label>
+            <label>Event Type</label>
             <select id="analysisType">
               <option value="">All Selected</option>
               <option value="Practice">Practice</option>
@@ -342,44 +731,49 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
             </select>
           </div>
           <div class="field">
-            <label>Month</label>
-            <select id="analysisMonth"><option value="">All months</option></select>
-          </div>
-          <div class="field">
-            <label>Phase</label>
-            <select id="analysisPhase"><option value="">All phases</option></select>
-          </div>
-          <div class="field">
-            <label>Status</label>
-            <select id="analysisStatus">
-              <option value="">All</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No / Counted No</option>
-              <option value="Maybe">Maybe</option>
-              <option value="No Response">No Response</option>
-            </select>
-          </div>
-          <div class="field">
             <label>Player Search</label>
             <input id="analysisPlayer" placeholder="Player...">
           </div>
-          <div class="field">
-            <label>Roster</label>
-            <div class="togglewrap">
-              <label class="switch"><input id="excludeNonPlayers" type="checkbox" checked><span class="slider"></span></label>
-              <span style="font-size:11px;font-weight:700">Exclude non-players</span>
+          <button id="toggleAnalysisFilters" class="btn" type="button" aria-expanded="false" aria-controls="advancedAnalysisFilters">More Filters</button>
+        </div>
+
+        <div id="advancedAnalysisFilters" class="compactcard hidden" style="margin-bottom:10px">
+          <div class="filterbar">
+            <div class="field">
+              <label>Month</label>
+              <select id="analysisMonth"><option value="">All months</option></select>
+            </div>
+            <div class="field">
+              <label>Phase</label>
+              <select id="analysisPhase"><option value="">All phases</option></select>
+            </div>
+            <div class="field">
+              <label>Status</label>
+              <select id="analysisStatus">
+                <option value="">All</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No / Counted No</option>
+                <option value="Maybe">Maybe</option>
+                <option value="No Response">No Response</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Roster</label>
+              <div class="togglewrap">
+                <label class="switch"><input id="excludeNonPlayers" type="checkbox" checked><span class="slider"></span></label>
+                <span style="font-size:11px;font-weight:700">Exclude non-players</span>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="exclusions">
+<div class="exclusions" style="margin-bottom:10px">
           <div class="exclusions-head">
             <div>
-              <b style="font-size:12px">Player exclusions</b>
+              <b style="font-size:12px">Exclude Specific Players</b>
               <span id="exclusionCount" style="font-size:11px;color:var(--muted);margin-left:6px">0 excluded</span>
             </div>
             <div class="actions" style="margin:0">
-              <button id="toggleExclusionsBtn" class="btn small" type="button">Choose Players</button>
+              <button id="toggleExclusionsBtn" class="btn small" type="button" aria-expanded="false" aria-controls="exclusionPicker">Choose Players</button>
               <button id="clearExclusionsBtn" class="btn small" type="button">Clear</button>
             </div>
           </div>
@@ -393,11 +787,11 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 
         <div class="kpis">
           <div class="kpi"><div class="label">Tracked Events</div><div id="kTracked" class="value">0</div><div class="sub">Same denominator per player</div></div>
-          <div class="kpi"><div class="label">Yes %</div><div id="kYes" class="value">0%</div><div class="sub">Only positive status</div></div>
-          <div class="kpi"><div class="label">No %</div><div id="kNo" class="value">0%</div><div class="sub">Explicit No</div></div>
-          <div class="kpi"><div class="label">Maybe %</div><div id="kMaybe" class="value">0%</div><div class="sub">Counts against availability</div></div>
-          <div class="kpi"><div class="label">No Response %</div><div id="kNone" class="value">0%</div><div class="sub">Counts against availability</div></div>
-          <div class="kpi"><div class="label">Counted No %</div><div id="kCountedNo" class="value">0%</div><div class="sub">Everything except Yes</div></div>
+          <div class="kpi"><div class="label">Availability</div><div id="kYes" class="value">0%</div><div class="sub">Yes %</div></div>
+          <div class="kpi"><div class="label">No</div><div id="kNo" class="value">0%</div><div class="sub">Explicit No</div></div>
+          <div class="kpi"><div class="label">Maybe</div><div id="kMaybe" class="value">0%</div><div class="sub">Counts against availability</div></div>
+          <div class="kpi"><div class="label">No Response</div><div id="kNone" class="value">0%</div><div class="sub">Counts against availability</div></div>
+          <div class="kpi"><div class="label">Counted No</div><div id="kCountedNo" class="value">0%</div><div class="sub">Everything except Yes</div></div>
         </div>
 
         <div class="tabs">
@@ -407,7 +801,12 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
           <button class="tab" data-tab="records" type="button">Records</button>
         </div>
 
-        <div class="tablewrap" style="margin-top:9px;max-height:64vh">
+        <div class="result-toolbar">
+          <div id="resultCount" class="result-count"></div>
+          <div class="rating-help">Availability = Yes ÷ tracked events</div>
+        </div>
+        <div id="analysisCards" class="mobile-cards"></div>
+        <div class="tablewrap mobile-scroll desktop-only" style="margin-top:9px;max-height:64vh">
           <div id="analysisTable"></div>
         </div>
       </div>
@@ -415,7 +814,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
   </div>
 
   <div class="footer">
-    OAuth callback: https://kakrami.github.io/myts. Direct TeamSnap requests are made from your browser. If TeamSnap blocks browser cross-origin requests (CORS), a static GitHub Pages site cannot override that restriction; the page will tell you which request was blocked.
+    TeamSnap authorization and API requests are made directly from your browser. If TeamSnap blocks a browser request, the app will show the specific error.
   </div>
 </div>
 
@@ -812,7 +1211,14 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       if(!rows.length) throw new Error('TeamSnap /me returned no user record.');
       state.me = rows[0];
       $('disconnectBtn').disabled = false;
-      status('authStatus',`Connected as ${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim(),'good');
+
+      const displayName = `${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim() || 'TeamSnap user';
+      $('connectedUser').textContent = `TeamSnap connected as ${displayName}`;
+      $('connectSetup').classList.add('hidden');
+      $('connectedState').classList.remove('hidden');
+      $('connectPanel').classList.add('step-complete');
+
+      status('authStatus',`Connected as ${displayName}`,'good');
       $('eventPanel').classList.remove('hidden');
       await loadTeams();
     }catch(err){
@@ -833,7 +1239,18 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       state.teams.sort((a,b) => String(first(a,['name','team_name'],'')).localeCompare(String(first(b,['name','team_name'],''))));
       $('teamSelect').innerHTML = '<option value="">Select a team...</option>' +
         state.teams.map(t => `<option value="${esc(String(t.id))}">${esc(String(first(t,['name','team_name'],`Team ${t.id}`)))}</option>`).join('');
-      status('eventStatus',`Loaded ${state.teams.length} team(s). Choose a team.`,'good');
+
+      if(state.teams.length === 1){
+        $('teamSelect').value = String(state.teams[0].id);
+        status('eventStatus','One team found. Loading its events...','good');
+        await loadTeamData(state.teams[0].id);
+      }else{
+        status('eventStatus',`Loaded ${state.teams.length} team(s). Choose a team.`,'good');
+        requestAnimationFrame(()=>{
+          $('eventPanel').scrollIntoView({behavior:'smooth',block:'start'});
+          $('teamSelect').focus({preventScroll:true});
+        });
+      }
     }finally{
       setBusy(false);
     }
@@ -863,7 +1280,10 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       enrichEvents();
       populateEventFilters();
       clearEventFilters(false);
-      applyEventFilters();
+
+      // Default to the most useful view without creating hidden filter state.
+      $('quickView').value='season';
+      applyPreset('season');
       $('loadedEvents').textContent = fmtInt(state.events.length);
       $('teamSeason').textContent = currentSeasonName() || (state.events[0]?._season || 'Unknown');
       status('eventStatus',`Loaded ${state.events.length} events and ${state.members.length} roster members.`,'good');
@@ -872,6 +1292,54 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     }finally{
       setBusy(false);
     }
+  }
+
+  function eventFilterCount(){
+    return [
+      $('dateFrom').value,
+      $('dateTo').value,
+      $('eventMonth').value,
+      $('eventType').value,
+      $('eventPhase').value,
+      $('opponentFilter').value,
+      $('locationFilter').value,
+      $('eventSearch').value.trim()
+    ].filter(Boolean).length;
+  }
+
+  function updateEventFilterButton(){
+    const count = eventFilterCount();
+    const open = !$('advancedEventFilters').classList.contains('hidden');
+    $('toggleEventFilters').textContent = open
+      ? `Hide Filters${count ? ` (${count})` : ''}`
+      : `More Filters${count ? ` (${count})` : ''}`;
+    $('toggleEventFilters').classList.toggle('filter-button-active', count > 0);
+    $('toggleEventFilters').setAttribute('aria-expanded', String(open));
+  }
+
+  function analysisFilterCount(){
+    return [
+      $('analysisMonth').value,
+      $('analysisPhase').value,
+      $('analysisStatus').value,
+      $('excludeNonPlayers').checked ? '' : 'include-nonplayers'
+    ].filter(Boolean).length;
+  }
+
+  function updateAnalysisFilterButton(){
+    const count = analysisFilterCount();
+    const open = !$('advancedAnalysisFilters').classList.contains('hidden');
+    $('toggleAnalysisFilters').textContent = open
+      ? `Hide Filters${count ? ` (${count})` : ''}`
+      : `More Filters${count ? ` (${count})` : ''}`;
+    $('toggleAnalysisFilters').classList.toggle('filter-button-active', count > 0);
+    $('toggleAnalysisFilters').setAttribute('aria-expanded', String(open));
+  }
+
+  function shortDate(date){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)) return date || '';
+    const [y,m,d] = date.split('-').map(Number);
+    return new Date(y,m-1,d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
   }
 
   function fillSelect(id, values, allText, labeler=v=>v){
@@ -901,13 +1369,19 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     $('opponentFilter').value = '';
     $('locationFilter').value = '';
     $('eventSearch').value = '';
+    if($('quickView')) $('quickView').value = '';
     if(reapply) applyEventFilters();
   }
 
   function applyPreset(name){
-    clearEventFilters(false);
+    // Presets are shortcuts only: they populate the real date fields below.
     const now = new Date();
     let from = null, to = null;
+
+    // Clear only date-related controls first so the visible fields match the preset.
+    $('dateFrom').value = '';
+    $('dateTo').value = '';
+    $('eventMonth').value = '';
 
     if(name === 'thisMonth'){
       from = new Date(now.getFullYear(),now.getMonth(),1);
@@ -923,19 +1397,30 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       from = new Date(now);
       to = new Date(now);
       to.setDate(to.getDate()+30);
-    }else if(name === 'season'){
-      const start = parseSeasonStartYear(currentSeasonName() || fallbackSeason(localDate(now)));
-      if(start !== null){
-        from = new Date(start,6,1);
-        to = new Date(start+1,4,31);
+    }else if(name === 'season' || name === 'lastSeason'){
+      let start = parseSeasonStartYear(currentSeasonName() || fallbackSeason(localDate(now)));
+
+      // If TeamSnap's season name is unavailable/unparseable, derive the current LVSA-style season.
+      if(start === null){
+        start = now.getMonth()+1 >= 7 ? now.getFullYear() : now.getFullYear()-1;
       }
-    }else if(name === 'clear'){
+
+      if(name === 'lastSeason') start -= 1;
+
+      from = new Date(start,6,1);
+      to = new Date(start+1,4,31);
+    }else{
       applyEventFilters();
       return;
     }
 
     if(from) $('dateFrom').value = localDate(from);
     if(to) $('dateTo').value = localDate(to);
+
+    // Open More Filters so the user can see exactly what the shortcut changed.
+    $('advancedEventFilters').classList.remove('hidden');
+    updateEventFilterButton();
+
     applyEventFilters();
   }
 
@@ -961,6 +1446,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     );
 
     $('visibleEvents').textContent = fmtInt(state.visibleEvents.length);
+    updateEventFilterButton();
     renderEvents();
     updateSelectionUI();
   }
@@ -973,13 +1459,17 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 
   function renderEvents(){
     const body = $('eventBody');
+    const cards = $('eventCards');
+
     if(!state.visibleEvents.length){
       body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">No events match the filters.</td></tr>';
+      cards.innerHTML = '<div class="empty-state"><b>No events found</b>Adjust the date range or filters.</div>';
       return;
     }
+
     body.innerHTML = state.visibleEvents.map(e => `
       <tr>
-        <td class="checkcell"><input class="eventcheck" type="checkbox" data-id="${esc(e._id)}" ${state.selectedEventIds.has(e._id)?'checked':''}></td>
+        <td class="checkcell"><input class="eventcheck" type="checkbox" aria-label="Select ${esc(e._name)}" data-id="${esc(e._id)}" ${state.selectedEventIds.has(e._id)?'checked':''}></td>
         <td>${esc(e._date)}</td>
         <td>${esc(e._time)}</td>
         <td class="name">${esc(e._name)}</td>
@@ -991,24 +1481,63 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       </tr>
     `).join('');
 
-    body.querySelectorAll('.eventcheck').forEach(cb => {
+    cards.innerHTML = state.visibleEvents.map(e => {
+      const selected = state.selectedEventIds.has(e._id);
+      const when = [shortDate(e._date), e._time].filter(Boolean).join(' · ');
+      const opponent = e._opponent ? `Opponent: ${e._opponent}` : '';
+      const location = e._location ? `Location: ${e._location}` : '';
+      return `<label class="event-card ${selected?'selected':''}" data-id="${esc(e._id)}">
+        <div class="card-top">
+          <div>
+            <div class="card-title">${esc(e._name)}</div>
+            <div class="card-sub">${esc(when)}</div>
+          </div>
+          <input class="eventcheck card-check" type="checkbox" aria-label="Select ${esc(e._name)}" data-id="${esc(e._id)}" ${selected?'checked':''}>
+        </div>
+        <div class="card-meta">
+          <span class="badge ${e._type.toLowerCase()}">${esc(e._type)}</span>
+          <span class="badge ${e._phase==='Postseason'?'post':'regular'}">${esc(e._phase)}</span>
+          ${e._tracking===false?'<span class="badge none">Availability off</span>':''}
+        </div>
+        ${(opponent||location)?`<div class="card-sub" style="margin-top:8px">${[opponent,location].filter(Boolean).map(esc).join(' · ')}</div>`:''}
+      </label>`;
+    }).join('');
+
+    document.querySelectorAll('.eventcheck').forEach(cb => {
       cb.addEventListener('change',() => {
         if(cb.checked) state.selectedEventIds.add(cb.dataset.id);
         else state.selectedEventIds.delete(cb.dataset.id);
+        renderEvents();
         updateSelectionUI();
       });
     });
   }
 
   function updateSelectionUI(){
-    $('selectedEvents').textContent = fmtInt(state.selectedEventIds.size);
-    const enabled = state.selectedEventIds.size > 0;
+    const selected = state.selectedEventIds.size;
+    $('selectedEvents').textContent = fmtInt(selected);
+
+    const enabled = selected > 0;
     $('loadAvailabilityBtn').disabled = !enabled;
     $('exportEventsBtn').disabled = !enabled;
+    $('loadAvailabilityBtn').textContent = enabled
+      ? `Analyze ${fmtInt(selected)} Selected`
+      : 'Select Events to Analyze';
+
+    const visibleIds = state.visibleEvents.map(e=>e._id);
+    const allVisibleSelected = visibleIds.length > 0 && visibleIds.every(id=>state.selectedEventIds.has(id));
+    $('selectVisibleBtn').textContent = allVisibleSelected ? 'Deselect Shown' : 'Select All Shown';
   }
 
   function selectVisible(){
-    state.visibleEvents.forEach(e => state.selectedEventIds.add(e._id));
+    const visibleIds = state.visibleEvents.map(e=>e._id);
+    const allVisibleSelected = visibleIds.length > 0 && visibleIds.every(id=>state.selectedEventIds.has(id));
+
+    visibleIds.forEach(id => {
+      if(allVisibleSelected) state.selectedEventIds.delete(id);
+      else state.selectedEventIds.add(id);
+    });
+
     renderEvents();
     updateSelectionUI();
   }
@@ -1072,6 +1601,9 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       }
 
       buildAnalysisRows();
+      if(!state.analysisRows.length){
+        throw new Error('Availability was returned for the selected events, but no player availability rows could be matched to the team roster.');
+      }
       populateAnalysisFilters();
       state.playerExclusions.clear();
       renderExclusionPicker();
@@ -1090,7 +1622,10 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       }
 
       status('eventStatus',`Loaded availability for ${tracked.length} tracked event(s).`,'good');
-      $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
+      requestAnimationFrame(()=>{
+        $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
+        $('analysisPlayer').focus({preventScroll:true});
+      });
     }catch(err){
       status('eventStatus',err.message,'bad');
     }finally{
@@ -1301,37 +1836,121 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 
   function renderSummaryTable(rows,mode){
     rows = sortRows(rows);
+    $('resultCount').innerHTML = `<b>${fmtInt(rows.length)}</b> ${rows.length===1?'row':'rows'}`;
+
     if(!rows.length){
-      $('analysisTable').innerHTML = '<div style="padding:35px;text-align:center;color:var(--muted)">No players match the current filters.</div>';
+      $('analysisTable').innerHTML = '<div class="empty-state"><b>No players found</b>Adjust the filters or player exclusions.</div>';
+      $('analysisCards').innerHTML = '<div class="empty-state"><b>No players found</b>Adjust the filters or player exclusions.</div>';
       return;
     }
 
-    let leading = '';
-    if(mode === 'monthly') leading = sortable('Month','month');
-    else if(mode === 'season') leading = sortable('Season','season') + sortable('Phase','phase');
+    let head = '';
+    let body = '';
 
-    const head = `<tr>
-      ${leading}
-      ${sortable('Player','player')}
-      ${sortable('Tracked Events','tracked')}
-      ${sortable('Availability','availabilityPct')}
-      ${sortable('Rating','rating')}
-      <th>Status Mix</th>
-      <th>Breakdown</th>
-    </tr>`;
+    if(mode === 'players'){
+      head = `<tr>
+        ${sortable('Player','player')}
+        ${sortable('Team','team')}
+        ${sortable('Season','season')}
+        ${sortable('Phase','phase')}
+        ${sortable('Tracked Events','tracked')}
+        ${sortable('Availability','availabilityPct')}
+        ${sortable('Rating','rating')}
+        <th>Status Mix</th>
+        <th>Breakdown</th>
+      </tr>`;
 
-    const body = rows.map(r => `<tr>
-      ${mode==='monthly'?`<td>${esc(r.monthLabel)}</td>`:''}
-      ${mode==='season'?`<td>${esc(r.season)}</td><td>${esc(r.phase)}</td>`:''}
-      <td class="name">${esc(r.player)}</td>
-      <td class="num">${fmtInt(r.tracked)}</td>
-      <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
-      <td><span class="rating ${r.ratingClass}">${esc(r.rating)}</span></td>
-      <td>${statusMix(r.c)}</td>
-      <td class="breakdown">${breakdown(r.c)}</td>
-    </tr>`).join('');
+      body = rows.map(r => `<tr>
+        <td class="name">${esc(r.player)}</td>
+        <td>${esc(r.team)}</td>
+        <td>${esc(r.season)}</td>
+        <td>${esc(r.phase)}</td>
+        <td class="num">${fmtInt(r.tracked)}</td>
+        <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
+        <td><span class="rating ${r.ratingClass}">${esc(r.rating)}</span></td>
+        <td>${statusMix(r.c)}</td>
+        <td class="breakdown">${breakdown(r.c)}</td>
+      </tr>`).join('');
+    }else if(mode === 'monthly'){
+      head = `<tr>
+        ${sortable('Month','month')}
+        ${sortable('Player','player')}
+        ${sortable('Team','team')}
+        ${sortable('Tracked Events','tracked')}
+        ${sortable('Availability','availabilityPct')}
+        ${sortable('Rating','rating')}
+        <th>Status Mix</th>
+        <th>Breakdown</th>
+      </tr>`;
+
+      body = rows.map(r => `<tr>
+        <td>${esc(r.monthLabel)}</td>
+        <td class="name">${esc(r.player)}</td>
+        <td>${esc(r.team)}</td>
+        <td class="num">${fmtInt(r.tracked)}</td>
+        <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
+        <td><span class="rating ${r.ratingClass}">${esc(r.rating)}</span></td>
+        <td>${statusMix(r.c)}</td>
+        <td class="breakdown">${breakdown(r.c)}</td>
+      </tr>`).join('');
+    }else{
+      head = `<tr>
+        ${sortable('Season','season')}
+        ${sortable('Phase','phase')}
+        ${sortable('Player','player')}
+        ${sortable('Team','team')}
+        ${sortable('Tracked Events','tracked')}
+        ${sortable('Availability','availabilityPct')}
+        ${sortable('Rating','rating')}
+        <th>Status Mix</th>
+        <th>Breakdown</th>
+      </tr>`;
+
+      body = rows.map(r => `<tr>
+        <td>${esc(r.season)}</td>
+        <td>${esc(r.phase)}</td>
+        <td class="name">${esc(r.player)}</td>
+        <td>${esc(r.team)}</td>
+        <td class="num">${fmtInt(r.tracked)}</td>
+        <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
+        <td><span class="rating ${r.ratingClass}">${esc(r.rating)}</span></td>
+        <td>${statusMix(r.c)}</td>
+        <td class="breakdown">${breakdown(r.c)}</td>
+      </tr>`).join('');
+    }
 
     $('analysisTable').innerHTML = `<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+
+    $('analysisCards').innerHTML = rows.map(r => {
+      const context = mode === 'monthly'
+        ? [r.monthLabel,r.team]
+        : mode === 'season'
+          ? [r.season,r.phase,r.team]
+          : [r.team,r.season,r.phase];
+
+      return `<article class="player-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">${esc(r.player)}</div>
+            <div class="card-sub">${context.filter(Boolean).map(esc).join(' · ')}</div>
+          </div>
+          <span class="rating ${r.ratingClass}">${esc(r.rating)}</span>
+        </div>
+        <div class="card-grid">
+          <div class="card-stat">
+            <div class="label">Availability</div>
+            <div class="value"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></div>
+          </div>
+          <div class="card-stat">
+            <div class="label">Tracked Events</div>
+            <div class="value">${fmtInt(r.tracked)}</div>
+          </div>
+        </div>
+        ${statusMix(r.c)}
+        <div class="card-breakdown">${breakdown(r.c)}</div>
+      </article>`;
+    }).join('');
+
     bindSort();
   }
 
@@ -1341,10 +1960,14 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       rows = rows.filter(r => statusFilter === 'No' ? r.status !== 'Yes' : r.status === statusFilter);
     }
     rows = sortRows(rows.map(r=>({...r})));
+    $('resultCount').innerHTML = `<b>${fmtInt(rows.length)}</b> ${rows.length===1?'record':'records'}`;
+
     if(!rows.length){
-      $('analysisTable').innerHTML = '<div style="padding:35px;text-align:center;color:var(--muted)">No records match.</div>';
+      $('analysisTable').innerHTML = '<div class="empty-state"><b>No records found</b>Adjust the filters.</div>';
+      $('analysisCards').innerHTML = '<div class="empty-state"><b>No records found</b>Adjust the filters.</div>';
       return;
     }
+
     const head = `<tr>
       ${sortable('Date','date')}
       ${sortable('Player','player')}
@@ -1361,7 +1984,25 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       <td><span class="badge ${r.status==='Yes'?'yes':r.status==='Maybe'?'maybe':r.status==='No Response'?'none':'no'}">${esc(r.status)}</span></td>
       <td>${esc(r.opponent)}</td><td>${esc(r.location)}</td><td>${esc(r.note)}</td>
     </tr>`).join('');
+
     $('analysisTable').innerHTML = `<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+
+    $('analysisCards').innerHTML = rows.map(r => `<article class="record-card">
+      <div class="card-top">
+        <div>
+          <div class="card-title">${esc(r.player)}</div>
+          <div class="card-sub">${esc(shortDate(r.date))} · ${esc(r.event)}</div>
+        </div>
+        <span class="badge ${r.status==='Yes'?'yes':r.status==='Maybe'?'maybe':r.status==='No Response'?'none':'no'}">${esc(r.status)}</span>
+      </div>
+      <div class="card-meta">
+        <span class="badge ${r.type.toLowerCase()}">${esc(r.type)}</span>
+        ${r.opponent?`<span class="card-sub">vs ${esc(r.opponent)}</span>`:''}
+      </div>
+      ${r.location?`<div class="card-sub" style="margin-top:7px">${esc(r.location)}</div>`:''}
+      ${r.note?`<div class="card-breakdown">${esc(r.note)}</div>`:''}
+    </article>`).join('');
+
     bindSort();
   }
 
@@ -1386,6 +2027,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
   }
 
   function applyAnalysisFilters(){
+    updateAnalysisFilterButton();
     const scope = analysisScopeRows();
     const visible = includedPlayerRows(scope);
 
@@ -1595,23 +2237,59 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     state.availabilityByEvent.clear();
     state.analysisRows=[];
     $('clientSecret').value='';
+    $('connectedState').classList.add('hidden');
+    $('connectSetup').classList.remove('hidden');
+    $('connectPanel').classList.remove('step-complete');
     $('eventPanel').classList.add('hidden');
     $('dashboardPanel').classList.add('hidden');
     $('disconnectBtn').disabled=true;
     status('authStatus','Disconnected.');
   });
 
-  $('toggleAuthDetails').addEventListener('click',()=>{
-    $('authBody').classList.toggle('hidden');
-    $('toggleAuthDetails').textContent=$('authBody').classList.contains('hidden')?'Show setup':'Hide setup';
+
+  $('copyRedirectBtn').addEventListener('click',async()=>{
+    const value=$('redirectDisplay').textContent.trim();
+    try{
+      await navigator.clipboard.writeText(value);
+      $('copyRedirectBtn').textContent='Copied';
+      setTimeout(()=>$('copyRedirectBtn').textContent='Copy',1200);
+    }catch{
+      const range=document.createRange();
+      range.selectNodeContents($('redirectDisplay'));
+      const selection=window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      $('copyRedirectBtn').textContent='Select & Copy';
+    }
   });
 
   // Event selection
   $('refreshTeamsBtn').addEventListener('click',()=>loadTeams().catch(err=>status('eventStatus',err.message,'bad')));
   $('teamSelect').addEventListener('change',e=>loadTeamData(e.target.value));
-  ['dateFrom','dateTo','eventMonth','eventType','eventPhase','opponentFilter','locationFilter'].forEach(id=>$(id).addEventListener('change',applyEventFilters));
+  ['dateFrom','dateTo','eventMonth'].forEach(id=>$(id).addEventListener('change',()=>{
+    $('quickView').value='';
+    applyEventFilters();
+  }));
+  ['eventType','eventPhase','opponentFilter','locationFilter'].forEach(id=>$(id).addEventListener('change',applyEventFilters));
   $('eventSearch').addEventListener('input',applyEventFilters);
-  document.querySelectorAll('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
+  $('quickView').addEventListener('change',e=>{
+    if(e.target.value) applyPreset(e.target.value);
+    else{
+      $('dateFrom').value='';
+      $('dateTo').value='';
+      $('eventMonth').value='';
+      applyEventFilters();
+    }
+  });
+  $('toggleEventFilters').addEventListener('click',()=>{
+    $('advancedEventFilters').classList.toggle('hidden');
+    updateEventFilterButton();
+  });
+  $('clearEventFiltersBtn').addEventListener('click',()=>{
+    $('quickView').value='';
+    clearEventFilters();
+    updateEventFilterButton();
+  });
   $('selectVisibleBtn').addEventListener('click',selectVisible);
   $('clearSelectionBtn').addEventListener('click',()=>{
     state.selectedEventIds.clear();renderEvents();updateSelectionUI();
@@ -1620,6 +2298,11 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
   $('loadAvailabilityBtn').addEventListener('click',loadAvailability);
 
   // Analysis
+  $('toggleAnalysisFilters').addEventListener('click',()=>{
+    $('advancedAnalysisFilters').classList.toggle('hidden');
+    updateAnalysisFilterButton();
+  });
+
   ['analysisType','analysisMonth','analysisPhase','analysisStatus','excludeNonPlayers'].forEach(id=>$(id).addEventListener('change',()=>{
     state.sortKey='';state.sortDir=1;applyAnalysisFilters();
   }));
@@ -1629,7 +2312,11 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     btn.classList.add('active');state.tab=btn.dataset.tab;state.sortKey='';state.sortDir=1;applyAnalysisFilters();
   }));
   $('toggleExclusionsBtn').addEventListener('click',()=>{
-    $('exclusionPicker').classList.toggle('hidden');renderExclusionPicker();
+    $('exclusionPicker').classList.toggle('hidden');
+    const open = !$('exclusionPicker').classList.contains('hidden');
+    $('toggleExclusionsBtn').setAttribute('aria-expanded',String(open));
+    $('toggleExclusionsBtn').textContent = open ? 'Hide Players' : 'Choose Players';
+    renderExclusionPicker();
   });
   $('exclusionSearch').addEventListener('input',renderExclusionPicker);
   $('clearExclusionsBtn').addEventListener('click',()=>{
