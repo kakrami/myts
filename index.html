@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>TeamSnap Availability Analyzer</title>
+<style>
+:root{
+  --bg:#f4f6f8;
+  --panel:#fff;
+  --text:#172033;
+  --muted:#64748b;
+  --line:#dce3ea;
+  --accent:#2563eb;
+  --accent2:#1d4ed8;
+  --good:#15803d;
+  --bad:#b91c1c;
+  --maybe:#a16207;
+  --purple:#7c3aed;
+  --shadow:0 8px 24px rgba(15,23,42,.08);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1680px;margin:0 auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:14px}
+.title h1{font-size:25px;margin:0 0 4px}
+.title p{margin:0;color:var(--muted);font-size:13px;max-width:920px}
+.security{font-size:11px;color:var(--muted);text-align:right}
+.stepgrid{display:grid;grid-template-columns:1fr;gap:14px}
+.panel{background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.panelhead h2{font-size:16px;margin:0}
+.panelhead p{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.panelbody{padding:14px}
+.stepbadge{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:#172033;color:#fff;font-size:12px;font-weight:800;margin-right:8px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}
+.field label{display:block;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.field input,.field select{width:100%;height:39px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:0 10px}
+.field input[type="checkbox"]{width:auto;height:auto}
+.span2{grid-column:span 2}
+.span4{grid-column:1/-1}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:9px;padding:9px 12px;font-weight:650}
+.btn:hover{background:#f8fafc}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent2)}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.small{padding:6px 9px;font-size:11px}
+.status{font-size:12px;color:var(--muted);margin-top:9px;min-height:18px}
+.status.good{color:var(--good)}
+.status.bad{color:var(--bad)}
+.status.warn{color:var(--maybe)}
+.note{background:#f8fafc;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:12px;color:var(--muted)}
+.hidden{display:none!important}
+.tabs{display:flex;gap:6px;overflow:auto;padding-bottom:1px}
+.tab{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:8px;white-space:nowrap}
+.tab.active{background:#172033;color:#fff;border-color:#172033}
+
+.quickbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.quickbar .label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;margin-right:2px}
+
+.eventsummary{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:8px;margin:12px 0}
+.mini{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fbfdff}
+.mini .label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase}
+.mini .value{font-size:20px;font-weight:850;margin-top:3px}
+
+.tablewrap{overflow:auto;max-height:58vh;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:980px}
+th,td{padding:9px 10px;border-bottom:1px solid #edf1f5;font-size:12px;text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:#f8fafc;z-index:2;font-size:10px;text-transform:uppercase;color:#475569;letter-spacing:.02em}
+th.sortable{cursor:pointer}
+tr:hover td{background:#f8fbff}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.name{font-weight:750}
+.checkcell{width:38px;text-align:center}
+.checkcell input{width:16px;height:16px}
+.badge{display:inline-flex;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:800}
+.badge.practice{background:#dbeafe;color:#1d4ed8}
+.badge.game{background:#dcfce7;color:#166534}
+.badge.other{background:#e2e8f0;color:#475569}
+.badge.post{background:#fef3c7;color:#92400e}
+.badge.regular{background:#e0f2fe;color:#0369a1}
+.badge.yes{background:#dcfce7;color:#166534}
+.badge.no{background:#fee2e2;color:#991b1b}
+.badge.maybe{background:#fef3c7;color:#92400e}
+.badge.none{background:#e2e8f0;color:#475569}
+
+.progress{height:3px;background:transparent;overflow:hidden}
+.progress.active:after{content:"";display:block;height:100%;width:30%;background:var(--accent);animation:progress 1s linear infinite}
+@keyframes progress{from{transform:translateX(-120%)}to{transform:translateX(430%)}}
+
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:9px;margin-bottom:12px}
+.kpi{background:#fbfdff;border:1px solid var(--line);border-radius:11px;padding:11px}
+.kpi .label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.kpi .value{font-size:23px;font-weight:850;margin-top:4px}
+.kpi .sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+.rating{display:inline-flex;align-items:center;justify-content:center;min-width:82px;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:850}
+.rating.excellent{background:#dcfce7;color:#166534}
+.rating.verygood{background:#d1fae5;color:#047857}
+.rating.good{background:#e0f2fe;color:#0369a1}
+.rating.fair{background:#fef3c7;color:#92400e}
+.rating.concern{background:#ffedd5;color:#c2410c}
+.rating.poor{background:#fee2e2;color:#991b1b}
+.availability{font-size:15px;font-weight:850}
+.pctgood{color:var(--good)}
+.pctbad{color:var(--bad)}
+.breakdown{white-space:normal;line-height:1.45;color:var(--muted);min-width:240px}
+.reason{white-space:nowrap}
+.bar{height:9px;display:flex;border-radius:999px;overflow:hidden;background:#e2e8f0;min-width:135px}
+.bar span{height:100%}
+.bar .yes{background:#22c55e}
+.bar .no{background:#ef4444}
+.bar .maybe{background:#f59e0b}
+.bar .none{background:#94a3b8}
+
+.dashboardfilters{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:9px;margin-bottom:12px}
+.togglewrap{display:flex;align-items:center;gap:8px;height:39px}
+.switch{position:relative;width:42px;height:24px;display:inline-block}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#cbd5e1;border-radius:999px}
+.slider:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(15,23,42,.25);transition:.15s}
+.switch input:checked + .slider{background:var(--accent)}
+.switch input:checked + .slider:before{transform:translateX(18px)}
+.exclusions{border:1px solid var(--line);border-radius:10px;background:#fbfdff;padding:10px;margin-bottom:12px}
+.exclusions-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.exclusion-list{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:6px;max-height:220px;overflow:auto;margin-top:9px}
+.exclusion-item{display:flex;align-items:center;gap:7px;border:1px solid #e8edf3;border-radius:8px;padding:7px 8px;background:#fff;font-size:11px}
+.exclusion-item input{margin:0}
+.exclusion-item b{overflow:hidden;text-overflow:ellipsis}
+.warningbox{border:1px solid #fed7aa;background:#fff7ed;color:#9a3412;border-radius:9px;padding:9px 10px;font-size:11px;margin-top:10px}
+.footer{font-size:11px;color:var(--muted);padding:12px 2px}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
+
+@media(max-width:1100px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .span4{grid-column:1/-1}
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .dashboardfilters{grid-template-columns:repeat(3,1fr)}
+  .exclusion-list{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .app{padding:10px}
+  .topbar{display:block}
+  .security{text-align:left;margin-top:8px}
+  .grid{grid-template-columns:1fr}
+  .span2,.span4{grid-column:auto}
+  .eventsummary{grid-template-columns:repeat(2,1fr)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .dashboardfilters{grid-template-columns:repeat(2,1fr)}
+  .exclusion-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="progress" class="progress"></div>
+<div class="app">
+  <div class="topbar">
+    <div class="title">
+      <h1>TeamSnap Availability Analyzer</h1>
+      <p>Connect to TeamSnap, choose exactly which events you want, then load availability only for those events. No Python, server, database, or Excel file is required.</p>
+    </div>
+    <div class="security">
+      Single HTML file · credentials kept in browser memory only<br>
+      No localStorage · no cookies · no third-party JavaScript
+    </div>
+  </div>
+
+  <div class="stepgrid">
+    <section class="panel">
+      <div class="panelhead">
+        <div>
+          <h2><span class="stepbadge">1</span>TeamSnap connection</h2>
+          <p>Use your TeamSnap OAuth application credentials, or paste an existing access token.</p>
+        </div>
+        <button id="toggleAuthDetails" class="btn small" type="button">Hide setup</button>
+      </div>
+      <div id="authBody" class="panelbody">
+        <div class="grid">
+          <div class="field span2">
+            <label>Client ID / UID</label>
+            <input id="clientId" autocomplete="off" placeholder="TeamSnap OAuth application UID">
+          </div>
+          <div class="field span2">
+            <label>Client Secret</label>
+            <input id="clientSecret" type="password" autocomplete="off" placeholder="Not saved anywhere">
+          </div>
+          <div class="field span2">
+            <label>Redirect URI</label>
+            <input id="redirectUri" value="https://kakrami.github.io/myts" readonly>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="connectOAuthBtn" class="btn primary" type="button">Connect TeamSnap</button>
+          <span style="font-size:11px;color:var(--muted)">or</span>
+          <input id="accessToken" type="password" autocomplete="off" placeholder="Existing access token" style="height:38px;min-width:260px;border:1px solid var(--line);border-radius:8px;padding:0 10px">
+          <button id="useTokenBtn" class="btn" type="button">Use Token</button>
+          <button id="disconnectBtn" class="btn danger" type="button" disabled>Disconnect</button>
+        </div>
+        <div class="note" style="margin-top:10px">
+          Register <code>https://kakrami.github.io/myts</code> as the TeamSnap OAuth application's redirect URI. Authorization opens in a popup; the code is captured automatically when TeamSnap redirects back here.
+        </div>
+        <div id="authStatus" class="status">Not connected.</div>
+      </div>
+    </section>
+
+    <section id="eventPanel" class="panel hidden">
+      <div class="panelhead">
+        <div>
+          <h2><span class="stepbadge">2</span>Choose events</h2>
+          <p>Only the lightweight event list is loaded here. Availability is fetched later only for selected events.</p>
+        </div>
+        <div class="actions" style="margin-top:0">
+          <button id="refreshTeamsBtn" class="btn small" type="button">Refresh teams</button>
+        </div>
+      </div>
+      <div class="panelbody">
+        <div class="grid">
+          <div class="field span2">
+            <label>Team</label>
+            <select id="teamSelect"><option value="">Select a team...</option></select>
+          </div>
+          <div class="field">
+            <label>Date From</label>
+            <input id="dateFrom" type="date">
+          </div>
+          <div class="field">
+            <label>Date To</label>
+            <input id="dateTo" type="date">
+          </div>
+          <div class="field">
+            <label>Month</label>
+            <select id="eventMonth"><option value="">All months</option></select>
+          </div>
+          <div class="field">
+            <label>Event Type</label>
+            <select id="eventType">
+              <option value="">All types</option>
+              <option value="Practice">Practice</option>
+              <option value="Game">Game</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Season Phase</label>
+            <select id="eventPhase">
+              <option value="">All phases</option>
+              <option value="Regular Season">Regular Season</option>
+              <option value="Postseason">Postseason</option>
+              <option value="Outside Season">Outside Season</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Opponent</label>
+            <select id="opponentFilter"><option value="">All opponents</option></select>
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <select id="locationFilter"><option value="">All locations</option></select>
+          </div>
+          <div class="field span2">
+            <label>Event Search</label>
+            <input id="eventSearch" placeholder="Practice, tournament, opponent...">
+          </div>
+        </div>
+
+        <div class="quickbar">
+          <span class="label">Quick filters</span>
+          <button class="btn small preset" data-preset="thisMonth" type="button">This Month</button>
+          <button class="btn small preset" data-preset="lastMonth" type="button">Last Month</button>
+          <button class="btn small preset" data-preset="last30" type="button">Last 30 Days</button>
+          <button class="btn small preset" data-preset="next30" type="button">Next 30 Days</button>
+          <button class="btn small preset" data-preset="season" type="button">Current Season</button>
+          <button class="btn small preset" data-preset="clear" type="button">Clear Filters</button>
+        </div>
+
+        <div class="eventsummary">
+          <div class="mini"><div class="label">Loaded Events</div><div id="loadedEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Visible Events</div><div id="visibleEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Selected Events</div><div id="selectedEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Team Season</div><div id="teamSeason" class="value" style="font-size:17px">—</div></div>
+        </div>
+
+        <div class="actions">
+          <button id="selectVisibleBtn" class="btn" type="button">Select Visible</button>
+          <button id="clearSelectionBtn" class="btn" type="button">Clear Selection</button>
+          <button id="exportEventsBtn" class="btn" type="button" disabled>Download Selected Events CSV</button>
+          <button id="loadAvailabilityBtn" class="btn primary" type="button" disabled>Load Availability for Selected</button>
+        </div>
+        <div id="eventStatus" class="status">Choose a team to load its events.</div>
+
+        <div class="tablewrap" style="margin-top:10px;max-height:52vh">
+          <table id="eventTable">
+            <thead>
+              <tr>
+                <th class="checkcell"></th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Phase</th>
+                <th>Opponent</th>
+                <th>Location</th>
+                <th>Availability</th>
+              </tr>
+            </thead>
+            <tbody id="eventBody">
+              <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">No team loaded.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboardPanel" class="panel hidden">
+      <div class="panelhead">
+        <div>
+          <h2><span class="stepbadge">3</span>Availability analysis</h2>
+          <p id="analysisSubtitle">Selected TeamSnap events.</p>
+        </div>
+        <div class="actions" style="margin-top:0">
+          <button id="exportAvailabilityBtn" class="btn small" type="button">Download Availability CSV</button>
+          <button id="backEventsBtn" class="btn small" type="button">Change Events</button>
+        </div>
+      </div>
+      <div class="panelbody">
+        <div id="availabilityWarning" class="warningbox hidden"></div>
+
+        <div class="dashboardfilters">
+          <div class="field">
+            <label>Analysis Type</label>
+            <select id="analysisType">
+              <option value="">All Selected</option>
+              <option value="Practice">Practice</option>
+              <option value="Game">Game</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Month</label>
+            <select id="analysisMonth"><option value="">All months</option></select>
+          </div>
+          <div class="field">
+            <label>Phase</label>
+            <select id="analysisPhase"><option value="">All phases</option></select>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="analysisStatus">
+              <option value="">All</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No / Counted No</option>
+              <option value="Maybe">Maybe</option>
+              <option value="No Response">No Response</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Player Search</label>
+            <input id="analysisPlayer" placeholder="Player...">
+          </div>
+          <div class="field">
+            <label>Roster</label>
+            <div class="togglewrap">
+              <label class="switch"><input id="excludeNonPlayers" type="checkbox" checked><span class="slider"></span></label>
+              <span style="font-size:11px;font-weight:700">Exclude non-players</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="exclusions">
+          <div class="exclusions-head">
+            <div>
+              <b style="font-size:12px">Player exclusions</b>
+              <span id="exclusionCount" style="font-size:11px;color:var(--muted);margin-left:6px">0 excluded</span>
+            </div>
+            <div class="actions" style="margin:0">
+              <button id="toggleExclusionsBtn" class="btn small" type="button">Choose Players</button>
+              <button id="clearExclusionsBtn" class="btn small" type="button">Clear</button>
+            </div>
+          </div>
+          <div id="exclusionPicker" class="hidden">
+            <div class="field" style="margin-top:8px;max-width:360px">
+              <input id="exclusionSearch" placeholder="Search players...">
+            </div>
+            <div id="exclusionList" class="exclusion-list"></div>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="label">Tracked Events</div><div id="kTracked" class="value">0</div><div class="sub">Same denominator per player</div></div>
+          <div class="kpi"><div class="label">Yes %</div><div id="kYes" class="value">0%</div><div class="sub">Only positive status</div></div>
+          <div class="kpi"><div class="label">No %</div><div id="kNo" class="value">0%</div><div class="sub">Explicit No</div></div>
+          <div class="kpi"><div class="label">Maybe %</div><div id="kMaybe" class="value">0%</div><div class="sub">Counts against availability</div></div>
+          <div class="kpi"><div class="label">No Response %</div><div id="kNone" class="value">0%</div><div class="sub">Counts against availability</div></div>
+          <div class="kpi"><div class="label">Counted No %</div><div id="kCountedNo" class="value">0%</div><div class="sub">Everything except Yes</div></div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="players" type="button">Players</button>
+          <button class="tab" data-tab="monthly" type="button">Monthly</button>
+          <button class="tab" data-tab="season" type="button">Season</button>
+          <button class="tab" data-tab="records" type="button">Records</button>
+        </div>
+
+        <div class="tablewrap" style="margin-top:9px;max-height:64vh">
+          <div id="analysisTable"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">
+    OAuth callback: https://kakrami.github.io/myts. Direct TeamSnap requests are made from your browser. If TeamSnap blocks browser cross-origin requests (CORS), a static GitHub Pages site cannot override that restriction; the page will tell you which request was blocked.
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const AUTH_BASE = 'https://auth.teamsnap.com';
+  const API_BASE = 'https://api.teamsnap.com/v3';
+
+  const $ = id => document.getElementById(id);
+  const state = {
+    token: '',
+    clientId: '',
+    clientSecret: '',
+    redirectUri: 'https://kakrami.github.io/myts',
+    oauthState: '',
+    authPopup: null,
+    me: null,
+    teams: [],
+    team: null,
+    events: [],
+    visibleEvents: [],
+    selectedEventIds: new Set(),
+    members: [],
+    locations: [],
+    opponents: [],
+    availabilityByEvent: new Map(),
+    trackedEvents: [],
+    analysisRows: [],
+    playerExclusions: new Set(),
+    tab: 'players',
+    sortKey: '',
+    sortDir: 1
+  };
+
+  function setBusy(on){
+    $('progress').classList.toggle('active', !!on);
+  }
+
+  function status(id, text, type=''){
+    const el = $(id);
+    el.textContent = text;
+    el.className = 'status' + (type ? ` ${type}` : '');
+  }
+
+  function esc(v){
+    return String(v ?? '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+
+  function fmtInt(v){
+    return Number(v || 0).toLocaleString();
+  }
+
+  function pct(n,d){
+    return d ? n / d * 100 : 0;
+  }
+
+  function pctText(n,d){
+    return `${pct(n,d).toFixed(1)}%`;
+  }
+
+  function first(record, keys, fallback=''){
+    for(const key of keys){
+      const v = record?.[key];
+      if(v !== undefined && v !== null && v !== '') return v;
+    }
+    return fallback;
+  }
+
+  function boolish(v){
+    if(v === true || v === 1) return true;
+    if(v === false || v === 0) return false;
+    const s = String(v ?? '').trim().toLowerCase();
+    if(['true','yes','y','1','on'].includes(s)) return true;
+    if(['false','no','n','0','off'].includes(s)) return false;
+    return null;
+  }
+
+  function collectionItems(payload){
+    const items = payload?.collection?.items || [];
+    return items.map(item => {
+      const row = {};
+      for(const d of item.data || []){
+        if(d?.name) row[d.name] = d.value;
+      }
+      row._href = item.href || '';
+      row._links = item.links || [];
+      return row;
+    });
+  }
+
+  function nextCollectionLink(payload){
+    const links = payload?.collection?.links || [];
+    const link = links.find(l =>
+      String(l.rel || '').toLowerCase() === 'next' ||
+      String(l.name || '').toLowerCase() === 'next'
+    );
+    return link?.href || '';
+  }
+
+  async function browserFetch(url, options={}, label='TeamSnap request'){
+    try{
+      const res = await fetch(url, options);
+      if(!res.ok){
+        const body = await res.text();
+        throw new Error(`${label} failed (HTTP ${res.status}): ${body.slice(0,350) || res.statusText}`);
+      }
+      return res;
+    }catch(err){
+      if(err instanceof TypeError){
+        throw new Error(
+          `${label} was blocked by the browser/network. This is usually a CORS restriction. ` +
+          `A static GitHub Pages file cannot bypass a TeamSnap CORS block. Original error: ${err.message}`
+        );
+      }
+      throw err;
+    }
+  }
+
+  async function apiJSON(url, params=null){
+    if(!state.token) throw new Error('Not connected to TeamSnap.');
+    const finalUrl = new URL(url);
+    if(params){
+      for(const [k,v] of Object.entries(params)){
+        if(v !== undefined && v !== null && v !== '') finalUrl.searchParams.set(k, v);
+      }
+    }
+    const res = await browserFetch(
+      finalUrl.toString(),
+      {headers:{'Authorization':`Bearer ${state.token}`,'Accept':'application/json'}},
+      'TeamSnap API request'
+    );
+    return res.json();
+  }
+
+  async function apiSearch(resource, params){
+    let url = `${API_BASE}/${resource}/search`;
+    let currentParams = {...params};
+    const rows = [];
+    const seen = new Set();
+
+    while(url){
+      const payload = await apiJSON(url, currentParams);
+      rows.push(...collectionItems(payload));
+      const next = nextCollectionLink(payload);
+      if(!next || seen.has(next)) break;
+      seen.add(next);
+      url = next;
+      currentParams = null;
+    }
+    return rows;
+  }
+
+  function localDate(date){
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+  }
+
+  function normalizeDate(v){
+    if(v instanceof Date && !isNaN(v)) return localDate(v);
+    const s = String(v || '').trim();
+    if(!s) return '';
+    let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
+    const d = new Date(s);
+    return isNaN(d) ? s.slice(0,10) : localDate(d);
+  }
+
+  function eventStart(event){
+    return String(first(event,['start_date','starts_at','start_at','event_date'],''));
+  }
+
+  function eventDate(event){
+    return normalizeDate(eventStart(event));
+  }
+
+  function eventTime(event){
+    const s = eventStart(event);
+    const m = s.match(/T(\d{2}):(\d{2})/);
+    if(m) return `${m[1]}:${m[2]}`;
+    return String(first(event,['start_time','time'],''));
+  }
+
+  function monthKey(date){
+    return /^\d{4}-\d{2}/.test(date) ? date.slice(0,7) : '';
+  }
+
+  function monthLabel(key){
+    if(!key) return 'Unknown';
+    const [y,m] = key.split('-').map(Number);
+    return new Date(y,m-1,1).toLocaleDateString(undefined,{month:'short',year:'numeric'});
+  }
+
+  function parseSeasonStartYear(season){
+    const s = String(season || '').trim();
+    const m = s.match(/^(\d{4})\s*[/\-]\s*(\d{2}|\d{4})$/);
+    if(!m) return null;
+    const start = Number(m[1]);
+    const end = m[2].length === 2 ? Math.floor(start/100)*100 + Number(m[2]) : Number(m[2]);
+    return end === start + 1 ? start : null;
+  }
+
+  function fallbackSeason(date){
+    if(!/^\d{4}-\d{2}/.test(date)) return 'Unknown';
+    const year = Number(date.slice(0,4));
+    const month = Number(date.slice(5,7));
+    if(month >= 7) return `${year}/${String(year+1).slice(-2)}`;
+    return `${year-1}/${String(year).slice(-2)}`;
+  }
+
+  function seasonPhase(date, season){
+    if(!/^\d{4}-\d{2}/.test(date)) return 'Unknown';
+    const y = Number(date.slice(0,4));
+    const m = Number(date.slice(5,7));
+    const start = parseSeasonStartYear(season);
+    if(start !== null){
+      if((y === start && m >= 7) || (y === start+1 && m <= 5)) return 'Regular Season';
+      if(y === start+1 && (m === 6 || m === 7)) return 'Postseason';
+      return 'Outside Season';
+    }
+    return m === 6 ? 'Postseason' : 'Regular Season';
+  }
+
+  function eventType(event){
+    const raw = String(first(event,['event_type','type','game_type'],'')).toLowerCase();
+    const name = String(first(event,['name','event_name'],'')).toLowerCase();
+    const combined = `${raw} ${name}`;
+
+    const practiceTerms = ['practice','training','technical','skills','conditioning','fitness','speed','agility','workout'];
+    const gameTerms = ['game','match','scrimmage','tournament','showcase','friendly','fixture'];
+
+    if(practiceTerms.some(x => combined.includes(x))) return 'Practice';
+    if(
+      boolish(event.is_game) === true ||
+      gameTerms.some(x => combined.includes(x)) ||
+      name.startsWith('vs ') || name.startsWith('vs.') ||
+      name.includes(' vs ') || name.startsWith('@ ')
+    ) return 'Game';
+    return 'Other';
+  }
+
+  function trackingFlag(event){
+    for(const key of [
+      'tracks_availability','track_availability','availability_tracking_enabled',
+      'is_availability_tracking_enabled','is_availability_enabled'
+    ]){
+      if(key in event) return boolish(event[key]);
+    }
+    return null;
+  }
+
+  function memberName(member){
+    const full = String(first(member,['name','full_name'],'')).trim();
+    if(full) return full;
+    return `${String(member.first_name || '').trim()} ${String(member.last_name || '').trim()}`.trim() || `Member ${member.id || ''}`;
+  }
+
+  function isNonPlayer(member){
+    if(boolish(member.is_non_player) === true) return true;
+    const role = String(first(member,['type','member_type','role'],'')).toLowerCase();
+    if(role.includes('non-player') || role.includes('non player')) return true;
+    if(role.includes('coach') || role.includes('staff') || role.includes('parent')) return true;
+    return false;
+  }
+
+  function lookupMap(rows){
+    const map = new Map();
+    for(const row of rows){
+      const id = String(row.id ?? '');
+      if(!id) continue;
+      map.set(id, String(first(row,['name','opponent_name','location_name','title'],id)));
+    }
+    return map;
+  }
+
+  function currentSeasonName(){
+    if(!state.team) return '';
+    return String(first(state.team,['season_name','season','division_name'],'')).trim();
+  }
+
+  function enrichEvents(){
+    const locs = lookupMap(state.locations);
+    const opps = lookupMap(state.opponents);
+    const seasonName = currentSeasonName();
+
+    state.events = state.events.map(e => {
+      const date = eventDate(e);
+      const opponentId = String(first(e,['opponent_id'],''));
+      const locationId = String(first(e,['location_id'],''));
+      const opponent = String(first(e,['opponent_name'],opps.get(opponentId) || ''));
+      const location = String(first(e,['location_name'],locs.get(locationId) || ''));
+      const name = String(first(e,['name','event_name'],'')).trim() ||
+        (opponent ? `vs ${opponent}` : 'Event');
+      const season = seasonName || fallbackSeason(date);
+      return {
+        ...e,
+        _id:String(e.id ?? ''),
+        _date:date,
+        _time:eventTime(e),
+        _month:monthKey(date),
+        _name:name,
+        _type:eventType({...e,name}),
+        _season:season,
+        _phase:seasonPhase(date,season),
+        _opponent:opponent,
+        _location:location,
+        _tracking:trackingFlag(e)
+      };
+    }).sort((a,b) => `${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`));
+  }
+
+  function randomState(){
+    const bytes = new Uint8Array(24);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes,b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function isOAuthCallback(){
+    const params = new URLSearchParams(window.location.search);
+    return params.has('code') || params.has('error');
+  }
+
+  function handleOAuthCallbackPage(){
+    if(!isOAuthCallback()) return false;
+
+    const params = new URLSearchParams(window.location.search);
+    const payload = {
+      type:'teamsnap-oauth-callback',
+      code:params.get('code') || '',
+      state:params.get('state') || '',
+      error:params.get('error') || '',
+      errorDescription:params.get('error_description') || ''
+    };
+
+    if(window.opener && !window.opener.closed){
+      window.opener.postMessage(payload, window.location.origin);
+      document.body.innerHTML = `
+        <div style="font-family:Segoe UI,Arial,sans-serif;padding:32px;text-align:center">
+          <h2>TeamSnap authorization complete</h2>
+          <p>You can close this window.</p>
+        </div>`;
+      setTimeout(() => window.close(), 250);
+      return true;
+    }
+
+    // Fallback if TeamSnap returned to this page without a popup.
+    history.replaceState({}, document.title, window.location.pathname);
+    return false;
+  }
+
+  async function exchangeOAuthCode(code){
+    const clientId = state.clientId;
+    const secret = state.clientSecret;
+    const redirect = state.redirectUri || 'https://kakrami.github.io/myts';
+
+    if(!clientId || !secret) throw new Error('Client ID or Client Secret is no longer available. Start Connect TeamSnap again.');
+
+    const body = new URLSearchParams({
+      client_id:clientId,
+      client_secret:secret,
+      redirect_uri:redirect,
+      grant_type:'authorization_code',
+      code
+    });
+
+    const res = await browserFetch(`${AUTH_BASE}/oauth/token`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/x-www-form-urlencoded',
+        'Accept':'application/json'
+      },
+      body
+    },'TeamSnap token exchange');
+
+    const data = await res.json();
+    if(!data.access_token) throw new Error('TeamSnap did not return an access token.');
+
+    // Remove secret from the visible field as soon as the exchange succeeds.
+    $('clientSecret').value = '';
+    state.clientSecret = '';
+
+    await connectWithToken(data.access_token);
+  }
+
+  async function connectWithToken(token){
+    state.token = String(token || '').trim();
+    if(!state.token) throw new Error('Enter an access token.');
+    setBusy(true);
+    try{
+      const payload = await apiJSON(`${API_BASE}/me`);
+      const rows = collectionItems(payload);
+      if(!rows.length) throw new Error('TeamSnap /me returned no user record.');
+      state.me = rows[0];
+      $('disconnectBtn').disabled = false;
+      status('authStatus',`Connected as ${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim(),'good');
+      $('eventPanel').classList.remove('hidden');
+      await loadTeams();
+    }catch(err){
+      state.token = '';
+      throw err;
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  async function loadTeams(){
+    if(!state.me) throw new Error('Connect first.');
+    setBusy(true);
+    status('eventStatus','Loading teams...');
+    try{
+      const userId = state.me.id;
+      state.teams = await apiSearch('teams',{user_id:userId});
+      state.teams.sort((a,b) => String(first(a,['name','team_name'],'')).localeCompare(String(first(b,['name','team_name'],''))));
+      $('teamSelect').innerHTML = '<option value="">Select a team...</option>' +
+        state.teams.map(t => `<option value="${esc(String(t.id))}">${esc(String(first(t,['name','team_name'],`Team ${t.id}`)))}</option>`).join('');
+      status('eventStatus',`Loaded ${state.teams.length} team(s). Choose a team.`,'good');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  async function loadTeamData(teamId){
+    if(!teamId) return;
+    state.team = state.teams.find(t => String(t.id) === String(teamId)) || null;
+    state.selectedEventIds.clear();
+    state.availabilityByEvent.clear();
+    state.trackedEvents = [];
+    $('dashboardPanel').classList.add('hidden');
+
+    setBusy(true);
+    status('eventStatus','Loading event list and roster...');
+    try{
+      const [events,members,locations,opponents] = await Promise.all([
+        apiSearch('events',{team_id:teamId}),
+        apiSearch('members',{team_id:teamId}),
+        apiSearch('locations',{team_id:teamId}).catch(()=>[]),
+        apiSearch('opponents',{team_id:teamId}).catch(()=>[])
+      ]);
+      state.events = events;
+      state.members = members;
+      state.locations = locations;
+      state.opponents = opponents;
+      enrichEvents();
+      populateEventFilters();
+      clearEventFilters(false);
+      applyEventFilters();
+      $('loadedEvents').textContent = fmtInt(state.events.length);
+      $('teamSeason').textContent = currentSeasonName() || (state.events[0]?._season || 'Unknown');
+      status('eventStatus',`Loaded ${state.events.length} events and ${state.members.length} roster members.`,'good');
+    }catch(err){
+      status('eventStatus',err.message,'bad');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  function fillSelect(id, values, allText, labeler=v=>v){
+    const el = $(id);
+    const current = el.value;
+    el.innerHTML = `<option value="">${esc(allText)}</option>` +
+      values.filter(Boolean).map(v => `<option value="${esc(v)}">${esc(labeler(v))}</option>`).join('');
+    if(values.includes(current)) el.value = current;
+  }
+
+  function uniq(arr){
+    return [...new Set(arr.filter(v => v !== undefined && v !== null && v !== ''))];
+  }
+
+  function populateEventFilters(){
+    fillSelect('eventMonth',uniq(state.events.map(e=>e._month)).sort(),'All months',monthLabel);
+    fillSelect('opponentFilter',uniq(state.events.map(e=>e._opponent)).sort(),'All opponents');
+    fillSelect('locationFilter',uniq(state.events.map(e=>e._location)).sort(),'All locations');
+  }
+
+  function clearEventFilters(reapply=true){
+    $('dateFrom').value = '';
+    $('dateTo').value = '';
+    $('eventMonth').value = '';
+    $('eventType').value = '';
+    $('eventPhase').value = '';
+    $('opponentFilter').value = '';
+    $('locationFilter').value = '';
+    $('eventSearch').value = '';
+    if(reapply) applyEventFilters();
+  }
+
+  function applyPreset(name){
+    clearEventFilters(false);
+    const now = new Date();
+    let from = null, to = null;
+
+    if(name === 'thisMonth'){
+      from = new Date(now.getFullYear(),now.getMonth(),1);
+      to = new Date(now.getFullYear(),now.getMonth()+1,0);
+    }else if(name === 'lastMonth'){
+      from = new Date(now.getFullYear(),now.getMonth()-1,1);
+      to = new Date(now.getFullYear(),now.getMonth(),0);
+    }else if(name === 'last30'){
+      to = new Date(now);
+      from = new Date(now);
+      from.setDate(from.getDate()-30);
+    }else if(name === 'next30'){
+      from = new Date(now);
+      to = new Date(now);
+      to.setDate(to.getDate()+30);
+    }else if(name === 'season'){
+      const start = parseSeasonStartYear(currentSeasonName() || fallbackSeason(localDate(now)));
+      if(start !== null){
+        from = new Date(start,6,1);
+        to = new Date(start+1,4,31);
+      }
+    }else if(name === 'clear'){
+      applyEventFilters();
+      return;
+    }
+
+    if(from) $('dateFrom').value = localDate(from);
+    if(to) $('dateTo').value = localDate(to);
+    applyEventFilters();
+  }
+
+  function applyEventFilters(){
+    const from = $('dateFrom').value;
+    const to = $('dateTo').value;
+    const month = $('eventMonth').value;
+    const type = $('eventType').value;
+    const phase = $('eventPhase').value;
+    const opponent = $('opponentFilter').value;
+    const location = $('locationFilter').value;
+    const search = $('eventSearch').value.trim().toLowerCase();
+
+    state.visibleEvents = state.events.filter(e =>
+      (!from || e._date >= from) &&
+      (!to || e._date <= to) &&
+      (!month || e._month === month) &&
+      (!type || e._type === type) &&
+      (!phase || e._phase === phase) &&
+      (!opponent || e._opponent === opponent) &&
+      (!location || e._location === location) &&
+      (!search || `${e._name} ${e._opponent} ${e._location}`.toLowerCase().includes(search))
+    );
+
+    $('visibleEvents').textContent = fmtInt(state.visibleEvents.length);
+    renderEvents();
+    updateSelectionUI();
+  }
+
+  function trackLabel(flag){
+    if(flag === true) return 'Tracked';
+    if(flag === false) return 'Disabled';
+    return 'Unknown';
+  }
+
+  function renderEvents(){
+    const body = $('eventBody');
+    if(!state.visibleEvents.length){
+      body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">No events match the filters.</td></tr>';
+      return;
+    }
+    body.innerHTML = state.visibleEvents.map(e => `
+      <tr>
+        <td class="checkcell"><input class="eventcheck" type="checkbox" data-id="${esc(e._id)}" ${state.selectedEventIds.has(e._id)?'checked':''}></td>
+        <td>${esc(e._date)}</td>
+        <td>${esc(e._time)}</td>
+        <td class="name">${esc(e._name)}</td>
+        <td><span class="badge ${e._type.toLowerCase()}">${esc(e._type)}</span></td>
+        <td><span class="badge ${e._phase==='Postseason'?'post':'regular'}">${esc(e._phase)}</span></td>
+        <td>${esc(e._opponent)}</td>
+        <td>${esc(e._location)}</td>
+        <td>${esc(trackLabel(e._tracking))}</td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.eventcheck').forEach(cb => {
+      cb.addEventListener('change',() => {
+        if(cb.checked) state.selectedEventIds.add(cb.dataset.id);
+        else state.selectedEventIds.delete(cb.dataset.id);
+        updateSelectionUI();
+      });
+    });
+  }
+
+  function updateSelectionUI(){
+    $('selectedEvents').textContent = fmtInt(state.selectedEventIds.size);
+    const enabled = state.selectedEventIds.size > 0;
+    $('loadAvailabilityBtn').disabled = !enabled;
+    $('exportEventsBtn').disabled = !enabled;
+  }
+
+  function selectVisible(){
+    state.visibleEvents.forEach(e => state.selectedEventIds.add(e._id));
+    renderEvents();
+    updateSelectionUI();
+  }
+
+  function selectedEvents(){
+    return state.events.filter(e => state.selectedEventIds.has(e._id));
+  }
+
+  async function mapLimit(items, limit, fn){
+    const results = new Array(items.length);
+    let next = 0;
+    async function worker(){
+      while(true){
+        const index = next++;
+        if(index >= items.length) return;
+        results[index] = await fn(items[index],index);
+      }
+    }
+    await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));
+    return results;
+  }
+
+  async function loadAvailability(){
+    const events = selectedEvents();
+    if(!events.length) return;
+
+    setBusy(true);
+    state.availabilityByEvent.clear();
+    status('eventStatus',`Loading availability for ${events.length} selected event(s)...`);
+
+    let completed = 0;
+    try{
+      await mapLimit(events,4,async event => {
+        const rows = await apiSearch('availabilities',{event_id:event._id}).catch(err => {
+          if(event._tracking === false) return [];
+          throw err;
+        });
+        state.availabilityByEvent.set(event._id,rows);
+        completed++;
+        status('eventStatus',`Availability: ${completed}/${events.length} events loaded...`);
+      });
+
+      const tracked = [];
+      const noData = [];
+      for(const event of events){
+        const avail = state.availabilityByEvent.get(event._id) || [];
+        if(event._tracking === false){
+          noData.push(event);
+          continue;
+        }
+        if(event._tracking === true || avail.length > 0){
+          tracked.push(event);
+        }else{
+          noData.push(event);
+        }
+      }
+
+      state.trackedEvents = tracked;
+      if(!tracked.length){
+        throw new Error('None of the selected events returned availability data. They may not have availability tracking enabled.');
+      }
+
+      buildAnalysisRows();
+      populateAnalysisFilters();
+      state.playerExclusions.clear();
+      renderExclusionPicker();
+      applyAnalysisFilters();
+
+      $('dashboardPanel').classList.remove('hidden');
+      $('analysisSubtitle').textContent =
+        `${first(state.team,['name','team_name'],'Team')} · ${tracked.length} tracked of ${events.length} selected events`;
+
+      if(noData.length){
+        $('availabilityWarning').classList.remove('hidden');
+        $('availabilityWarning').textContent =
+          `${noData.length} selected event(s) had availability disabled or returned no availability records and were excluded from the tracked-event denominator.`;
+      }else{
+        $('availabilityWarning').classList.add('hidden');
+      }
+
+      status('eventStatus',`Loaded availability for ${tracked.length} tracked event(s).`,'good');
+      $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(err){
+      status('eventStatus',err.message,'bad');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  function normalizeAvailability(record){
+    const raw = String(record?.status_code ?? record?.status ?? '').trim().toLowerCase();
+    if(['1','yes','available','true'].includes(raw)) return 'Yes';
+    if(['2','maybe'].includes(raw)) return 'Maybe';
+    if(['','null','undefined'].includes(raw)) return 'No Response';
+    return 'No';
+  }
+
+  function buildAnalysisRows(){
+    const memberMap = new Map(state.members.map(m => [String(m.id),m]));
+    const rows = [];
+
+    for(const event of state.trackedEvents){
+      const avail = state.availabilityByEvent.get(event._id) || [];
+      const byMember = new Map(avail.map(a => [String(a.member_id),a]));
+
+      for(const member of state.members){
+        const id = String(member.id ?? '');
+        if(!id) continue;
+        const a = byMember.get(id);
+        rows.push({
+          teamId:String(state.team?.id ?? ''),
+          team:String(first(state.team,['name','team_name'],'Team')),
+          season:event._season,
+          phase:event._phase,
+          month:event._month,
+          date:event._date,
+          time:event._time,
+          eventId:event._id,
+          event:event._name,
+          type:event._type,
+          opponent:event._opponent,
+          location:event._location,
+          memberId:id,
+          player:memberName(member),
+          nonPlayer:isNonPlayer(member),
+          status:a ? normalizeAvailability(a) : 'No Response',
+          rawCode:a?.status_code ?? '',
+          note:String(first(a,['notes','note','comments'],''))
+        });
+      }
+    }
+    state.analysisRows = rows;
+  }
+
+  function playerKey(row){
+    return `${row.teamId}::${row.memberId || row.player.toLowerCase()}`;
+  }
+
+  function populateAnalysisFilters(){
+    fillSelect('analysisMonth',uniq(state.trackedEvents.map(e=>e._month)).sort(),'All months',monthLabel);
+    fillSelect('analysisPhase',uniq(state.trackedEvents.map(e=>e._phase)).sort(),'All phases');
+    $('analysisType').value = '';
+    $('analysisStatus').value = '';
+    $('analysisPlayer').value = '';
+  }
+
+  function eventKey(row){
+    return `${row.teamId}::${row.eventId}`;
+  }
+
+  function counted(rows,total){
+    const c = {total,yes:0,no:0,maybe:0,none:0};
+    rows.forEach(r => {
+      if(r.status === 'Yes') c.yes++;
+      else if(r.status === 'Maybe') c.maybe++;
+      else if(r.status === 'No Response') c.none++;
+      else c.no++;
+    });
+    const classified = c.yes + c.no + c.maybe + c.none;
+    if(total > classified) c.none += total-classified;
+    c.countedNo = Math.max(0,total-c.yes);
+    return c;
+  }
+
+  function analysisScopeRows(){
+    const type = $('analysisType').value;
+    const month = $('analysisMonth').value;
+    const phase = $('analysisPhase').value;
+    return state.analysisRows.filter(r =>
+      (!type || r.type === type) &&
+      (!month || r.month === month) &&
+      (!phase || r.phase === phase)
+    );
+  }
+
+  function includedPlayerRows(scopeRows){
+    const search = $('analysisPlayer').value.trim().toLowerCase();
+    const excludeNP = $('excludeNonPlayers').checked;
+    return scopeRows.filter(r =>
+      (!excludeNP || !r.nonPlayer) &&
+      !state.playerExclusions.has(playerKey(r)) &&
+      (!search || r.player.toLowerCase().includes(search))
+    );
+  }
+
+  function groupedPlayerStats(scopeRows, visibleRows, keys){
+    const eventGroups = new Map();
+    for(const row of scopeRows){
+      const scopeKey = keys.filter(k=>!['player','memberId'].includes(k)).map(k=>row[k]).join('|||');
+      if(!eventGroups.has(scopeKey)) eventGroups.set(scopeKey,new Set());
+      eventGroups.get(scopeKey).add(eventKey(row));
+    }
+
+    const groups = new Map();
+    for(const row of visibleRows){
+      const key = keys.map(k=>row[k]).join('|||');
+      if(!groups.has(key)){
+        const base = {};
+        keys.forEach(k=>base[k]=row[k]);
+        groups.set(key,{...base,rows:[]});
+      }
+      groups.get(key).rows.push(row);
+    }
+
+    const statusFilter = $('analysisStatus').value;
+    const result = [];
+    for(const g of groups.values()){
+      const scopeKey = keys.filter(k=>!['player','memberId'].includes(k)).map(k=>g[k]).join('|||');
+      const total = eventGroups.get(scopeKey)?.size || 0;
+      const c = counted(g.rows,total);
+      if(statusFilter){
+        const matches = statusFilter === 'No'
+          ? c.countedNo > 0
+          : statusFilter === 'Yes'
+            ? c.yes > 0
+            : statusFilter === 'Maybe'
+              ? c.maybe > 0
+              : c.none > 0;
+        if(!matches) continue;
+      }
+      result.push({...g,c});
+    }
+    return result;
+  }
+
+  function rating(yesPct){
+    const gameOnly = $('analysisType').value === 'Game';
+    const scale = gameOnly
+      ? [[95,'Excellent','excellent'],[90,'Very Good','verygood'],[85,'Good','good'],[80,'Fair','fair'],[70,'Concern','concern'],[0,'Poor','poor']]
+      : [[90,'Excellent','excellent'],[85,'Very Good','verygood'],[80,'Good','good'],[75,'Fair','fair'],[65,'Concern','concern'],[0,'Poor','poor']];
+    for(const [min,label,css] of scale){
+      if(yesPct >= min) return {label,css};
+    }
+    return {label:'Poor',css:'poor'};
+  }
+
+  function statusMix(c){
+    if(!c.total) return '<div class="bar"></div>';
+    const yp=pct(c.yes,c.total), np=pct(c.no,c.total), mp=pct(c.maybe,c.total), rp=pct(c.none,c.total);
+    return `<div class="bar" title="Yes ${c.yes} (${yp.toFixed(1)}%) · No ${c.no} (${np.toFixed(1)}%) · Maybe ${c.maybe} (${mp.toFixed(1)}%) · No Response ${c.none} (${rp.toFixed(1)}%)">
+      <span class="yes" style="width:${yp}%"></span>
+      <span class="no" style="width:${np}%"></span>
+      <span class="maybe" style="width:${mp}%"></span>
+      <span class="none" style="width:${rp}%"></span>
+    </div>`;
+  }
+
+  function breakdown(c){
+    const parts = [];
+    if(c.no) parts.push(`${fmtInt(c.no)} No (${pct(c.no,c.total).toFixed(1)}%)`);
+    if(c.maybe) parts.push(`${fmtInt(c.maybe)} Maybe (${pct(c.maybe,c.total).toFixed(1)}%)`);
+    if(c.none) parts.push(`${fmtInt(c.none)} No Response (${pct(c.none,c.total).toFixed(1)}%)`);
+    return parts.length ? parts.map(x=>`<span class="reason">${esc(x)}</span>`).join(' · ') : '<span class="pctgood">No unavailable responses</span>';
+  }
+
+  function sortable(label,key){
+    const arrow = state.sortKey===key ? (state.sortDir===1?' ▲':' ▼') : '';
+    return `<th class="sortable" data-sort="${esc(key)}">${esc(label)}${arrow}</th>`;
+  }
+
+  function sortRows(rows){
+    if(!state.sortKey) return rows;
+    const key=state.sortKey, dir=state.sortDir;
+    return rows.slice().sort((a,b)=>{
+      let av=a[key], bv=b[key];
+      if(typeof av==='number' && typeof bv==='number') return (av-bv)*dir;
+      return String(av??'').localeCompare(String(bv??''),undefined,{numeric:true})*dir;
+    });
+  }
+
+  function buildSummaryRows(groups,mode){
+    return groups.map(g => {
+      const yesPct = pct(g.c.yes,g.c.total);
+      const r = rating(yesPct);
+      return {
+        month:g.month || '',
+        monthLabel:g.month ? monthLabel(g.month) : '',
+        season:g.season || '',
+        phase:g.phase || '',
+        player:g.player,
+        team:g.team,
+        tracked:g.c.total,
+        availabilityPct:yesPct,
+        rating:r.label,
+        ratingClass:r.css,
+        c:g.c
+      };
+    });
+  }
+
+  function renderSummaryTable(rows,mode){
+    rows = sortRows(rows);
+    if(!rows.length){
+      $('analysisTable').innerHTML = '<div style="padding:35px;text-align:center;color:var(--muted)">No players match the current filters.</div>';
+      return;
+    }
+
+    let leading = '';
+    if(mode === 'monthly') leading = sortable('Month','month');
+    else if(mode === 'season') leading = sortable('Season','season') + sortable('Phase','phase');
+
+    const head = `<tr>
+      ${leading}
+      ${sortable('Player','player')}
+      ${sortable('Tracked Events','tracked')}
+      ${sortable('Availability','availabilityPct')}
+      ${sortable('Rating','rating')}
+      <th>Status Mix</th>
+      <th>Breakdown</th>
+    </tr>`;
+
+    const body = rows.map(r => `<tr>
+      ${mode==='monthly'?`<td>${esc(r.monthLabel)}</td>`:''}
+      ${mode==='season'?`<td>${esc(r.season)}</td><td>${esc(r.phase)}</td>`:''}
+      <td class="name">${esc(r.player)}</td>
+      <td class="num">${fmtInt(r.tracked)}</td>
+      <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
+      <td><span class="rating ${r.ratingClass}">${esc(r.rating)}</span></td>
+      <td>${statusMix(r.c)}</td>
+      <td class="breakdown">${breakdown(r.c)}</td>
+    </tr>`).join('');
+
+    $('analysisTable').innerHTML = `<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    bindSort();
+  }
+
+  function renderRecords(rows){
+    const statusFilter = $('analysisStatus').value;
+    if(statusFilter){
+      rows = rows.filter(r => statusFilter === 'No' ? r.status !== 'Yes' : r.status === statusFilter);
+    }
+    rows = sortRows(rows.map(r=>({...r})));
+    if(!rows.length){
+      $('analysisTable').innerHTML = '<div style="padding:35px;text-align:center;color:var(--muted)">No records match.</div>';
+      return;
+    }
+    const head = `<tr>
+      ${sortable('Date','date')}
+      ${sortable('Player','player')}
+      ${sortable('Event','event')}
+      ${sortable('Type','type')}
+      ${sortable('Status','status')}
+      <th>Opponent</th><th>Location</th><th>Note</th>
+    </tr>`;
+    const body = rows.map(r=>`<tr>
+      <td>${esc(r.date)}</td>
+      <td class="name">${esc(r.player)}</td>
+      <td>${esc(r.event)}</td>
+      <td><span class="badge ${r.type.toLowerCase()}">${esc(r.type)}</span></td>
+      <td><span class="badge ${r.status==='Yes'?'yes':r.status==='Maybe'?'maybe':r.status==='No Response'?'none':'no'}">${esc(r.status)}</span></td>
+      <td>${esc(r.opponent)}</td><td>${esc(r.location)}</td><td>${esc(r.note)}</td>
+    </tr>`).join('');
+    $('analysisTable').innerHTML = `<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    bindSort();
+  }
+
+  function updateKPIs(groups){
+    if(!groups.length){
+      ['kTracked'].forEach(id=>$(id).textContent='0');
+      ['kYes','kNo','kMaybe','kNone','kCountedNo'].forEach(id=>$(id).textContent='0%');
+      return;
+    }
+    const totals = groups.map(g=>g.c.total);
+    const uniqueTotals = [...new Set(totals)];
+    $('kTracked').textContent = uniqueTotals.length===1 ? fmtInt(uniqueTotals[0]) : `${Math.min(...totals)}-${Math.max(...totals)}`;
+
+    const agg = groups.reduce((a,g)=>{
+      a.total+=g.c.total;a.yes+=g.c.yes;a.no+=g.c.no;a.maybe+=g.c.maybe;a.none+=g.c.none;a.countedNo+=g.c.countedNo;return a;
+    },{total:0,yes:0,no:0,maybe:0,none:0,countedNo:0});
+    $('kYes').textContent=pctText(agg.yes,agg.total);
+    $('kNo').textContent=pctText(agg.no,agg.total);
+    $('kMaybe').textContent=pctText(agg.maybe,agg.total);
+    $('kNone').textContent=pctText(agg.none,agg.total);
+    $('kCountedNo').textContent=pctText(agg.countedNo,agg.total);
+  }
+
+  function applyAnalysisFilters(){
+    const scope = analysisScopeRows();
+    const visible = includedPlayerRows(scope);
+
+    const baseGroups = groupedPlayerStats(scope,visible,['team','season','phase','player','memberId']);
+    updateKPIs(baseGroups);
+
+    if(state.tab === 'players'){
+      renderSummaryTable(buildSummaryRows(baseGroups,'players'),'players');
+    }else if(state.tab === 'monthly'){
+      const groups = groupedPlayerStats(scope,visible,['team','season','phase','month','player','memberId']);
+      renderSummaryTable(buildSummaryRows(groups,'monthly'),'monthly');
+    }else if(state.tab === 'season'){
+      const groups = groupedPlayerStats(scope,visible,['team','season','phase','player','memberId']);
+      renderSummaryTable(buildSummaryRows(groups,'season'),'season');
+    }else{
+      renderRecords(visible);
+    }
+  }
+
+  function bindSort(){
+    document.querySelectorAll('#analysisTable th[data-sort]').forEach(th => {
+      th.addEventListener('click',()=>{
+        const key=th.dataset.sort;
+        if(state.sortKey===key) state.sortDir*=-1;
+        else{state.sortKey=key;state.sortDir=1;}
+        applyAnalysisFilters();
+      });
+    });
+  }
+
+  function uniquePlayersForExclusion(){
+    const map = new Map();
+    state.analysisRows.forEach(r => {
+      if(r.nonPlayer) return;
+      const key=playerKey(r);
+      if(!map.has(key)) map.set(key,{key,name:r.player});
+    });
+    return [...map.values()].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+  }
+
+  function renderExclusionPicker(){
+    const search = $('exclusionSearch')?.value.trim().toLowerCase() || '';
+    const players = uniquePlayersForExclusion().filter(p=>!search || p.name.toLowerCase().includes(search));
+    $('exclusionList').innerHTML = players.map(p=>`
+      <label class="exclusion-item">
+        <input type="checkbox" data-key="${esc(p.key)}" ${state.playerExclusions.has(p.key)?'checked':''}>
+        <b>${esc(p.name)}</b>
+      </label>
+    `).join('');
+    $('exclusionCount').textContent = `${state.playerExclusions.size} excluded`;
+    $('exclusionList').querySelectorAll('input[data-key]').forEach(cb => {
+      cb.addEventListener('change',()=>{
+        if(cb.checked) state.playerExclusions.add(cb.dataset.key);
+        else state.playerExclusions.delete(cb.dataset.key);
+        $('exclusionCount').textContent = `${state.playerExclusions.size} excluded`;
+        applyAnalysisFilters();
+      });
+    });
+  }
+
+  function csvEscape(v){
+    let s=String(v??'');
+    if(/^[=+\-@\t\r]/.test(s)) s=`'${s}`;
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s;
+  }
+
+  function downloadCSV(filename,rows){
+    if(!rows.length) return;
+    const keys=Object.keys(rows[0]);
+    const lines=[keys.map(csvEscape).join(',')];
+    rows.forEach(r=>lines.push(keys.map(k=>csvEscape(r[k])).join(',')));
+    const blob=new Blob(["\ufeff"+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=filename;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }
+
+  function exportSelectedEvents(){
+    const rows=selectedEvents().map(e=>({
+      Team:first(state.team,['name','team_name'],''),
+      'Event ID':e._id,
+      Date:e._date,
+      Time:e._time,
+      Event:e._name,
+      Type:e._type,
+      Season:e._season,
+      Phase:e._phase,
+      Opponent:e._opponent,
+      Location:e._location,
+      'Availability Tracking':trackLabel(e._tracking)
+    }));
+    downloadCSV('teamsnap_selected_events.csv',rows);
+  }
+
+  function exportAvailability(){
+    const scope=analysisScopeRows();
+    const rows=includedPlayerRows(scope).map(r=>({
+      Team:r.team,Season:r.season,Phase:r.phase,Date:r.date,Time:r.time,
+      'Event ID':r.eventId,Event:r.event,Type:r.type,Opponent:r.opponent,Location:r.location,
+      'Member ID':r.memberId,Player:r.player,Availability:r.status,'Raw Code':r.rawCode,Note:r.note
+    }));
+    downloadCSV('teamsnap_selected_availability.csv',rows);
+  }
+
+  // Auth
+  if(handleOAuthCallbackPage()){
+    return;
+  }
+
+  $('connectOAuthBtn').addEventListener('click',()=>{
+    const clientId=$('clientId').value.trim();
+    const secret=$('clientSecret').value;
+    const redirect='https://kakrami.github.io/myts';
+
+    if(!clientId || !secret){
+      status('authStatus','Enter the TeamSnap Client ID / UID and Client Secret first.','bad');
+      return;
+    }
+
+    state.clientId=clientId;
+    state.clientSecret=secret;
+    state.redirectUri=redirect;
+    state.oauthState=randomState();
+
+    const u=new URL(`${AUTH_BASE}/oauth/authorize`);
+    u.searchParams.set('client_id',clientId);
+    u.searchParams.set('redirect_uri',redirect);
+    u.searchParams.set('response_type','code');
+    u.searchParams.set('scope','read');
+    u.searchParams.set('state',state.oauthState);
+
+    const width=620;
+    const height=760;
+    const left=Math.max(0,Math.round((screen.width-width)/2));
+    const top=Math.max(0,Math.round((screen.height-height)/2));
+
+    state.authPopup=window.open(
+      u.toString(),
+      'teamsnap_oauth',
+      `popup=yes,width=${width},height=${height},left=${left},top=${top}`
+    );
+
+    if(!state.authPopup){
+      status('authStatus','The authorization popup was blocked. Allow popups for this site and try again.','bad');
+      return;
+    }
+
+    status('authStatus','TeamSnap authorization opened. Complete login/approval in the popup.','warn');
+  });
+
+  window.addEventListener('message',async event=>{
+    if(event.origin !== window.location.origin) return;
+    const data=event.data || {};
+    if(data.type !== 'teamsnap-oauth-callback') return;
+
+    if(data.error){
+      status('authStatus',`TeamSnap authorization failed: ${data.errorDescription || data.error}`,'bad');
+      return;
+    }
+
+    if(!data.state || data.state !== state.oauthState){
+      status('authStatus','TeamSnap authorization returned an invalid state value. Start Connect TeamSnap again.','bad');
+      return;
+    }
+
+    if(!data.code){
+      status('authStatus','TeamSnap did not return an authorization code.','bad');
+      return;
+    }
+
+    state.oauthState='';
+    setBusy(true);
+    status('authStatus','Authorization approved. Finishing TeamSnap connection...','warn');
+
+    try{
+      await exchangeOAuthCode(data.code);
+    }catch(err){
+      status('authStatus',err.message,'bad');
+    }finally{
+      setBusy(false);
+    }
+  });
+
+  $('useTokenBtn').addEventListener('click',async()=>{
+    setBusy(true);
+    try{
+      await connectWithToken($('accessToken').value);
+      $('accessToken').value='';
+    }catch(err){
+      status('authStatus',err.message,'bad');
+    }finally{
+      setBusy(false);
+    }
+  });
+
+  $('disconnectBtn').addEventListener('click',()=>{
+    state.token='';
+    state.clientSecret='';
+    state.oauthState='';
+    state.me=null;
+    state.teams=[];
+    state.team=null;
+    state.events=[];
+    state.selectedEventIds.clear();
+    state.availabilityByEvent.clear();
+    state.analysisRows=[];
+    $('clientSecret').value='';
+    $('eventPanel').classList.add('hidden');
+    $('dashboardPanel').classList.add('hidden');
+    $('disconnectBtn').disabled=true;
+    status('authStatus','Disconnected.');
+  });
+
+  $('toggleAuthDetails').addEventListener('click',()=>{
+    $('authBody').classList.toggle('hidden');
+    $('toggleAuthDetails').textContent=$('authBody').classList.contains('hidden')?'Show setup':'Hide setup';
+  });
+
+  // Event selection
+  $('refreshTeamsBtn').addEventListener('click',()=>loadTeams().catch(err=>status('eventStatus',err.message,'bad')));
+  $('teamSelect').addEventListener('change',e=>loadTeamData(e.target.value));
+  ['dateFrom','dateTo','eventMonth','eventType','eventPhase','opponentFilter','locationFilter'].forEach(id=>$(id).addEventListener('change',applyEventFilters));
+  $('eventSearch').addEventListener('input',applyEventFilters);
+  document.querySelectorAll('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
+  $('selectVisibleBtn').addEventListener('click',selectVisible);
+  $('clearSelectionBtn').addEventListener('click',()=>{
+    state.selectedEventIds.clear();renderEvents();updateSelectionUI();
+  });
+  $('exportEventsBtn').addEventListener('click',exportSelectedEvents);
+  $('loadAvailabilityBtn').addEventListener('click',loadAvailability);
+
+  // Analysis
+  ['analysisType','analysisMonth','analysisPhase','analysisStatus','excludeNonPlayers'].forEach(id=>$(id).addEventListener('change',()=>{
+    state.sortKey='';state.sortDir=1;applyAnalysisFilters();
+  }));
+  $('analysisPlayer').addEventListener('input',applyAnalysisFilters);
+  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');state.tab=btn.dataset.tab;state.sortKey='';state.sortDir=1;applyAnalysisFilters();
+  }));
+  $('toggleExclusionsBtn').addEventListener('click',()=>{
+    $('exclusionPicker').classList.toggle('hidden');renderExclusionPicker();
+  });
+  $('exclusionSearch').addEventListener('input',renderExclusionPicker);
+  $('clearExclusionsBtn').addEventListener('click',()=>{
+    state.playerExclusions.clear();renderExclusionPicker();applyAnalysisFilters();
+  });
+  $('exportAvailabilityBtn').addEventListener('click',exportAvailability);
+  $('backEventsBtn').addEventListener('click',()=>$('eventPanel').scrollIntoView({behavior:'smooth',block:'start'}));
+})();
+</script>
+</body>
+</html>
