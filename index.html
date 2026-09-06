@@ -137,7 +137,7 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='1.1.0';
+const VERSION='1.1.1';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v1';
@@ -268,10 +268,38 @@ async function fetchCollection(pathOrUrl,params={},options={}){
   return out;
 }
 async function loadIdentityAndTeams(){
-  const mePayload=await apiJson(`${API}/me`);const me=collectionObjects(mePayload)[0]||{};state.user=me;
-  let teamsUrl=collectionLink(mePayload,'teams')||me._link_teams;
-  state.teams=teamsUrl?await fetchCollection(teamsUrl):await fetchCollection('teams/search',{user_id:me.id});
-  if(!state.teams.length)throw new Error('No TeamSnap teams were returned for this account.');
+  const mePayload=await apiJson(`${API}/me`);
+  const me=collectionObjects(mePayload)[0]||{};
+  state.user=me;
+  if(me.id===undefined||me.id===null||me.id==='')throw new Error('TeamSnap login succeeded, but the authenticated user ID was missing from /me.');
+
+  // Match TeamSnap's official SDK lifecycle: loadMe() -> loadTeams({ userId: me.id }).
+  // The direct API equivalent is /teams/search?user_id=<authenticated user id>.
+  let teams=[];
+  let searchError=null;
+  try{
+    teams=await fetchCollection('teams/search',{user_id:me.id});
+  }catch(err){
+    searchError=err;
+  }
+
+  // Some API responses also expose a user-specific teams relation. Treat it only as
+  // a fallback because collection-level discovery links are not guaranteed to be
+  // scoped to the authenticated user.
+  if(!teams.length){
+    const meItem=mePayload?.collection?.items?.[0];
+    const itemTeamsUrl=meItem?.links?.find(l=>l.rel==='teams')?.href||me._link_teams||null;
+    if(itemTeamsUrl){
+      try{teams=await fetchCollection(itemTeamsUrl);}catch(err){if(!searchError)searchError=err;}
+    }
+  }
+
+  if(!teams.length){
+    if(searchError)throw searchError;
+    throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams were returned.`);
+  }
+
+  state.teams=teams;
   if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
   fillTeamSwitchers();saveSession();
 }
