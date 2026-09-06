@@ -565,6 +565,71 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   }
   .multi-options{max-height:42vh}
 }
+
+/* Report builder workspace */
+.stepbadge{display:none!important}
+.stepgrid{gap:12px}
+#eventPanel .panelhead,#dashboardPanel .panelhead,#connectPanel .panelhead{align-items:center}
+.report-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  overflow:visible;
+}
+.report-tabs .tab{flex:0 0 auto}
+.report-library{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(180px,1fr));
+  gap:9px;
+}
+.report-card{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  padding:12px;
+  text-align:left;
+  cursor:pointer;
+}
+.report-card:hover{border-color:#93c5fd;background:#f8fbff}
+.report-card b{display:block;font-size:12px}
+.report-card p{font-size:10px;color:var(--muted);line-height:1.4;margin:4px 0 0}
+.source-strip{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(110px,1fr));
+  gap:7px;
+  margin:8px 0 12px;
+}
+.source-chip{
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fbfdff;
+  padding:8px 9px;
+}
+.source-chip .label{font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.source-chip .value{font-size:15px;font-weight:850;margin-top:2px}
+.report-prompt{
+  padding:28px 16px;
+  text-align:center;
+  border:1px dashed var(--line);
+  border-radius:11px;
+  background:#fbfdff;
+}
+.report-prompt b{display:block;font-size:14px;margin-bottom:4px}
+.report-prompt p{margin:0 auto 12px;max-width:560px;font-size:11px;color:var(--muted);line-height:1.5}
+#availabilityKpis.hidden,#availabilityExclusions.hidden,#analysisTypeField.hidden,#toggleAnalysisFilters.hidden{display:none!important}
+
+@media(max-width:900px){
+  .report-library{grid-template-columns:repeat(2,1fr)}
+  .source-strip{grid-template-columns:repeat(3,1fr)}
+  .eventsummary{grid-template-columns:repeat(3,1fr)!important}
+}
+@media(max-width:600px){
+  .report-tabs{display:grid;grid-template-columns:1fr 1fr}
+  .report-tabs .tab:first-child{grid-column:auto}
+  .report-library{grid-template-columns:1fr}
+  .source-strip{grid-template-columns:1fr 1fr}
+  .eventsummary{grid-template-columns:1fr 1fr!important}
+}
 </style>
 </head>
 <body>
@@ -572,8 +637,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 <div class="app">
   <div class="topbar">
     <div class="title">
-      <h1>TeamSnap Availability</h1>
-      <p>Connect, choose the events you care about, and review player availability.</p>
+      <h1>TeamSnap Report Builder</h1>
+      <p>Fetch TeamSnap data, define the scope you care about, and build useful reports from it.</p>
     </div>
     <div class="security">
       Single-file app · Client Secret never stored · session survives refresh
@@ -583,12 +648,9 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   <div class="stepgrid">
     <section id="connectPanel" class="panel">
       <div class="panelhead stepintro">
-        <div class="stepintro-left">
-          <span class="stepbadge">1</span>
-          <div>
-            <h2>Connect TeamSnap</h2>
-            <p>Use a TeamSnap OAuth app to securely access your own teams.</p>
-          </div>
+        <div>
+          <h2>TeamSnap Connection</h2>
+          <p>Connect a TeamSnap account to make its data available to the report builder.</p>
         </div>
       </div>
 
@@ -686,12 +748,9 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
     <section id="eventPanel" class="panel hidden">
       <div class="panelhead stepintro">
-        <div class="stepintro-left">
-          <span class="stepbadge">2</span>
-          <div>
-            <h2>Choose Events</h2>
-            <p>Choose a team, confirm the date range, then select the events you want included.</p>
-          </div>
+        <div>
+          <h2>Data Scope</h2>
+          <p>Choose the team and filters used by reports. Select events only when you want availability data fetched for them.</p>
         </div>
         <button id="refreshTeamsBtn" class="btn small" type="button">Refresh</button>
       </div>
@@ -787,10 +846,13 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
             <button id="clearEventFiltersBtn" class="btn small" type="button">Clear Filters</button>
           </div>
         </div>
-<div class="eventsummary" style="grid-template-columns:repeat(3,minmax(130px,1fr))">
-          <div class="mini"><div class="label">Shown</div><div id="visibleEvents" class="value">0</div></div>
-          <div class="mini"><div class="label">Selected</div><div id="selectedEvents" class="value">0</div></div>
-          <div class="mini"><div class="label">Season</div><div id="teamSeason" class="value" style="font-size:17px">—</div></div>
+<div class="eventsummary" style="grid-template-columns:repeat(5,minmax(110px,1fr))">
+          <div class="mini"><div class="label">Events Shown</div><div id="visibleEvents" class="value">0</div></div>
+          <div class="mini"><div class="label">Roster</div><div id="rosterCount" class="value">0</div></div>
+          <div class="mini"><div class="label">Opponents</div><div id="opponentCount" class="value">0</div></div>
+          <div class="mini"><div class="label">Locations</div><div id="locationCount" class="value">0</div></div>
+          <div class="mini"><div class="label">Availability Events</div><div id="selectedEvents" class="value">0</div></div>
+          <div id="teamSeason" class="hidden">—</div>
         </div>
 
         <div id="loadedEvents" class="hidden">0</div>
@@ -798,7 +860,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
           <button id="selectVisibleBtn" class="btn" type="button">Select All Shown</button>
           <button id="clearSelectionBtn" class="btn" type="button">Clear Selection</button>
           <button id="exportEventsBtn" class="btn" type="button" disabled>Export Selected</button>
-          <button id="loadAvailabilityBtn" class="btn primary" type="button" disabled style="margin-left:auto">Analyze Selected</button>
+          <button id="loadAvailabilityBtn" class="btn primary" type="button" disabled style="margin-left:auto">Fetch Availability</button>
         </div>
         <div id="eventStatus" class="status" aria-live="polite">Choose a team to load its events.</div>
 
@@ -828,24 +890,21 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
     <section id="dashboardPanel" class="panel hidden">
       <div class="panelhead stepintro">
-        <div class="stepintro-left">
-          <span class="stepbadge">3</span>
-          <div>
-            <h2>Player Availability</h2>
-            <p id="analysisSubtitle">Availability across the selected TeamSnap events.</p>
-          </div>
+        <div>
+          <h2>Reports</h2>
+          <p id="analysisSubtitle">Choose a report below. Availability is only one of the available report types.</p>
         </div>
         <div class="heroaction">
-          <button id="backEventsBtn" class="btn small" type="button">Change Events</button>
-          <button id="exportAvailabilityBtn" class="btn small" type="button">Export CSV</button>
+          <button id="backEventsBtn" class="btn small" type="button">View Data Scope</button>
+          <button id="exportAvailabilityBtn" class="btn small" type="button">Export Current Report</button>
         </div>
       </div>
       <div class="panelbody">
         <div id="availabilityWarning" class="warningbox hidden"></div>
 
         <div class="primaryrow" style="margin-bottom:10px">
-          <div class="field">
-            <label>Event Type</label>
+          <div id="analysisTypeField" class="field">
+            <label>Availability Event Type</label>
             <select id="analysisType">
               <option value="">All Selected</option>
               <option value="Practice">Practice</option>
@@ -854,8 +913,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
             </select>
           </div>
           <div class="field">
-            <label>Player Search</label>
-            <input id="analysisPlayer" placeholder="Player...">
+            <label>Search Report</label>
+            <input id="analysisPlayer" placeholder="Search current report...">
           </div>
           <button id="toggleAnalysisFilters" class="btn" type="button" aria-expanded="false" aria-controls="advancedAnalysisFilters">More Filters</button>
         </div>
@@ -889,7 +948,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
             </div>
           </div>
         </div>
-<div class="exclusions" style="margin-bottom:10px">
+<div id="availabilityExclusions" class="exclusions" style="margin-bottom:10px">
           <div class="exclusions-head">
             <div>
               <b style="font-size:12px">Exclude Specific Players</b>
@@ -908,7 +967,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
           </div>
         </div>
 
-        <div class="kpis">
+        <div id="availabilityKpis" class="kpis">
           <div class="kpi"><div class="label">Tracked Events</div><div id="kTracked" class="value">0</div><div class="sub">Same denominator per player</div></div>
           <div class="kpi"><div class="label">Availability</div><div id="kYes" class="value">0%</div><div class="sub">Yes %</div></div>
           <div class="kpi"><div class="label">No</div><div id="kNo" class="value">0%</div><div class="sub">Explicit No</div></div>
@@ -919,20 +978,25 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
         <div class="result-toolbar" style="margin-top:2px">
           <div>
-            <b style="font-size:12px">Reports</b>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">Choose how you want to review the selected availability data.</div>
+            <b style="font-size:12px">Report Library</b>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Reports use the current Data Scope. Availability reports use only the events selected for availability.</div>
           </div>
         </div>
 
-        <div class="tabs">
-          <button class="tab active" data-tab="players" type="button">Player Availability</button>
-          <button class="tab" data-tab="monthly" type="button">Monthly</button>
-          <button class="tab" data-tab="season" type="button">Season</button>
-          <button class="tab" data-tab="records" type="button">Records</button>
+        <div class="tabs report-tabs">
+          <button class="tab active" data-tab="overview" type="button">Overview</button>
+          <button class="tab" data-tab="events" type="button">Events</button>
+          <button class="tab" data-tab="roster" type="button">Roster</button>
+          <button class="tab" data-tab="opponents" type="button">Opponents</button>
+          <button class="tab" data-tab="locations" type="button">Locations</button>
+          <button class="tab" data-tab="players" type="button">Player Availability</button>
+          <button class="tab" data-tab="monthly" type="button">Monthly Availability</button>
+          <button class="tab" data-tab="season" type="button">Season Availability</button>
+          <button class="tab" data-tab="records" type="button">Availability Records</button>
         </div>
 
         <div id="reportDescription" class="note" style="margin:8px 0">
-          Player Availability shows each player against the same tracked-event denominator. Yes is the only positive response; No, Maybe, and No Response all count against Availability.
+          Overview summarizes the data currently available for the selected team and filters.
         </div>
         <div class="result-toolbar">
           <div id="resultCount" class="result-count"></div>
@@ -983,7 +1047,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     selectedLocations: new Set(),
     eventSortKey: '_date',
     eventSortDir: 1,
-    tab: 'players',
+    tab: 'overview',
     sortKey: '',
     sortDir: 1,
     restoreSnapshot: null,
@@ -1086,7 +1150,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     $('analysisPlayer').value=snapshot.analysisPlayer || '';
     $('excludeNonPlayers').checked=snapshot.excludeNonPlayers !== false;
     state.playerExclusions=new Set(snapshot.playerExclusions || []);
-    state.tab=['players','monthly','season','records'].includes(snapshot.tab) ? snapshot.tab : 'players';
+    state.tab=['overview','events','roster','opponents','locations','players','monthly','season','records'].includes(snapshot.tab) ? snapshot.tab : 'overview';
     state.sortKey=snapshot.sortKey || '';
     state.sortDir=snapshot.sortDir===-1 ? -1 : 1;
 
@@ -1102,7 +1166,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     $('toggleExclusionsBtn').textContent=exclusionsOpen ? 'Hide Players' : 'Choose Players';
 
     renderExclusionPicker();
-    applyAnalysisFilters();
+    renderWorkspaceReport();
   }
 
   async function restoreSessionAfterRefresh(){
@@ -1553,7 +1617,6 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     state.trackedEvents = [];
     state.analysisRows=[];
     state.availabilityLoaded=false;
-    $('dashboardPanel').classList.add('hidden');
 
     setBusy(true);
     status('eventStatus',restore ? 'Restoring event list and roster...' : 'Loading event list and roster...');
@@ -1582,6 +1645,24 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
       $('loadedEvents').textContent = fmtInt(state.events.length);
       $('teamSeason').textContent = currentSeasonName() || (state.events[0]?._season || 'Unknown');
+      $('rosterCount').textContent = fmtInt(state.members.length);
+      $('opponentCount').textContent = fmtInt(uniq(state.events.map(e=>e._opponent)).filter(Boolean).length);
+      $('locationCount').textContent = fmtInt(uniq(state.events.map(e=>e._location)).filter(Boolean).length);
+      $('dashboardPanel').classList.remove('hidden');
+
+      if(restore && snapshot && !snapshot.availabilityLoaded){
+        state.tab=['overview','events','roster','opponents','locations','players','monthly','season','records'].includes(snapshot.tab) ? snapshot.tab : 'overview';
+        $('analysisPlayer').value=snapshot.analysisPlayer || '';
+        state.sortKey=snapshot.sortKey || '';
+        state.sortDir=snapshot.sortDir===-1 ? -1 : 1;
+        renderWorkspaceReport();
+      }else if(!restore){
+        state.tab='overview';
+        state.sortKey='';
+        state.sortDir=1;
+        $('analysisPlayer').value='';
+        renderWorkspaceReport();
+      }
 
       if(restore && snapshot?.availabilityLoaded && state.selectedEventIds.size){
         status('eventStatus','Restoring Player Availability report...','warn');
@@ -1976,8 +2057,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     $('loadAvailabilityBtn').disabled = !enabled;
     $('exportEventsBtn').disabled = !enabled;
     $('loadAvailabilityBtn').textContent = enabled
-      ? `Analyze ${fmtInt(selected)} Selected`
-      : 'Select Events to Analyze';
+      ? `Fetch Availability for ${fmtInt(selected)}`
+      : 'Select Events for Availability';
 
     const visibleIds = state.visibleEvents.map(e=>e._id);
     const allVisibleSelected = visibleIds.length > 0 && visibleIds.every(id=>state.selectedEventIds.has(id));
@@ -2082,7 +2163,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       state.availabilityLoaded=true;
       $('dashboardPanel').classList.remove('hidden');
       $('analysisSubtitle').textContent =
-        `${first(state.team,['name','team_name'],'Team')} · ${tracked.length} tracked of ${events.length} selected events`;
+        `${first(state.team,['name','team_name'],'Team')} · report data loaded · ${tracked.length} availability-tracked events`;
 
       if(noData.length){
         $('availabilityWarning').classList.remove('hidden');
@@ -2294,6 +2375,224 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       if(typeof av==='number' && typeof bv==='number') return (av-bv)*dir;
       return String(av??'').localeCompare(String(bv??''),undefined,{numeric:true})*dir;
     });
+  }
+
+  function reportQuery(){
+    return $('analysisPlayer').value.trim();
+  }
+
+  function reportSearchMatch(values){
+    const q=reportQuery().toLowerCase();
+    if(!q) return true;
+    return values.some(v=>String(v ?? '').toLowerCase().includes(q));
+  }
+
+  function setAvailabilityControls(show){
+    $('analysisTypeField').classList.toggle('hidden',!show);
+    $('toggleAnalysisFilters').classList.toggle('hidden',!show);
+    $('advancedAnalysisFilters').classList.toggle('hidden',!show || $('toggleAnalysisFilters').getAttribute('aria-expanded')!=='true');
+    $('availabilityExclusions').classList.toggle('hidden',!show);
+    $('availabilityKpis').classList.toggle('hidden',!show);
+  }
+
+  function reportRowsSort(rows){
+    return sortRows(rows);
+  }
+
+  function renderOverviewReport(){
+    setAvailabilityControls(false);
+    const events=state.visibleEvents;
+    const q=reportQuery();
+    const games=events.filter(e=>e._type==='Game').length;
+    const practices=events.filter(e=>e._type==='Practice').length;
+    const other=events.length-games-practices;
+    const players=state.members.filter(m=>!isNonPlayer(m)).length;
+
+    $('reportDescription').textContent='Overview summarizes the TeamSnap data currently loaded for this team and Data Scope.';
+    $('resultCount').innerHTML=`<b>${fmtInt(events.length)}</b> scoped events`;
+
+    const availabilityText=state.availabilityLoaded
+      ? `${fmtInt(state.trackedEvents.length)} tracked events loaded`
+      : 'Not fetched yet';
+
+    $('analysisTable').innerHTML=`
+      <div class="source-strip">
+        <div class="source-chip"><div class="label">Events</div><div class="value">${fmtInt(events.length)}</div></div>
+        <div class="source-chip"><div class="label">Players</div><div class="value">${fmtInt(players)}</div></div>
+        <div class="source-chip"><div class="label">Games</div><div class="value">${fmtInt(games)}</div></div>
+        <div class="source-chip"><div class="label">Practices</div><div class="value">${fmtInt(practices)}</div></div>
+        <div class="source-chip"><div class="label">Availability</div><div class="value" style="font-size:11px">${esc(availabilityText)}</div></div>
+      </div>
+      <div class="report-library">
+        <button class="report-card" data-open-report="events"><b>Events</b><p>Review and sort the current event scope.</p></button>
+        <button class="report-card" data-open-report="roster"><b>Roster</b><p>Review players, roles, and roster composition.</p></button>
+        <button class="report-card" data-open-report="opponents"><b>Opponents</b><p>See which opponents appear most often and when.</p></button>
+        <button class="report-card" data-open-report="locations"><b>Locations</b><p>Summarize where games and practices are happening.</p></button>
+        <button class="report-card" data-open-report="players"><b>Player Availability</b><p>Availability percentage, rating, status mix, and breakdown.</p></button>
+        <button class="report-card" data-open-report="monthly"><b>Monthly Availability</b><p>Compare player availability month by month.</p></button>
+        <button class="report-card" data-open-report="season"><b>Season Availability</b><p>Review availability by season and phase.</p></button>
+        <button class="report-card" data-open-report="records"><b>Availability Records</b><p>See the individual responses behind the availability reports.</p></button>
+      </div>`;
+
+    $('analysisCards').innerHTML='';
+    $('analysisTable').querySelectorAll('[data-open-report]').forEach(btn=>btn.addEventListener('click',()=>openReport(btn.dataset.openReport)));
+  }
+
+  function renderEventsReport(){
+    setAvailabilityControls(false);
+    const q=reportQuery();
+    let rows=state.visibleEvents.filter(e=>reportSearchMatch([e._date,e._time,e._name,e._type,e._phase,e._opponent,e._location,trackLabel(e._tracking)]))
+      .map(e=>({
+        date:e._date,time:e._time,event:e._name,type:e._type,phase:e._phase,
+        opponent:e._opponent,location:e._location,tracking:trackLabel(e._tracking)
+      }));
+    rows=reportRowsSort(rows);
+
+    $('reportDescription').textContent='Events uses the current Data Scope filters. Event selection is not required for this report.';
+    $('resultCount').innerHTML=`<b>${fmtInt(rows.length)}</b> ${rows.length===1?'event':'events'}`;
+
+    if(!rows.length){
+      $('analysisTable').innerHTML='<div class="empty-state"><b>No events found</b>Adjust Data Scope or report search.</div>';
+      $('analysisCards').innerHTML=$('analysisTable').innerHTML;
+      return;
+    }
+
+    const head=`<tr>
+      ${sortable('Date','date')}${sortable('Time','time')}${sortable('Event','event')}
+      ${sortable('Type','type')}${sortable('Phase','phase')}${sortable('Opponent','opponent')}
+      ${sortable('Location','location')}${sortable('Availability','tracking')}
+    </tr>`;
+    const body=rows.map(r=>`<tr>
+      <td>${highlight(r.date,q)}</td><td>${highlight(r.time,q)}</td><td class="name">${highlight(r.event,q)}</td>
+      <td>${highlight(r.type,q)}</td><td>${highlight(r.phase,q)}</td><td>${highlight(r.opponent,q)}</td>
+      <td>${highlight(r.location,q)}</td><td>${highlight(r.tracking,q)}</td>
+    </tr>`).join('');
+    $('analysisTable').innerHTML=`<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    $('analysisCards').innerHTML=rows.map(r=>`<article class="record-card">
+      <div class="card-title">${highlight(r.event,q)}</div>
+      <div class="card-sub">${highlight(shortDate(r.date),q)}${r.time?` · ${highlight(r.time,q)}`:''}</div>
+      <div class="card-meta"><span class="badge ${r.type.toLowerCase()}">${highlight(r.type,q)}</span><span>${highlight(r.phase,q)}</span></div>
+      <div class="card-sub" style="margin-top:7px">${[r.opponent,r.location].filter(Boolean).map(v=>highlight(v,q)).join(' · ')}</div>
+    </article>`).join('');
+    bindSort();
+  }
+
+  function rosterRole(member){
+    return String(first(member,['type','member_type','role'],'')).trim() || (isNonPlayer(member)?'Non-player':'Player');
+  }
+
+  function renderRosterReport(){
+    setAvailabilityControls(false);
+    const q=reportQuery();
+    let rows=state.members.map(m=>({
+      player:memberName(m),
+      role:rosterRole(m),
+      position:String(first(m,['position','position_name'],'')).trim(),
+      category:isNonPlayer(m)?'Non-player':'Player'
+    })).filter(r=>reportSearchMatch([r.player,r.role,r.position,r.category]));
+    rows=reportRowsSort(rows);
+
+    $('reportDescription').textContent='Roster shows the members returned for the selected TeamSnap team.';
+    $('resultCount').innerHTML=`<b>${fmtInt(rows.length)}</b> roster ${rows.length===1?'member':'members'}`;
+
+    if(!rows.length){
+      $('analysisTable').innerHTML='<div class="empty-state"><b>No roster members found</b>Adjust report search.</div>';
+      $('analysisCards').innerHTML=$('analysisTable').innerHTML;
+      return;
+    }
+
+    const head=`<tr>${sortable('Name','player')}${sortable('Category','category')}${sortable('Role','role')}${sortable('Position','position')}</tr>`;
+    const body=rows.map(r=>`<tr><td class="name">${highlight(r.player,q)}</td><td>${highlight(r.category,q)}</td><td>${highlight(r.role,q)}</td><td>${highlight(r.position,q)}</td></tr>`).join('');
+    $('analysisTable').innerHTML=`<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    $('analysisCards').innerHTML=rows.map(r=>`<article class="record-card"><div class="card-title">${highlight(r.player,q)}</div><div class="card-sub">${highlight(r.category,q)}${r.role?` · ${highlight(r.role,q)}`:''}${r.position?` · ${highlight(r.position,q)}`:''}</div></article>`).join('');
+    bindSort();
+  }
+
+  function aggregateEventDimension(field,label){
+    const map=new Map();
+    for(const e of state.visibleEvents){
+      const name=e[field] || `(No ${label.toLowerCase()})`;
+      if(!map.has(name)) map.set(name,{name,total:0,games:0,practices:0,other:0,first:'',last:''});
+      const g=map.get(name);
+      g.total++;
+      if(e._type==='Game') g.games++;
+      else if(e._type==='Practice') g.practices++;
+      else g.other++;
+      if(!g.first || e._date<g.first) g.first=e._date;
+      if(!g.last || e._date>g.last) g.last=e._date;
+    }
+    return [...map.values()];
+  }
+
+  function renderDimensionReport(kind){
+    setAvailabilityControls(false);
+    const isOpponent=kind==='opponents';
+    const q=reportQuery();
+    const label=isOpponent?'Opponent':'Location';
+    let rows=aggregateEventDimension(isOpponent?'_opponent':'_location',label)
+      .map(r=>({...r,[isOpponent?'opponent':'location']:r.name}))
+      .filter(r=>reportSearchMatch([r.name,r.total,r.games,r.practices,r.other,r.first,r.last]));
+    rows=reportRowsSort(rows);
+
+    $('reportDescription').textContent=`${label}s summarizes the current Data Scope by ${label.toLowerCase()}.`;
+    $('resultCount').innerHTML=`<b>${fmtInt(rows.length)}</b> ${label.toLowerCase()} ${rows.length===1?'row':'rows'}`;
+
+    const key=isOpponent?'opponent':'location';
+    if(!rows.length){
+      $('analysisTable').innerHTML=`<div class="empty-state"><b>No ${label.toLowerCase()} data found</b>Adjust Data Scope or report search.</div>`;
+      $('analysisCards').innerHTML=$('analysisTable').innerHTML;
+      return;
+    }
+
+    const head=`<tr>${sortable(label,key)}${sortable('Events','total')}${sortable('Games','games')}${sortable('Practices','practices')}${sortable('Other','other')}${sortable('First','first')}${sortable('Last','last')}</tr>`;
+    const body=rows.map(r=>`<tr><td class="name">${highlight(r.name,q)}</td><td class="num">${r.total}</td><td class="num">${r.games}</td><td class="num">${r.practices}</td><td class="num">${r.other}</td><td>${r.first}</td><td>${r.last}</td></tr>`).join('');
+    $('analysisTable').innerHTML=`<table><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    $('analysisCards').innerHTML=rows.map(r=>`<article class="record-card"><div class="card-title">${highlight(r.name,q)}</div><div class="card-grid"><div class="card-stat"><div class="label">Events</div><div class="value">${r.total}</div></div><div class="card-stat"><div class="label">Games / Practices</div><div class="value">${r.games} / ${r.practices}</div></div></div><div class="card-sub">${r.first} → ${r.last}</div></article>`).join('');
+    bindSort();
+  }
+
+  function renderAvailabilityNeeded(){
+    setAvailabilityControls(true);
+    $('reportDescription').textContent='This report needs availability responses. Select the events you want included in Data Scope, then fetch availability.';
+    $('resultCount').textContent='';
+    $('analysisTable').innerHTML=`<div class="report-prompt">
+      <b>Availability data has not been fetched</b>
+      <p>Select the relevant events in Data Scope and fetch availability. Events, roster, opponents, and location reports do not require this step.</p>
+      <button id="openDataScopePrompt" class="btn primary" type="button">Go to Data Scope</button>
+    </div>`;
+    $('analysisCards').innerHTML=$('analysisTable').innerHTML;
+    $('openDataScopePrompt')?.addEventListener('click',()=>$('eventPanel').scrollIntoView({behavior:'smooth',block:'start'}));
+  }
+
+  function isAvailabilityReport(tab=state.tab){
+    return ['players','monthly','season','records'].includes(tab);
+  }
+
+  function renderWorkspaceReport(){
+    document.querySelectorAll('.tab[data-tab]').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===state.tab));
+
+    if(state.tab==='overview') return renderOverviewReport();
+    if(state.tab==='events') return renderEventsReport();
+    if(state.tab==='roster') return renderRosterReport();
+    if(state.tab==='opponents') return renderDimensionReport('opponents');
+    if(state.tab==='locations') return renderDimensionReport('locations');
+
+    if(isAvailabilityReport()){
+      if(!state.availabilityLoaded) return renderAvailabilityNeeded();
+      return applyAnalysisFilters();
+    }
+
+    state.tab='overview';
+    renderOverviewReport();
+  }
+
+  function openReport(tab){
+    const allowed=['overview','events','roster','opponents','locations','players','monthly','season','records'];
+    state.tab=allowed.includes(tab)?tab:'overview';
+    state.sortKey='';
+    state.sortDir=1;
+    renderWorkspaceReport();
+    persistSession();
   }
 
   function buildSummaryRows(groups,mode){
@@ -2516,6 +2815,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   }
 
   function applyAnalysisFilters(){
+    setAvailabilityControls(true);
     updateAnalysisFilterButton();
     const scope = analysisScopeRows();
     const visible = includedPlayerRows(scope);
@@ -2525,9 +2825,9 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
     const descriptions = {
       players:'Player Availability shows each player against the same tracked-event denominator. Yes is the only positive response; No, Maybe, and No Response all count against Availability.',
-      monthly:'Monthly groups the same Player Availability calculations by month.',
-      season:'Season groups the same Player Availability calculations by season and phase.',
-      records:'Records shows the individual player-event availability responses behind the reports.'
+      monthly:'Monthly Availability groups the Player Availability calculations by month.',
+      season:'Season Availability groups Player Availability by season and phase.',
+      records:'Availability Records shows the individual player-event responses behind the availability reports.'
     };
     $('reportDescription').textContent = descriptions[state.tab] || descriptions.players;
 
@@ -2551,7 +2851,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         const key=th.dataset.sort;
         if(state.sortKey===key) state.sortDir*=-1;
         else{state.sortKey=key;state.sortDir=1;}
-        applyAnalysisFilters();
+        renderWorkspaceReport();
         persistSession();
       });
     });
@@ -2621,6 +2921,37 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       'Availability Tracking':trackLabel(e._tracking)
     }));
     downloadCSV('teamsnap_selected_events.csv',rows);
+  }
+
+  function currentEventsReportRows(){
+    return state.visibleEvents.filter(e=>reportSearchMatch([e._date,e._time,e._name,e._type,e._phase,e._opponent,e._location]))
+      .map(e=>({Date:e._date,Time:e._time,Event:e._name,Type:e._type,Phase:e._phase,Opponent:e._opponent,Location:e._location,'Availability Tracking':trackLabel(e._tracking)}));
+  }
+
+  function currentRosterReportRows(){
+    return state.members.map(m=>({
+      Name:memberName(m),
+      Category:isNonPlayer(m)?'Non-player':'Player',
+      Role:rosterRole(m),
+      Position:String(first(m,['position','position_name'],'')).trim()
+    })).filter(r=>reportSearchMatch(Object.values(r)));
+  }
+
+  function currentDimensionRows(kind){
+    const isOpponent=kind==='opponents';
+    const label=isOpponent?'Opponent':'Location';
+    return aggregateEventDimension(isOpponent?'_opponent':'_location',label)
+      .filter(r=>reportSearchMatch([r.name,r.total,r.games,r.practices,r.other,r.first,r.last]))
+      .map(r=>({[label]:r.name,Events:r.total,Games:r.games,Practices:r.practices,Other:r.other,First:r.first,Last:r.last}));
+  }
+
+  function exportCurrentReport(){
+    if(state.tab==='events') return downloadCSV('teamsnap_events_report.csv',currentEventsReportRows());
+    if(state.tab==='roster') return downloadCSV('teamsnap_roster_report.csv',currentRosterReportRows());
+    if(state.tab==='opponents') return downloadCSV('teamsnap_opponents_report.csv',currentDimensionRows('opponents'));
+    if(state.tab==='locations') return downloadCSV('teamsnap_locations_report.csv',currentDimensionRows('locations'));
+    if(isAvailabilityReport()) return exportAvailability();
+    return downloadCSV('teamsnap_overview_events.csv',currentEventsReportRows());
   }
 
   function exportAvailability(){
@@ -2838,13 +3169,12 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   });
 
   ['analysisType','analysisMonth','analysisPhase','analysisStatus','excludeNonPlayers'].forEach(id=>$(id).addEventListener('change',()=>{
-    state.sortKey='';state.sortDir=1;applyAnalysisFilters();
+    state.sortKey='';state.sortDir=1;
+    if(isAvailabilityReport()) applyAnalysisFilters();
+    persistSession();
   }));
-  $('analysisPlayer').addEventListener('input',applyAnalysisFilters);
-  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');state.tab=btn.dataset.tab;state.sortKey='';state.sortDir=1;applyAnalysisFilters();
-  }));
+  $('analysisPlayer').addEventListener('input',()=>{renderWorkspaceReport();persistSession();});
+  document.querySelectorAll('.tab[data-tab]').forEach(btn=>btn.addEventListener('click',()=>openReport(btn.dataset.tab)));
   $('toggleExclusionsBtn').addEventListener('click',()=>{
     $('exclusionPicker').classList.toggle('hidden');
     const open = !$('exclusionPicker').classList.contains('hidden');
@@ -2857,7 +3187,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   $('clearExclusionsBtn').addEventListener('click',()=>{
     state.playerExclusions.clear();renderExclusionPicker();applyAnalysisFilters();
   });
-  $('exportAvailabilityBtn').addEventListener('click',exportAvailability);
+  $('exportAvailabilityBtn').addEventListener('click',exportCurrentReport);
   $('backEventsBtn').addEventListener('click',()=>$('eventPanel').scrollIntoView({behavior:'smooth',block:'start'}));
 
   // Restore this tab's previous state after a normal page refresh.
