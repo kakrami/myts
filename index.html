@@ -466,6 +466,12 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     max-width:65vw;
   }
 }
+
+/* Report tabs */
+@media(max-width:700px){
+  .tabs{grid-template-columns:1fr 1fr}
+  .tabs .tab:first-child{grid-column:1/-1;font-weight:800}
+}
 </style>
 </head>
 <body>
@@ -794,13 +800,23 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
           <div class="kpi"><div class="label">Counted No</div><div id="kCountedNo" class="value">0%</div><div class="sub">Everything except Yes</div></div>
         </div>
 
+        <div class="result-toolbar" style="margin-top:2px">
+          <div>
+            <b style="font-size:12px">Reports</b>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Choose how you want to review the selected availability data.</div>
+          </div>
+        </div>
+
         <div class="tabs">
-          <button class="tab active" data-tab="players" type="button">Players</button>
+          <button class="tab active" data-tab="players" type="button">Player Availability</button>
           <button class="tab" data-tab="monthly" type="button">Monthly</button>
           <button class="tab" data-tab="season" type="button">Season</button>
           <button class="tab" data-tab="records" type="button">Records</button>
         </div>
 
+        <div id="reportDescription" class="note" style="margin:8px 0">
+          Player Availability shows each player against the same tracked-event denominator. Yes is the only positive response; No, Maybe, and No Response all count against Availability.
+        </div>
         <div class="result-toolbar">
           <div id="resultCount" class="result-count"></div>
           <div class="rating-help">Availability = Yes ÷ tracked events</div>
@@ -2033,6 +2049,14 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 
     const baseGroups = groupedPlayerStats(scope,visible,['team','season','phase','player','memberId']);
     updateKPIs(baseGroups);
+
+    const descriptions = {
+      players:'Player Availability shows each player against the same tracked-event denominator. Yes is the only positive response; No, Maybe, and No Response all count against Availability.',
+      monthly:'Monthly groups the same Player Availability calculations by month.',
+      season:'Season groups the same Player Availability calculations by season and phase.',
+      records:'Records shows the individual player-event availability responses behind the reports.'
+    };
+    $('reportDescription').textContent = descriptions[state.tab] || descriptions.players;
 
     if(state.tab === 'players'){
       renderSummaryTable(buildSummaryRows(baseGroups,'players'),'players');
