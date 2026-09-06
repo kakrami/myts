@@ -8,36 +8,36 @@
 :root{
   --bg:#f4f6f8;--panel:#fff;--soft:#f8fafc;--text:#18212b;--muted:#667586;
   --line:#dce3ea;--accent:#2563eb;--accent-soft:#eff6ff;--good:#16803b;
-  --bad:#b42318;--warn:#a15c00;--maybe:#946200;--radius:12px;
+  --bad:#b42318;--warn:#a15c00;--radius:12px;
 }
 *{box-sizing:border-box}
 html{background:var(--bg)}
-body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:var(--bg);font-size:13px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:13px}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-.progress{height:3px;position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;overflow:hidden}
-.progress.active:after{content:"";display:block;width:32%;height:100%;background:var(--accent);animation:progress 1.1s infinite ease-in-out}
-@keyframes progress{0%{transform:translateX(-110%)}100%{transform:translateX(420%)}}
+.progress{height:3px;position:fixed;top:0;left:0;right:0;z-index:100;overflow:hidden}
+.progress.active:after{content:"";display:block;width:34%;height:100%;background:var(--accent);animation:progress 1.1s infinite ease-in-out}
+@keyframes progress{0%{transform:translateX(-110%)}100%{transform:translateX(410%)}}
 .app{max-width:1460px;margin:auto;padding:14px}
-.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:4px 0 12px}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:4px 0 12px}
 .brand h1{font-size:21px;margin:0}
 .brand p{margin:3px 0 0;color:var(--muted);font-size:11px}
 .security{font-size:10px;color:var(--muted);text-align:right}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 3px 14px rgba(15,23,42,.045);margin-bottom:11px}
 .panelbody{padding:12px}
-.btn{min-height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:7px 10px;font-weight:750;font-size:11px}
+.btn{min-height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:7px 10px;font-size:11px;font-weight:800}
 .btn:hover{background:#f8fafc}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.danger{color:var(--bad)}
 .btn.small{min-height:31px;padding:5px 8px;font-size:10px}
 .field{min-width:0}
-.field label{display:block;font-size:9px;font-weight:850;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+.field label{display:block;margin-bottom:4px;color:var(--muted);font-size:9px;font-weight:850;text-transform:uppercase;letter-spacing:.03em}
 .field input,.field select{width:100%;height:39px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:0 9px;min-width:0}
-.field input:focus,.field select:focus,.btn:focus-visible,.navbtn:focus-visible{outline:2px solid #93c5fd;outline-offset:1px}
-.status{font-size:10px;color:var(--muted);min-height:16px;margin-top:6px}
-.status.good{color:var(--good)} .status.bad{color:var(--bad)} .status.warn{color:var(--warn)}
-.note,.warning{font-size:10px;line-height:1.45;border-radius:8px;padding:8px 9px}
+.field input:focus,.field select:focus,.btn:focus-visible,.navbtn:focus-visible,.card-filter:focus-visible{outline:2px solid #93c5fd;outline-offset:1px}
+.status{min-height:16px;margin-top:6px;color:var(--muted);font-size:10px}
+.status.good{color:var(--good)}.status.bad{color:var(--bad)}.status.warn{color:var(--warn)}
+.note,.warning{padding:8px 9px;border-radius:8px;font-size:10px;line-height:1.45}
 .note{background:#f8fafc;border:1px solid var(--line);color:var(--muted)}
 .warning{background:#fffbeb;border:1px solid #fde68a;color:#854d0e}
 mark.search-hit{background:#fef08a;color:inherit;border-radius:2px;padding:0 1px}
@@ -51,14 +51,13 @@ mark.search-hit{background:#fef08a;color:inherit;border-radius:2px;padding:0 1px
 .redirect code{background:#f1f5f9;border:1px solid var(--line);padding:7px 8px;border-radius:7px;font-size:10px;overflow-wrap:anywhere;flex:1}
 .connected-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px}
 .connected-left{display:flex;align-items:center;gap:7px;min-width:0}
-.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:0 0 auto}
+.dot,.syncdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;flex:0 0 auto}
 .connected-left b{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.shell-header{display:grid;grid-template-columns:minmax(170px,260px) minmax(150px,190px) minmax(200px,1fr) auto;gap:8px;align-items:end;padding:10px 11px;border-bottom:1px solid var(--line);background:#fbfdff;border-radius:12px 12px 0 0}
-.custom-range{display:grid;grid-template-columns:1fr 1fr;gap:6px;grid-column:2/4}
-.syncbox{align-self:center;text-align:right;font-size:9px;color:var(--muted);min-width:120px}
+.shell-header{display:grid;grid-template-columns:minmax(180px,280px) minmax(220px,1fr) auto;gap:8px;align-items:end;padding:10px 11px;border-bottom:1px solid var(--line);background:#fbfdff;border-radius:12px 12px 0 0}
+.syncbox{align-self:center;text-align:right;font-size:9px;color:var(--muted);min-width:130px}
 .syncbox b{display:block;color:var(--text);font-size:10px}
 .nav{display:flex;gap:3px;overflow-x:auto;padding:6px 8px;border-bottom:1px solid var(--line);background:#fff}
-.navbtn{border:0;background:transparent;color:var(--muted);padding:8px 10px;border-radius:7px;font-size:11px;font-weight:850;white-space:nowrap}
+.navbtn{border:0;background:transparent;color:var(--muted);padding:8px 11px;border-radius:7px;font-size:11px;font-weight:850;white-space:nowrap}
 .navbtn:hover{background:#f4f7fa;color:var(--text)}
 .navbtn.active{background:var(--accent-soft);color:var(--accent)}
 .page{padding:12px}
@@ -66,33 +65,45 @@ mark.search-hit{background:#fef08a;color:inherit;border-radius:2px;padding:0 1px
 .pagehead h2{margin:0;font-size:18px}
 .pagehead p{margin:3px 0 0;color:var(--muted);font-size:10px;line-height:1.45}
 .actions{display:flex;gap:6px;flex-wrap:wrap}
+.page-controls{display:flex;gap:7px;align-items:end;flex-wrap:wrap;margin-bottom:10px}
+.page-controls .field{min-width:150px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:11px;background:#fff;overflow:hidden;min-width:0}
+.card.wide{grid-column:1/-1}
+.cardhead{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid #edf1f5;background:#fbfdff}
+.cardhead b{font-size:11px}
+.card-controls{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.card-filter{height:30px;border:1px solid var(--line);border-radius:7px;background:#fff;padding:0 7px;color:var(--text);font-size:9px;max-width:170px}
+.cardbody{padding:10px}
 .kpis{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:8px;margin-bottom:10px}
 .kpi{border:1px solid var(--line);background:#fbfdff;border-radius:10px;padding:9px}
 .kpi .label{font-size:8px;text-transform:uppercase;color:var(--muted);font-weight:850}
 .kpi .value{font-size:20px;font-weight:900;margin-top:3px}
 .kpi .sub{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.3}
-.grid2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.75fr);gap:10px}
-.section{border:1px solid var(--line);border-radius:10px;background:#fff;overflow:hidden}
-.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #edf1f5}
-.sectionhead b{font-size:11px}
-.sectionbody{padding:9px 10px}
+.metric{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.metric strong{font-size:27px}
+.metric span{font-size:10px;color:var(--muted)}
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}
+.mini-stat{border:1px solid #edf1f5;background:#fbfdff;border-radius:8px;padding:7px}
+.mini-stat b{display:block;font-size:14px}
+.mini-stat span{font-size:8px;color:var(--muted)}
 .event-list{display:grid;gap:7px}
 .event-card{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:9px;align-items:center;border:1px solid #e8edf3;border-radius:9px;background:#fbfdff;padding:8px;text-align:left;width:100%;color:inherit}
 .event-card:hover{border-color:#b8c8da;background:#fff}
 .when b,.event-main b{display:block;font-size:11px}
-.when span,.event-main span{font-size:9px;color:var(--muted);margin-top:2px;display:block}
+.when span,.event-main span{display:block;margin-top:2px;color:var(--muted);font-size:9px}
 .avail-mini{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
-.avail-mini span{font-size:8px;font-weight:850;padding:3px 5px;border-radius:5px;background:#f1f5f9}
+.avail-mini span{padding:3px 5px;border-radius:5px;background:#f1f5f9;font-size:8px;font-weight:850}
 .alert-list{display:grid;gap:6px}
 .alert{border-left:3px solid #f59e0b;background:#fffbeb;padding:7px 8px;border-radius:6px;font-size:10px;line-height:1.35}
 .alert.good{border-left-color:#22c55e;background:#f0fdf4}
-.loader{display:flex;align-items:center;gap:7px;padding:10px;border:1px solid var(--line);background:#fbfdff;border-radius:9px;font-size:10px;color:var(--muted)}
+.loader{display:flex;align-items:center;gap:7px;padding:10px;border:1px solid var(--line);background:#fbfdff;border-radius:9px;color:var(--muted);font-size:10px}
 .spinner{width:14px;height:14px;border-radius:50%;border:2px solid #dbe4ee;border-top-color:var(--accent);animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.table-wrap{border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:67vh;background:#fff}
+.table-wrap{border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:66vh;background:#fff}
 table{border-collapse:collapse;width:100%;font-size:10px}
 th,td{padding:7px 8px;border-bottom:1px solid #edf1f5;text-align:left;vertical-align:top}
-th{position:sticky;top:0;background:#f8fafc;z-index:2;color:#536273;font-size:9px;font-weight:850;white-space:nowrap}
+th{position:sticky;top:0;z-index:2;background:#f8fafc;color:#536273;font-size:9px;font-weight:850;white-space:nowrap}
 th.sortable{cursor:pointer;user-select:none}
 th.sortable:hover{background:#eef4fa}
 td.name{font-weight:800}
@@ -115,15 +126,12 @@ td.num,th.num{text-align:right}
 .form-strip{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .form-pill{width:27px;height:27px;border-radius:7px;display:grid;place-items:center;font-weight:900;font-size:10px;background:#e2e8f0}
 .form-pill.W{background:#dcfce7;color:#166534}.form-pill.L{background:#fee2e2;color:#991b1b}.form-pill.T{background:#fef3c7;color:#92400e}
-.subnav{display:flex;gap:4px;overflow-x:auto;margin-bottom:9px}
-.subbtn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 8px;font-size:10px;font-weight:800;white-space:nowrap}
-.subbtn.active{background:var(--accent-soft);border-color:#bfdbfe;color:#1d4ed8}
 .rating{display:inline-block;padding:3px 6px;border-radius:6px;font-weight:850;font-size:9px;background:#eef2f7}
 .rating.excellent,.rating.verygood{background:#dcfce7;color:#166534}.rating.good{background:#ecfccb;color:#3f6212}.rating.fair{background:#fef3c7;color:#92400e}.rating.concern{background:#ffedd5;color:#9a3412}.rating.poor{background:#fee2e2;color:#991b1b}
 .mix{display:flex;height:8px;min-width:90px;border-radius:99px;overflow:hidden;background:#e2e8f0}
 .mix span.y{background:#22c55e}.mix span.n{background:#ef4444}.mix span.m{background:#f59e0b}.mix span.nr{background:#94a3b8}
 .breakdown{color:var(--muted);font-size:9px;white-space:nowrap}
-.report-library{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:8px}
+.report-library{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:8px}
 .report-card{border:1px solid var(--line);border-radius:10px;background:#fff;padding:11px;text-align:left;color:inherit}
 .report-card:hover{border-color:#93c5fd;background:#f8fbff}
 .report-card b{display:block;font-size:11px}
@@ -133,172 +141,112 @@ td.num,th.num{text-align:right}
 .column-list{display:grid;gap:5px;max-height:270px;overflow:auto;margin-top:6px}
 .column-opt{display:flex;gap:6px;align-items:center;border:1px solid #e8edf3;border-radius:6px;background:#fff;padding:5px;font-size:9px}
 .column-opt input{width:16px;height:16px}
+.detailbar{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:9px}
 .empty{padding:28px 14px;text-align:center;color:var(--muted);font-size:10px}
 .empty b{display:block;color:var(--text);font-size:12px;margin-bottom:3px}
-.syncdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:4px}
 @media(max-width:1000px){
-  .shell-header{grid-template-columns:1fr 1fr 2fr auto}
+  .shell-header{grid-template-columns:minmax(160px,240px) 1fr auto}
   .kpis{grid-template-columns:repeat(3,1fr)}
-  .grid2{grid-template-columns:1fr}
   .report-library{grid-template-columns:repeat(2,1fr)}
 }
-@media(max-width:720px){
-  .app{padding:8px}
-  .topbar{align-items:flex-start}
-  .security{display:none}
-  .auth-grid,.credentials{grid-template-columns:1fr}
-  .shell-header{grid-template-columns:1fr 1fr;padding:8px}
-  .shell-header .searchfield{grid-column:1/-1}
-  .syncbox{text-align:left;min-width:0}
-  .custom-range{grid-column:1/-1}
-  .nav{padding:5px}
-  .page{padding:9px}
-  .pagehead{flex-direction:column}
-  .actions{width:100%}.actions .btn{flex:1}
+@media(max-width:760px){
+  .app{padding:8px}.security{display:none}.auth-grid,.credentials{grid-template-columns:1fr}
+  .shell-header{grid-template-columns:1fr 1fr;padding:8px}.shell-header .searchfield{grid-column:1/-1}.syncbox{text-align:left;min-width:0}
+  .page{padding:9px}.pagehead{flex-direction:column}.actions{width:100%}.actions .btn{flex:1}
+  .cards{grid-template-columns:1fr}.card.wide{grid-column:auto}
   .kpis{grid-template-columns:1fr 1fr}
-  .event-card{grid-template-columns:72px minmax(0,1fr)}
-  .avail-mini{grid-column:1/-1;justify-content:flex-start}
-  .status-grid{grid-template-columns:1fr 1fr}
-  .picker-options{grid-template-columns:1fr}
-  .report-library{grid-template-columns:1fr}
-  .custom-grid{grid-template-columns:1fr}
+  .event-card{grid-template-columns:72px minmax(0,1fr)}.avail-mini{grid-column:1/-1;justify-content:flex-start}
+  .status-grid{grid-template-columns:1fr 1fr}.picker-options{grid-template-columns:1fr}.report-library{grid-template-columns:1fr}.custom-grid{grid-template-columns:1fr}
   .table-wrap{border:0;overflow:visible;max-height:none;background:transparent}
-  .data-table thead{display:none}
-  .data-table,.data-table tbody,.data-table tr,.data-table td{display:block;width:100%}
+  .data-table thead{display:none}.data-table,.data-table tbody,.data-table tr,.data-table td{display:block;width:100%}
   .data-table tr{border:1px solid var(--line);border-radius:9px;background:#fff;margin-bottom:7px;overflow:hidden}
   .data-table td{display:grid;grid-template-columns:105px minmax(0,1fr);gap:7px;border-bottom:1px solid #edf1f5;padding:7px 8px}
-  .data-table td:last-child{border-bottom:0}
-  .data-table td:before{content:attr(data-label);font-size:8px;font-weight:850;text-transform:uppercase;color:var(--muted)}
-  .data-table td.num{text-align:left}
-  .mobile-sort{display:flex;align-items:end;gap:6px;margin-bottom:7px}
-  .mobile-sort .field{flex:1}
-  .breakdown{white-space:normal}
+  .data-table td:last-child{border-bottom:0}.data-table td:before{content:attr(data-label);font-size:8px;font-weight:850;text-transform:uppercase;color:var(--muted)}
+  .data-table td.num{text-align:left}.mobile-sort{display:flex;align-items:end;gap:6px;margin-bottom:7px}.mobile-sort .field{flex:1}.breakdown{white-space:normal}
 }
-@media(max-width:430px){
-  .shell-header{grid-template-columns:1fr}
-  .shell-header .searchfield{grid-column:auto}
-  .custom-range{grid-column:auto}
-  .kpis{grid-template-columns:1fr 1fr}
-  .status-grid{grid-template-columns:1fr}
-}
-@media(prefers-reduced-motion:reduce){
-  .progress.active:after,.spinner{animation:none}
-}
+@media(max-width:440px){.shell-header{grid-template-columns:1fr}.shell-header .searchfield{grid-column:auto}.kpis{grid-template-columns:1fr 1fr}.status-grid{grid-template-columns:1fr}.mini-stats{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.progress.active:after,.spinner{animation:none}}
 </style>
 </head>
 <body>
 <div id="progress" class="progress"></div>
 <div class="app">
-  <header class="topbar">
-    <div class="brand">
-      <h1>TeamSnap Manager Console</h1>
-      <p>Upcoming events, game-day readiness, team performance, availability, assignments, roster, and optional reporting.</p>
-    </div>
-    <div class="security">Single-file app · Client Secret never stored · session survives refresh</div>
-  </header>
+<header class="topbar">
+  <div class="brand"><h1>TeamSnap Manager Console</h1><p>Schedule, roster, availability, stats, and optional reporting without duplicate workflows.</p></div>
+  <div class="security">Single-file app · Client Secret never stored · session survives refresh</div>
+</header>
 
-  <section id="authPanel" class="panel">
-    <div id="connectSetup" class="panelbody">
-      <div class="auth-grid">
-        <div class="auth-card">
-          <h2>Connect TeamSnap</h2>
-          <p>Connect once, then the console loads the team data each screen needs automatically.</p>
-          <div class="credentials">
-            <div class="field"><label>Client ID / UID</label><input id="clientId" autocomplete="off"></div>
-            <div class="field"><label>Client Secret</label><input id="clientSecret" type="password" autocomplete="off"></div>
-          </div>
-          <div class="auth-actions">
-            <button id="connectOAuthBtn" class="btn primary" type="button">Connect TeamSnap</button>
-            <details>
-              <summary style="font-size:10px;cursor:pointer;color:var(--muted)">Use an existing access token</summary>
-              <div style="display:flex;gap:6px;margin-top:7px">
-                <input id="accessToken" style="height:36px;min-width:220px;border:1px solid var(--line);border-radius:7px;padding:0 8px" placeholder="Access token">
-                <button id="useTokenBtn" class="btn small" type="button">Use Token</button>
-              </div>
-            </details>
-          </div>
-          <div id="authStatus" class="status" aria-live="polite">Not connected.</div>
+<section id="authPanel" class="panel">
+  <div id="connectSetup" class="panelbody">
+    <div class="auth-grid">
+      <div class="auth-card">
+        <h2>Connect TeamSnap</h2>
+        <p>Connect once. The console automatically loads the data each area needs.</p>
+        <div class="credentials">
+          <div class="field"><label>Client ID / UID</label><input id="clientId" autocomplete="off"></div>
+          <div class="field"><label>Client Secret</label><input id="clientSecret" type="password" autocomplete="off"></div>
         </div>
-        <aside class="auth-card">
-          <h3>First time setup</h3>
-          <p>Create a TeamSnap OAuth application, then paste its UID / Client ID and Secret here.</p>
-          <p style="margin-top:7px"><a href="https://auth.teamsnap.com/oauth/applications" target="_blank" rel="noopener noreferrer">Open TeamSnap OAuth Applications</a></p>
-          <div class="redirect">
-            <code id="redirectDisplay">https://kakrami.github.io/myts</code>
-            <button id="copyRedirectBtn" class="btn small" type="button">Copy</button>
-          </div>
-          <div class="note" style="margin-top:8px">Use that exact redirect URI. The Client Secret is held only long enough to finish OAuth and is never stored. The access token and current console state use this tab's sessionStorage so a normal refresh restores your work.</div>
-        </aside>
+        <div class="auth-actions">
+          <button id="connectOAuthBtn" class="btn primary" type="button">Connect TeamSnap</button>
+          <details><summary style="font-size:10px;cursor:pointer;color:var(--muted)">Use an existing access token</summary>
+            <div style="display:flex;gap:6px;margin-top:7px"><input id="accessToken" style="height:36px;min-width:220px;border:1px solid var(--line);border-radius:7px;padding:0 8px" placeholder="Access token"><button id="useTokenBtn" class="btn small" type="button">Use Token</button></div>
+          </details>
+        </div>
+        <div id="authStatus" class="status" aria-live="polite">Not connected.</div>
       </div>
+      <aside class="auth-card">
+        <h3>First time setup</h3>
+        <p>Create a TeamSnap OAuth application, then paste its UID / Client ID and Secret here.</p>
+        <p style="margin-top:7px"><a href="https://auth.teamsnap.com/oauth/applications" target="_blank" rel="noopener noreferrer">Open TeamSnap OAuth Applications</a></p>
+        <div class="redirect"><code id="redirectDisplay">https://kakrami.github.io/myts</code><button id="copyRedirectBtn" class="btn small" type="button">Copy</button></div>
+        <div class="note" style="margin-top:8px">Use that exact redirect URI. The Client Secret is held only long enough to finish OAuth and is never stored. Session data is kept only in this tab so a refresh can restore your work.</div>
+      </aside>
     </div>
-    <div id="connectedState" class="connected-row hidden">
-      <div class="connected-left"><span class="dot"></span><b id="connectedUser">TeamSnap connected</b></div>
-      <button id="disconnectBtn" class="btn small danger" type="button">Disconnect</button>
-    </div>
-  </section>
+  </div>
+  <div id="connectedState" class="connected-row hidden">
+    <div class="connected-left"><span class="dot"></span><b id="connectedUser">TeamSnap connected</b></div>
+    <button id="disconnectBtn" class="btn small danger" type="button">Disconnect</button>
+  </div>
+</section>
 
-  <section id="appShell" class="panel hidden">
-    <div class="shell-header">
-      <div class="field"><label>Team</label><select id="teamSelect"><option value="">Select a team...</option></select></div>
-      <div class="field"><label>Timeframe</label>
-        <select id="timeframeSelect">
-          <option value="season">Current Season</option>
-          <option value="next30">Next 30 Days</option>
-          <option value="thisMonth">This Month</option>
-          <option value="last30">Last 30 Days</option>
-          <option value="lastSeason">Last Season</option>
-          <option value="all">All Events</option>
-          <option value="custom">Custom Dates</option>
-        </select>
-      </div>
-      <div class="field searchfield"><label>Search Current View</label><input id="globalSearch" type="search" placeholder="Player, event, opponent, location..." autocomplete="off"></div>
-      <div class="syncbox"><b id="syncTitle">Ready</b><span id="syncText">Choose a team.</span></div>
-      <div id="customRange" class="custom-range hidden">
-        <div class="field"><label>From</label><input id="customFrom" type="date"></div>
-        <div class="field"><label>To</label><input id="customTo" type="date"></div>
-      </div>
-    </div>
+<section id="appShell" class="panel hidden">
+  <div class="shell-header">
+    <div class="field"><label>Team</label><select id="teamSelect"><option value="">Select a team...</option></select></div>
+    <div class="field searchfield"><label>Search Current View</label><input id="globalSearch" type="search" placeholder="Player, event, opponent, location..." autocomplete="off"></div>
+    <div class="syncbox"><b id="syncTitle">Ready</b><span id="syncText">Choose a team.</span></div>
+  </div>
 
-    <nav id="mainNav" class="nav" aria-label="Team management">
-      <button class="navbtn active" data-page="home" type="button">Home</button>
-      <button class="navbtn" data-page="upcoming" type="button">Upcoming</button>
-      <button class="navbtn" data-page="gameday" type="button">Game Day</button>
-      <button class="navbtn" data-page="schedule" type="button">Schedule</button>
-      <button class="navbtn" data-page="roster" type="button">Roster</button>
-      <button class="navbtn" data-page="performance" type="button">Performance</button>
-      <button class="navbtn" data-page="availability" type="button">Availability</button>
-      <button class="navbtn" data-page="assignments" type="button">Assignments</button>
-      <button class="navbtn" data-page="reports" type="button">Reports</button>
-    </nav>
+  <nav id="mainNav" class="nav" aria-label="Team management">
+    <button class="navbtn active" data-page="home" type="button">Home</button>
+    <button class="navbtn" data-page="schedule" type="button">Schedule</button>
+    <button class="navbtn" data-page="roster" type="button">Roster</button>
+    <button class="navbtn" data-page="availability" type="button">Availability</button>
+    <button class="navbtn" data-page="stats" type="button">Stats</button>
+    <button class="navbtn" data-page="reports" type="button">Reports</button>
+  </nav>
 
-    <div id="appStatus" class="status" aria-live="polite" style="padding:0 12px;margin-top:7px"></div>
-    <main id="pageContent" class="page">
-      <div class="empty"><b>Choose a team</b>The manager console will load automatically.</div>
-    </main>
-  </section>
+  <div id="appStatus" class="status" aria-live="polite" style="padding:0 12px;margin-top:7px"></div>
+  <main id="pageContent" class="page"><div class="empty"><b>Choose a team</b>The manager console will load automatically.</div></main>
+</section>
 </div>
 
 <script>
 (() => {
 'use strict';
-
-const AUTH_BASE='https://auth.teamsnap.com';
-const API_BASE='https://api.teamsnap.com/v3';
-const REDIRECT_URI='https://kakrami.github.io/myts';
-const SESSION_STATE_KEY='myts.manager.state.v2';
-const SESSION_TOKEN_KEY='myts.manager.token.v2';
+const AUTH_BASE='https://auth.teamsnap.com',API_BASE='https://api.teamsnap.com/v3',REDIRECT_URI='https://kakrami.github.io/myts';
+const SESSION_STATE_KEY='myts.manager.state.v3',SESSION_TOKEN_KEY='myts.manager.token.v3';
 const $=id=>document.getElementById(id);
 
 const state={
-  token:'',clientId:'',clientSecret:'',oauthState:'',authPopup:null,me:null,
-  teams:[],team:null,events:[],members:[],locations:[],opponents:[],
-  availability:new Map(),availabilityUpdated:new Map(),
-  assignments:[],assignmentsState:'idle',
-  page:'home',timeframe:'season',customFrom:'',customTo:'',search:'',
-  gameDayEventId:'',availabilityView:'players',reportType:'',
-  scheduleType:'',scheduleOpponents:new Set(),scheduleLocations:new Set(),openPicker:'',
-  sorts:{},reportSource:'events',reportColumns:[],reportGroupBy:'',
-  restoreSnapshot:null,restoring:false,baseLoadedAt:0,liveTimer:null
+  token:'',clientId:'',clientSecret:'',oauthState:'',authPopup:null,me:null,teams:[],team:null,
+  events:[],members:[],locations:[],opponents:[],availability:new Map(),availabilityUpdated:new Map(),
+  page:'home',search:'',baseLoadedAt:0,liveTimer:null,sorts:{},
+  scheduleView:'upcoming',scheduleType:'',scheduleOpponents:new Set(),scheduleLocations:new Set(),schedulePicker:'',selectedEventId:'',
+  selectedMemberId:'',
+  availabilityTimeframe:'season',availabilityType:'all',availabilityPlayerType:'all',missingScope:'next30',readinessScope:'next30',trendType:'all',
+  statsTimeframe:'season',statsRecentCount:5,statsOpponent:'',statsLocation:'',
+  reportsTimeframe:'season',reportType:'',reportSource:'events',reportColumns:[],reportGroupBy:'',
+  restoreSnapshot:null,restoring:false
 };
 
 function setBusy(on){$('progress').classList.toggle('active',!!on)}
@@ -311,659 +259,317 @@ function first(record,keys,fallback=''){for(const k of keys){const v=record?.[k]
 function boolish(v){if(v===true||v===1)return true;if(v===false||v===0)return false;const s=String(v??'').trim().toLowerCase();if(['true','yes','y','1','on'].includes(s))return true;if(['false','no','n','0','off'].includes(s))return false;return null}
 function uniq(arr){return [...new Set(arr.filter(v=>v!==undefined&&v!==null&&v!==''))]}
 function highlight(value,query=state.search){
-  const raw=String(value??''),q=String(query??'').trim();
-  if(!q)return esc(raw);
+  const raw=String(value??''),q=String(query??'').trim();if(!q)return esc(raw);
   const parts=[...new Set(q.split(/\s+/).filter(Boolean))].sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
-  if(!parts.length)return esc(raw);
-  return esc(raw).replace(new RegExp(`(${parts.join('|')})`,'ig'),'<mark class="search-hit">$1</mark>');
+  if(!parts.length)return esc(raw);return esc(raw).replace(new RegExp(`(${parts.join('|')})`,'ig'),'<mark class="search-hit">$1</mark>')
 }
-function shortDate(date){
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return date||'';
-  const [y,m,d]=date.split('-').map(Number);
-  return new Date(y,m-1,d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
-}
+function matches(values){const q=state.search.toLowerCase();return!q||values.some(v=>String(v??'').toLowerCase().includes(q))}
 function localDate(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function todayISO(){return localDate(new Date())}
-function normalizeDate(v){
-  if(v instanceof Date&&!isNaN(v))return localDate(v);
-  const s=String(v||'').trim();if(!s)return'';
-  const m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if(m)return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
-  const d=new Date(s);return isNaN(d)?s.slice(0,10):localDate(d)
-}
+function normalizeDate(v){if(v instanceof Date&&!isNaN(v))return localDate(v);const s=String(v||'').trim();if(!s)return'';const m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;const d=new Date(s);return isNaN(d)?s.slice(0,10):localDate(d)}
+function shortDate(date){if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return date||'';const[y,m,d]=date.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}
 function monthKey(date){return /^\d{4}-\d{2}/.test(date)?date.slice(0,7):''}
 function monthLabel(key){if(!key)return'Unknown';const[y,m]=key.split('-').map(Number);return new Date(y,m-1,1).toLocaleDateString(undefined,{month:'short',year:'numeric'})}
-function parseSeasonStartYear(season){
-  const m=String(season||'').trim().match(/^(\d{4})\s*[/\-]\s*(\d{2}|\d{4})$/);if(!m)return null;
-  const start=Number(m[1]),end=m[2].length===2?Math.floor(start/100)*100+Number(m[2]):Number(m[2]);return end===start+1?start:null
-}
-function fallbackSeason(date){
-  if(!/^\d{4}-\d{2}/.test(date))return'Unknown';
-  const y=Number(date.slice(0,4)),m=Number(date.slice(5,7));return m>=7?`${y}/${String(y+1).slice(-2)}`:`${y-1}/${String(y).slice(-2)}`
-}
-function seasonPhase(date,season){
-  if(!/^\d{4}-\d{2}/.test(date))return'Unknown';
-  const y=Number(date.slice(0,4)),m=Number(date.slice(5,7)),start=parseSeasonStartYear(season);
-  if(start!==null){
-    if((y===start&&m>=7)||(y===start+1&&m<=5))return'Regular Season';
-    if(y===start+1&&(m===6||m===7))return'Postseason';
-    return'Outside Season'
-  }
-  return m===6?'Postseason':'Regular Season'
-}
-function collectionItems(payload){
-  return (payload?.collection?.items||[]).map(item=>{
-    const row={};for(const d of item.data||[]){if(d?.name)row[d.name]=d.value}
-    row._href=item.href||'';row._links=item.links||[];return row
-  })
-}
-function nextCollectionLink(payload){
-  const link=(payload?.collection?.links||[]).find(l=>String(l.rel||'').toLowerCase()==='next'||String(l.name||'').toLowerCase()==='next');
-  return link?.href||''
-}
-async function browserFetch(url,options={},label='TeamSnap request'){
-  try{
-    const res=await fetch(url,options);
-    if(!res.ok){const body=await res.text();throw new Error(`${label} failed (HTTP ${res.status}): ${body.slice(0,300)||res.statusText}`)}
-    return res
-  }catch(err){
-    if(err instanceof TypeError)throw new Error(`${label} was blocked by the browser/network. A static GitHub Pages page cannot bypass a TeamSnap CORS restriction. ${err.message}`);
-    throw err
-  }
-}
-async function apiJSON(url,params=null){
-  if(!state.token)throw new Error('Not connected to TeamSnap.');
-  const u=new URL(url);if(params)for(const[k,v]of Object.entries(params))if(v!==undefined&&v!==null&&v!=='')u.searchParams.set(k,v);
-  const res=await browserFetch(u.toString(),{headers:{Authorization:`Bearer ${state.token}`,Accept:'application/json'}},'TeamSnap API request');
-  return res.json()
-}
-async function apiSearch(resource,params){
-  let url=`${API_BASE}/${resource}/search`,nextParams={...params};const rows=[],seen=new Set();
-  while(url){
-    const payload=await apiJSON(url,nextParams);rows.push(...collectionItems(payload));
-    const next=nextCollectionLink(payload);if(!next||seen.has(next))break;seen.add(next);url=next;nextParams=null
-  }
-  return rows
-}
-async function mapLimit(items,limit,fn){
-  const results=new Array(items.length);let next=0;
-  async function worker(){while(true){const i=next++;if(i>=items.length)return;results[i]=await fn(items[i],i)}}
-  await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));return results
-}
+function parseSeasonStartYear(season){const m=String(season||'').trim().match(/^(\d{4})\s*[/\-]\s*(\d{2}|\d{4})$/);if(!m)return null;const start=Number(m[1]),end=m[2].length===2?Math.floor(start/100)*100+Number(m[2]):Number(m[2]);return end===start+1?start:null}
+function fallbackSeason(date){if(!/^\d{4}-\d{2}/.test(date))return'Unknown';const y=Number(date.slice(0,4)),m=Number(date.slice(5,7));return m>=7?`${y}/${String(y+1).slice(-2)}`:`${y-1}/${String(y).slice(-2)}`}
+function seasonPhase(date,season){if(!/^\d{4}-\d{2}/.test(date))return'Unknown';const y=Number(date.slice(0,4)),m=Number(date.slice(5,7)),start=parseSeasonStartYear(season);if(start!==null){if((y===start&&m>=7)||(y===start+1&&m<=5))return'Regular Season';if(y===start+1&&(m===6||m===7))return'Postseason';return'Outside Season'}return m===6?'Postseason':'Regular Season'}
+function collectionItems(payload){return(payload?.collection?.items||[]).map(item=>{const row={};for(const d of item.data||[])if(d?.name)row[d.name]=d.value;row._href=item.href||'';row._links=item.links||[];return row})}
+function nextCollectionLink(payload){const link=(payload?.collection?.links||[]).find(l=>String(l.rel||'').toLowerCase()==='next'||String(l.name||'').toLowerCase()==='next');return link?.href||''}
+async function browserFetch(url,options={},label='TeamSnap request'){try{const res=await fetch(url,options);if(!res.ok){const body=await res.text();throw new Error(`${label} failed (HTTP ${res.status}): ${body.slice(0,300)||res.statusText}`)}return res}catch(err){if(err instanceof TypeError)throw new Error(`${label} was blocked by the browser/network. A static GitHub Pages page cannot bypass a TeamSnap CORS restriction. ${err.message}`);throw err}}
+async function apiJSON(url,params=null){if(!state.token)throw new Error('Not connected to TeamSnap.');const u=new URL(url);if(params)for(const[k,v]of Object.entries(params))if(v!==undefined&&v!==null&&v!=='')u.searchParams.set(k,v);const res=await browserFetch(u.toString(),{headers:{Authorization:`Bearer ${state.token}`,Accept:'application/json'}},'TeamSnap API request');return res.json()}
+async function apiSearch(resource,params){let url=`${API_BASE}/${resource}/search`,nextParams={...params};const rows=[],seen=new Set();while(url){const payload=await apiJSON(url,nextParams);rows.push(...collectionItems(payload));const next=nextCollectionLink(payload);if(!next||seen.has(next))break;seen.add(next);url=next;nextParams=null}return rows}
+async function mapLimit(items,limit,fn){const results=new Array(items.length);let next=0;async function worker(){while(true){const i=next++;if(i>=items.length)return;results[i]=await fn(items[i],i)}}await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));return results}
 
 function eventStart(e){return String(first(e,['start_date','starts_at','start_at','event_date'],''))}
 function eventDate(e){return normalizeDate(eventStart(e))}
 function eventTime(e){const s=eventStart(e),m=s.match(/T(\d{2}):(\d{2})/);return m?`${m[1]}:${m[2]}`:String(first(e,['start_time','time'],''))}
-function eventType(e){
-  const raw=String(first(e,['event_type','type','game_type'],'')).toLowerCase(),name=String(first(e,['name','event_name'],'')).toLowerCase(),both=`${raw} ${name}`;
-  const practice=['practice','training','technical','skills','conditioning','fitness','speed','agility','workout'];
-  const game=['game','match','scrimmage','tournament','showcase','friendly','fixture'];
-  if(practice.some(x=>both.includes(x)))return'Practice';
-  if(boolish(e.is_game)===true||game.some(x=>both.includes(x))||name.startsWith('vs ')||name.includes(' vs ')||name.startsWith('@ '))return'Game';
-  return'Other'
-}
-function trackingFlag(e){
-  for(const k of ['tracks_availability','track_availability','availability_tracking_enabled','is_availability_tracking_enabled','is_availability_enabled'])if(k in e)return boolish(e[k]);
-  return null
-}
-function memberName(m){
-  const full=String(first(m,['name','full_name'],'')).trim();if(full)return full;
-  return `${String(m.first_name||'').trim()} ${String(m.last_name||'').trim()}`.trim()||`Member ${m.id||''}`
-}
-function isNonPlayer(m){
-  if(boolish(m.is_non_player)===true)return true;
-  const role=String(first(m,['type','member_type','role'],'')).toLowerCase();
-  return role.includes('non-player')||role.includes('non player')||role.includes('coach')||role.includes('staff')||role.includes('parent')
-}
+function eventType(e){const raw=String(first(e,['event_type','type','game_type'],'')).toLowerCase(),name=String(first(e,['name','event_name'],'')).toLowerCase(),both=`${raw} ${name}`;const practice=['practice','training','technical','skills','conditioning','fitness','speed','agility','workout'],game=['game','match','scrimmage','tournament','showcase','friendly','fixture'];if(practice.some(x=>both.includes(x)))return'Practice';if(boolish(e.is_game)===true||game.some(x=>both.includes(x))||name.startsWith('vs ')||name.includes(' vs ')||name.startsWith('@ '))return'Game';return'Other'}
+function trackingFlag(e){for(const k of ['tracks_availability','track_availability','availability_tracking_enabled','is_availability_tracking_enabled','is_availability_enabled'])if(k in e)return boolish(e[k]);return null}
+function memberName(m){const full=String(first(m,['name','full_name'],'')).trim();if(full)return full;return`${String(m.first_name||'').trim()} ${String(m.last_name||'').trim()}`.trim()||`Member ${m.id||''}`}
+function isNonPlayer(m){if(boolish(m.is_non_player)===true)return true;const role=String(first(m,['type','member_type','role'],'')).toLowerCase();return role.includes('non-player')||role.includes('non player')||role.includes('coach')||role.includes('staff')||role.includes('parent')}
 function rosterRole(m){return String(first(m,['type','member_type','role'],'')).trim()||(isNonPlayer(m)?'Non-player':'Player')}
-function lookupMap(rows){
-  const map=new Map();for(const r of rows){const id=String(r.id??'');if(id)map.set(id,String(first(r,['name','opponent_name','location_name','title'],id)))}return map
-}
+function lookupMap(rows){const map=new Map();for(const r of rows){const id=String(r.id??'');if(id)map.set(id,String(first(r,['name','opponent_name','location_name','title'],id)))}return map}
 function currentSeasonName(){return state.team?String(first(state.team,['season_name','season','division_name'],'')).trim():''}
 function numberOrNull(v){if(v===null||v===undefined||v==='')return null;const n=Number(v);return Number.isFinite(n)?n:null}
 function scoreInfo(e){
-  let sf=numberOrNull(first(e,['score_for','team_score','our_score','points_for','team_score_value'],null));
-  let sa=numberOrNull(first(e,['score_against','opponent_score','their_score','points_against','opponent_score_value'],null));
-  const hs=numberOrNull(first(e,['home_score','home_team_score'],null)),as=numberOrNull(first(e,['away_score','away_team_score'],null));
-  const isHome=boolish(first(e,['is_home','home'],null)),ha=String(first(e,['home_or_away','home_away'],'')).toLowerCase();
-  if((sf===null||sa===null)&&hs!==null&&as!==null){
-    if(isHome===true||ha==='home'){sf=hs;sa=as}else if(isHome===false||ha==='away'){sf=as;sa=hs}else{sf=hs;sa=as}
-  }
-  if(sf===null||sa===null)return null;
-  return{for:sf,against:sa,result:sf>sa?'W':sf<sa?'L':'T',diff:sf-sa}
+  let sf=numberOrNull(first(e,['points_for_team','score_for','team_score','our_score','points_for','team_score_value'],null));
+  let sa=numberOrNull(first(e,['points_for_opponent','score_against','opponent_score','their_score','points_against','opponent_score_value'],null));
+  const hs=numberOrNull(first(e,['home_score','home_team_score'],null)),as=numberOrNull(first(e,['away_score','away_team_score'],null)),isHome=boolish(first(e,['is_home','home'],null)),ha=String(first(e,['home_or_away','home_away'],'')).toLowerCase();
+  if((sf===null||sa===null)&&hs!==null&&as!==null){if(isHome===true||ha==='home'){sf=hs;sa=as}else if(isHome===false||ha==='away'){sf=as;sa=hs}else{sf=hs;sa=as}}
+  if(sf===null||sa===null){const m=String(first(e,['results'],'')).trim().match(/(-?\d+(?:\.\d+)?)\s*[-–:]\s*(-?\d+(?:\.\d+)?)/);if(m){sf=Number(m[1]);sa=Number(m[2])}}
+  if(sf===null||sa===null)return null;return{for:sf,against:sa,result:sf>sa?'W':sf<sa?'L':'T',diff:sf-sa}
 }
 function enrichEvents(){
   const locs=lookupMap(state.locations),opps=lookupMap(state.opponents),seasonName=currentSeasonName();
   state.events=state.events.map(e=>{
-    const date=eventDate(e),opp=String(first(e,['opponent_name'],opps.get(String(first(e,['opponent_id'],'')))||'')),loc=String(first(e,['location_name'],locs.get(String(first(e,['location_id'],'')))||''));
-    const name=String(first(e,['name','event_name'],'')).trim()||(opp?`vs ${opp}`:'Event'),season=seasonName||fallbackSeason(date);
-    return{...e,_id:String(e.id??''),_date:date,_time:eventTime(e),_month:monthKey(date),_name:name,_type:eventType({...e,name}),_season:season,_phase:seasonPhase(date,season),_opponent:opp,_location:loc,_tracking:trackingFlag(e)}
-  }).sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`))
-}
-
-function getSnapshot(){
-  try{const raw=sessionStorage.getItem(SESSION_STATE_KEY);return raw?JSON.parse(raw):null}catch{return null}
-}
-function persist(){
-  try{
-    const snap={
-      clientId:$('clientId')?.value.trim()||state.clientId||'',teamId:String(state.team?.id||$('teamSelect')?.value||''),
-      page:state.page,timeframe:state.timeframe,customFrom:state.customFrom,customTo:state.customTo,search:state.search,
-      gameDayEventId:state.gameDayEventId,availabilityView:state.availabilityView,reportType:state.reportType,
-      scheduleType:state.scheduleType,scheduleOpponents:[...state.scheduleOpponents],scheduleLocations:[...state.scheduleLocations],
-      reportSource:state.reportSource,reportColumns:state.reportColumns,reportGroupBy:state.reportGroupBy,sorts:state.sorts
+    const date=eventDate(e);
+    const opponentId=String(first(e,['opponent_id'],''));
+    const locationId=String(first(e,['location_id'],''));
+    const opp=String(first(e,['opponent_name'],opps.get(opponentId)||''));
+    const loc=String(first(e,['location_name'],locs.get(locationId)||''));
+    const name=String(first(e,['name','event_name'],'')).trim()||(opp?`vs ${opp}`:'Event');
+    const season=seasonName||fallbackSeason(date);
+    return{
+      ...e,
+      _id:String(e.id??''),
+      _date:date,
+      _time:eventTime(e),
+      _month:monthKey(date),
+      _name:name,
+      _type:eventType({...e,name}),
+      _season:season,
+      _phase:seasonPhase(date,season),
+      _opponent:opp,
+      _location:loc,
+      _tracking:trackingFlag(e)
     };
-    sessionStorage.setItem(SESSION_STATE_KEY,JSON.stringify(snap));if(state.token)sessionStorage.setItem(SESSION_TOKEN_KEY,state.token)
-  }catch{}
+  }).sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`));
 }
-function clearSession(){try{sessionStorage.removeItem(SESSION_STATE_KEY);sessionStorage.removeItem(SESSION_TOKEN_KEY)}catch{}}
 
-function timeframeRange(){
-  const now=new Date(),value=state.timeframe;
-  if(value==='all')return{from:'',to:''};
-  if(value==='custom')return{from:state.customFrom||'',to:state.customTo||''};
-  if(value==='next30'){const to=new Date(now);to.setDate(to.getDate()+30);return{from:localDate(now),to:localDate(to)}}
-  if(value==='thisMonth')return{from:localDate(new Date(now.getFullYear(),now.getMonth(),1)),to:localDate(new Date(now.getFullYear(),now.getMonth()+1,0))}
-  if(value==='last30'){const from=new Date(now);from.setDate(from.getDate()-30);return{from:localDate(from),to:localDate(now)}}
-  let start=parseSeasonStartYear(currentSeasonName()||fallbackSeason(localDate(now)));
-  if(start===null)start=(now.getMonth()+1)>=7?now.getFullYear():now.getFullYear()-1;
-  if(value==='lastSeason')start--;
-  return{from:`${start}-07-01`,to:`${start+1}-05-31`}
-}
-function scopedEvents(){
-  const {from,to}=timeframeRange();
-  return state.events.filter(e=>(!from||e._date>=from)&&(!to||e._date<=to))
-}
-function upcomingEvents(limit=50){
-  const today=todayISO();return scopedEvents().filter(e=>e._date&&e._date>=today).sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`)).slice(0,limit)
-}
-function matches(values){const q=state.search.toLowerCase();return!q||values.some(v=>String(v??'').toLowerCase().includes(q))}
+function rangeFor(value){const now=new Date();if(value==='all')return{from:'',to:''};if(value==='next30'){const to=new Date(now);to.setDate(to.getDate()+30);return{from:localDate(now),to:localDate(to)}}if(value==='thisMonth')return{from:localDate(new Date(now.getFullYear(),now.getMonth(),1)),to:localDate(new Date(now.getFullYear(),now.getMonth()+1,0))};if(value==='last30'){const from=new Date(now);from.setDate(from.getDate()-30);return{from:localDate(from),to:localDate(now)}}let start=parseSeasonStartYear(currentSeasonName()||fallbackSeason(localDate(now)));if(start===null)start=(now.getMonth()+1)>=7?now.getFullYear():now.getFullYear()-1;if(value==='lastSeason')start--;return{from:`${start}-07-01`,to:`${start+1}-05-31`}}
+function eventsForTimeframe(value){const{from,to}=rangeFor(value);return state.events.filter(e=>(!from||e._date>=from)&&(!to||e._date<=to))}
+function timeframeLabel(value){return{season:'Current Season',next30:'Next 30 Days',thisMonth:'This Month',last30:'Last 30 Days',lastSeason:'Last Season',all:'All Events'}[value]||'Current Season'}
+function timeframeOptions(current){return[['season','Current Season'],['next30','Next 30 Days'],['thisMonth','This Month'],['last30','Last 30 Days'],['lastSeason','Last Season'],['all','All Events']].map(([v,l])=>`<option value="${v}" ${current===v?'selected':''}>${l}</option>`).join('')}
 
 function sortConfig(id,defaultKey){if(!state.sorts[id])state.sorts[id]={key:defaultKey,dir:1};return state.sorts[id]}
-function sortedRows(id,rows,columns){
-  const cfg=sortConfig(id,columns[0]?.key||'');const key=cfg.key,dir=cfg.dir;
-  return rows.slice().sort((a,b)=>{
-    const av=a[key]??'',bv=b[key]??'';
-    if(typeof av==='number'&&typeof bv==='number')return(av-bv)*dir;
-    return String(av).localeCompare(String(bv),undefined,{numeric:true,sensitivity:'base'})*dir
-  })
-}
+function sortedRows(id,rows,columns){const cfg=sortConfig(id,columns[0]?.key||''),key=cfg.key,dir=cfg.dir;return rows.slice().sort((a,b)=>{const av=a[key]??'',bv=b[key]??'';if(typeof av==='number'&&typeof bv==='number')return(av-bv)*dir;return String(av).localeCompare(String(bv),undefined,{numeric:true,sensitivity:'base'})*dir})}
 function dataTable(id,columns,rows,empty='No data found'){
-  const cfg=sortConfig(id,columns[0]?.key||'');const sorted=sortedRows(id,rows,columns);
-  if(!sorted.length)return`<div class="empty"><b>${esc(empty)}</b>Try another timeframe or search.</div>`;
-  const mobileSort=`<div class="mobile-sort"><div class="field"><label>Sort</label><select data-mobile-sort="${esc(id)}">${columns.map(c=>`<option value="${esc(c.key)}" ${cfg.key===c.key?'selected':''}>${esc(c.label)}${cfg.key===c.key?(cfg.dir===1?' ↑':' ↓'):''}</option>`).join('')}</select></div><button class="btn small" data-mobile-dir="${esc(id)}" type="button">${cfg.dir===1?'Ascending':'Descending'}</button></div>`;
+  const cfg=sortConfig(id,columns[0]?.key||''),sorted=sortedRows(id,rows,columns);
+  if(!sorted.length)return`<div class="empty"><b>${esc(empty)}</b>Try another filter or search.</div>`;
+  const mobile=`<div class="mobile-sort"><div class="field"><label>Sort</label><select data-mobile-sort="${esc(id)}">${columns.map(c=>`<option value="${esc(c.key)}" ${cfg.key===c.key?'selected':''}>${esc(c.label)}${cfg.key===c.key?(cfg.dir===1?' ↑':' ↓'):''}</option>`).join('')}</select></div><button class="btn small" data-mobile-dir="${esc(id)}" type="button">${cfg.dir===1?'Ascending':'Descending'}</button></div>`;
   const head=columns.map(c=>`<th class="sortable ${c.num?'num':''}" data-sort-table="${esc(id)}" data-sort-key="${esc(c.key)}">${esc(c.label)}${cfg.key===c.key?(cfg.dir===1?' ▲':' ▼'):''}</th>`).join('');
-  const body=sorted.map(r=>`<tr>${columns.map(c=>`<td data-label="${esc(c.label)}" class="${c.cls||''} ${c.num?'num':''}">${c.render?c.render(r):highlight(r[c.key])}</td>`).join('')}</tr>`).join('');
-  return`${mobileSort}<div class="table-wrap"><table class="data-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`
+  const body=sorted.map(r=>`<tr${r._click?` data-row-action="${esc(r._click)}" style="cursor:pointer"`:''}>${columns.map(c=>`<td data-label="${esc(c.label)}" class="${c.cls||''} ${c.num?'num':''}">${c.render?c.render(r):highlight(r[c.key])}</td>`).join('')}</tr>`).join('');
+  return`${mobile}<div class="table-wrap"><table class="data-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`
 }
 
-function normalizeAvailability(r){
-  const raw=String(r?.status_code??r?.status??'').trim().toLowerCase();
-  if(['1','yes','available','true'].includes(raw))return'Yes';
-  if(['2','maybe'].includes(raw))return'Maybe';
-  if(['','null','undefined'].includes(raw))return'No Response';
-  return'No'
-}
-async function ensureAvailability(events,{force=false,silent=true}={}){
-  const candidates=events.filter(e=>e._tracking!==false);
-  const missing=candidates.filter(e=>force||!state.availability.has(e._id));
-  if(!missing.length)return;
-  if(!silent)status(`Loading availability for ${missing.length} event${missing.length===1?'':'s'}...`);
-  await mapLimit(missing,4,async e=>{
-    const rows=await apiSearch('availabilities',{event_id:e._id}).catch(()=>[]);
-    state.availability.set(e._id,rows);state.availabilityUpdated.set(e._id,Date.now())
-  });
-  if(!silent)status('Availability updated.','good')
-}
-function trackedAvailabilityEvents(events){
-  return events.filter(e=>{
-    if(e._tracking===false)return false;
-    const rows=state.availability.get(e._id);
-    return e._tracking===true||(Array.isArray(rows)&&rows.length>0)
-  })
-}
-function availabilityRows(events){
-  const rows=[];
-  for(const e of trackedAvailabilityEvents(events)){
-    const byMember=new Map((state.availability.get(e._id)||[]).map(a=>[String(a.member_id),a]));
-    for(const m of state.members){
-      const id=String(m.id??'');if(!id)continue;const a=byMember.get(id);
-      rows.push({eventId:e._id,date:e._date,time:e._time,event:e._name,type:e._type,opponent:e._opponent,location:e._location,season:e._season,phase:e._phase,month:e._month,memberId:id,player:memberName(m),nonPlayer:isNonPlayer(m),status:a?normalizeAvailability(a):'No Response',note:String(first(a,['notes','note','comments'],''))})
-    }
-  }
-  return rows
-}
-function counts(rows,total){
-  const c={total,yes:0,no:0,maybe:0,none:0};
-  rows.forEach(r=>{if(r.status==='Yes')c.yes++;else if(r.status==='Maybe')c.maybe++;else if(r.status==='No Response')c.none++;else c.no++});
-  const classified=c.yes+c.no+c.maybe+c.none;if(total>classified)c.none+=total-classified;c.countedNo=Math.max(0,total-c.yes);return c
-}
-function availabilityCountsForEvent(e){
-  const loaded=state.availability.has(e._id),players=state.members.filter(m=>!isNonPlayer(m)),c={loaded,total:players.length,yes:0,no:0,maybe:0,none:0};
-  if(!loaded)return c;
-  const byMember=new Map((state.availability.get(e._id)||[]).map(a=>[String(a.member_id),normalizeAvailability(a)]));
-  players.forEach(m=>{const s=byMember.get(String(m.id))||'No Response';if(s==='Yes')c.yes++;else if(s==='Maybe')c.maybe++;else if(s==='No Response')c.none++;else c.no++});
-  return c
-}
-function rating(p,gameOnly=false){
-  const scale=gameOnly?[[95,'Excellent','excellent'],[90,'Very Good','verygood'],[85,'Good','good'],[80,'Fair','fair'],[70,'Concern','concern'],[0,'Poor','poor']]:[[90,'Excellent','excellent'],[85,'Very Good','verygood'],[80,'Good','good'],[75,'Fair','fair'],[65,'Concern','concern'],[0,'Poor','poor']];
-  for(const[min,label,css]of scale)if(p>=min)return{label,css};return{label:'Poor',css:'poor'}
-}
-function mixBar(c){
-  if(!c.total)return'<div class="mix"></div>';
-  return`<div class="mix" title="Yes ${c.yes}, No ${c.no}, Maybe ${c.maybe}, No Response ${c.none}"><span class="y" style="width:${pct(c.yes,c.total)}%"></span><span class="n" style="width:${pct(c.no,c.total)}%"></span><span class="m" style="width:${pct(c.maybe,c.total)}%"></span><span class="nr" style="width:${pct(c.none,c.total)}%"></span></div>`
-}
+function normalizeAvailability(r){const raw=String(r?.status_code??r?.status??'').trim().toLowerCase();if(['1','yes','available','true'].includes(raw))return'Yes';if(['2','maybe'].includes(raw))return'Maybe';if(['','null','undefined'].includes(raw))return'No Response';return'No'}
+async function ensureAvailability(events,{force=false,silent=true}={}){const candidates=events.filter(e=>e._tracking!==false),missing=candidates.filter(e=>force||!state.availability.has(e._id));if(!missing.length)return;if(!silent)status(`Loading availability for ${missing.length} event${missing.length===1?'':'s'}...`);await mapLimit(missing,4,async e=>{const rows=await apiSearch('availabilities',{event_id:e._id}).catch(()=>[]);state.availability.set(e._id,rows);state.availabilityUpdated.set(e._id,Date.now())});if(!silent)status('Availability updated.','good')}
+function trackedAvailabilityEvents(events){return events.filter(e=>{if(e._tracking===false)return false;const rows=state.availability.get(e._id);return e._tracking===true||(Array.isArray(rows)&&rows.length>0)})}
+function availabilityRows(events){const rows=[];for(const e of trackedAvailabilityEvents(events)){const byMember=new Map((state.availability.get(e._id)||[]).map(a=>[String(a.member_id),a]));for(const m of state.members){const id=String(m.id??'');if(!id)continue;const a=byMember.get(id);rows.push({eventId:e._id,date:e._date,time:e._time,event:e._name,type:e._type,opponent:e._opponent,location:e._location,season:e._season,phase:e._phase,month:e._month,memberId:id,player:memberName(m),nonPlayer:isNonPlayer(m),status:a?normalizeAvailability(a):'No Response',note:String(first(a,['notes','note','comments'],''))})}}return rows}
+function counts(rows,total){const c={total,yes:0,no:0,maybe:0,none:0};rows.forEach(r=>{if(r.status==='Yes')c.yes++;else if(r.status==='Maybe')c.maybe++;else if(r.status==='No Response')c.none++;else c.no++});const classified=c.yes+c.no+c.maybe+c.none;if(total>classified)c.none+=total-classified;c.countedNo=Math.max(0,total-c.yes);return c}
+function availabilityCountsForEvent(e){const loaded=state.availability.has(e._id),players=state.members.filter(m=>!isNonPlayer(m)),c={loaded,total:players.length,yes:0,no:0,maybe:0,none:0};if(!loaded)return c;const byMember=new Map((state.availability.get(e._id)||[]).map(a=>[String(a.member_id),normalizeAvailability(a)]));players.forEach(m=>{const s=byMember.get(String(m.id))||'No Response';if(s==='Yes')c.yes++;else if(s==='Maybe')c.maybe++;else if(s==='No Response')c.none++;else c.no++});return c}
+function rating(p,gameOnly=false){const scale=gameOnly?[[95,'Excellent','excellent'],[90,'Very Good','verygood'],[85,'Good','good'],[80,'Fair','fair'],[70,'Concern','concern'],[0,'Poor','poor']]:[[90,'Excellent','excellent'],[85,'Very Good','verygood'],[80,'Good','good'],[75,'Fair','fair'],[65,'Concern','concern'],[0,'Poor','poor']];for(const[min,label,css]of scale)if(p>=min)return{label,css};return{label:'Poor',css:'poor'}}
+function mixBar(c){if(!c.total)return'<div class="mix"></div>';return`<div class="mix" title="Yes ${c.yes}, No ${c.no}, Maybe ${c.maybe}, No Response ${c.none}"><span class="y" style="width:${pct(c.yes,c.total)}%"></span><span class="n" style="width:${pct(c.no,c.total)}%"></span><span class="m" style="width:${pct(c.maybe,c.total)}%"></span><span class="nr" style="width:${pct(c.none,c.total)}%"></span></div>`}
 function breakdown(c){return`${c.no} No (${pct(c.no,c.total).toFixed(1)}%) · ${c.maybe} Maybe (${pct(c.maybe,c.total).toFixed(1)}%) · ${c.none} No Response (${pct(c.none,c.total).toFixed(1)}%)`}
 
-async function ensureAssignments(){
-  if(state.assignmentsState==='ready'||state.assignmentsState==='loading'||!state.team)return;
-  state.assignmentsState='loading';
-  try{state.assignments=await apiSearch('assignments',{team_id:state.team.id});state.assignmentsState='ready'}
-  catch{state.assignments=[];state.assignmentsState='error'}
-  if(['home','gameday','assignments'].includes(state.page))renderPage()
-}
-function assignmentRows(){
-  const eventMap=new Map(state.events.map(e=>[e._id,e])),memberMap=new Map(state.members.map(m=>[String(m.id),memberName(m)]));
-  return state.assignments.map(a=>{
-    const event=eventMap.get(String(first(a,['event_id'],'')))||{},memberId=String(first(a,['member_id','assigned_member_id'],''));
-    return{date:event._date||normalizeDate(first(a,['event_date','starts_at'],'')),event:event._name||String(first(a,['event_name'],'')).trim(),assignment:String(first(a,['name','description','assignment_name','title'],'')).trim()||'Assignment',member:memberMap.get(memberId)||String(first(a,['member_name','assignee_name'],'')).trim(),status:String(first(a,['status','state'],'')).trim(),eventId:String(first(a,['event_id'],''))}
-  })
-}
-
-async function refreshUpcomingAvailability(){
-  if(!state.team)return;const events=upcomingEvents(6);await ensureAvailability(events,{force:true,silent:true});
-  updateSyncText();if(['home','upcoming','gameday','availability'].includes(state.page))renderPage()
-}
-function startLive(){stopLive();refreshUpcomingAvailability();state.liveTimer=setInterval(refreshUpcomingAvailability,60000)}
-function stopLive(){if(state.liveTimer)clearInterval(state.liveTimer);state.liveTimer=null}
-function updateSyncText(){
-  if(!state.team){$('syncTitle').textContent='Ready';$('syncText').textContent='Choose a team.';return}
-  $('syncTitle').innerHTML='<span class="syncdot"></span>Connected';
-  const ages=[...state.availabilityUpdated.values()];const latest=ages.length?Math.max(...ages):state.baseLoadedAt;
-  $('syncText').textContent=latest?`Data updated ${Math.max(0,Math.floor((Date.now()-latest)/1000))} sec ago`:'Team loaded'
-}
-
-function recordFromGames(games){
-  const r={games:0,w:0,l:0,t:0,for:0,against:0,diff:0,winPct:0};
-  games.forEach(e=>{const s=scoreInfo(e);if(!s)return;r.games++;r.for+=s.for;r.against+=s.against;if(s.result==='W')r.w++;else if(s.result==='L')r.l++;else r.t++});
-  r.diff=r.for-r.against;r.winPct=r.games?((r.w+r.t*.5)/r.games)*100:0;return r
-}
-function scoredGames(events=scopedEvents()){return events.filter(e=>e._type==='Game'&&scoreInfo(e)).sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`))}
-function headToHead(events=scopedEvents()){
-  const map=new Map();scoredGames(events).forEach(e=>{const opp=e._opponent||'(Unknown opponent)';if(!map.has(opp))map.set(opp,[]);map.get(opp).push(e)});
-  return[...map.entries()].map(([opponent,games])=>({opponent,...recordFromGames(games),last:games[games.length-1]?._date||''}))
-}
+function recordFromGames(games){const r={games:0,w:0,l:0,t:0,for:0,against:0,diff:0,winPct:0};games.forEach(e=>{const s=scoreInfo(e);if(!s)return;r.games++;r.for+=s.for;r.against+=s.against;if(s.result==='W')r.w++;else if(s.result==='L')r.l++;else r.t++});r.diff=r.for-r.against;r.winPct=r.games?((r.w+r.t*.5)/r.games)*100:0;return r}
+function scoredGames(events){return events.filter(e=>e._type==='Game'&&scoreInfo(e)).sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`))}
+function headToHead(events){const map=new Map();scoredGames(events).forEach(e=>{const opp=e._opponent||'(Unknown opponent)';if(!map.has(opp))map.set(opp,[]);map.get(opp).push(e)});return[...map.entries()].map(([opponent,games])=>({opponent,...recordFromGames(games),last:games[games.length-1]?._date||''}))}
 
 function pageHead(title,subtitle,actions=''){return`<div class="pagehead"><div><h2>${esc(title)}</h2><p>${esc(subtitle)}</p></div>${actions?`<div class="actions">${actions}</div>`:''}</div>`}
-function availMini(c){
-  if(!c.loaded)return'<div class="avail-mini"><span>Availability loading…</span></div>';
-  return`<div class="avail-mini"><span>${c.yes} Yes</span><span>${c.maybe} Maybe</span><span>${c.no} No</span><span>${c.none} No Response</span></div>`
-}
-function eventCards(events){
-  if(!events.length)return'<div class="empty"><b>No events found</b>Try another timeframe or search.</div>';
-  return`<div class="event-list">${events.map(e=>`<button class="event-card" data-gameday="${esc(e._id)}" type="button"><div class="when"><b>${highlight(shortDate(e._date))}</b><span>${highlight(e._time)}</span></div><div class="event-main"><b>${highlight(e._name)}</b><span>${[e._opponent,e._location].filter(Boolean).map(v=>highlight(v)).join(' · ')}</span></div>${availMini(availabilityCountsForEvent(e))}</button>`).join('')}</div>`
-}
-function bindGameDayLinks(){
-  document.querySelectorAll('[data-gameday]').forEach(b=>b.addEventListener('click',()=>{state.gameDayEventId=b.dataset.gameday;go('gameday')}))
-}
+function availMini(c){if(!c.loaded)return'<div class="avail-mini"><span>Availability loading…</span></div>';return`<div class="avail-mini"><span>${c.yes} Yes</span><span>${c.maybe} Maybe</span><span>${c.no} No</span><span>${c.none} No Response</span></div>`}
+function eventCards(events){if(!events.length)return'<div class="empty"><b>No events found</b>Try another filter.</div>';return`<div class="event-list">${events.map(e=>`<button class="event-card" data-open-event="${esc(e._id)}" type="button"><div class="when"><b>${highlight(shortDate(e._date))}</b><span>${highlight(e._time)}</span></div><div class="event-main"><b>${highlight(e._name)}</b><span>${[e._opponent,e._location].filter(Boolean).map(v=>highlight(v)).join(' · ')}</span></div>${availMini(availabilityCountsForEvent(e))}</button>`).join('')}</div>`}
+function bindEventLinks(){document.querySelectorAll('[data-open-event]').forEach(b=>b.addEventListener('click',()=>{state.selectedEventId=b.dataset.openEvent;state.page='schedule';persist();renderPage()}))}
+
+async function refreshUpcomingAvailability(){if(!state.team)return;const events=state.events.filter(e=>e._date>=todayISO()).slice(0,6);await ensureAvailability(events,{force:true,silent:true});updateSyncText();if(['home','schedule','availability'].includes(state.page))renderPage()}
+function startLive(){stopLive();refreshUpcomingAvailability();state.liveTimer=setInterval(refreshUpcomingAvailability,60000)}
+function stopLive(){if(state.liveTimer)clearInterval(state.liveTimer);state.liveTimer=null}
+function updateSyncText(){if(!state.team){$('syncTitle').textContent='Ready';$('syncText').textContent='Choose a team.';return}$('syncTitle').innerHTML='<span class="syncdot"></span>Connected';const ages=[...state.availabilityUpdated.values()],latest=ages.length?Math.max(...ages):state.baseLoadedAt;$('syncText').textContent=latest?`Data updated ${Math.max(0,Math.floor((Date.now()-latest)/1000))} sec ago`:'Team loaded'}
 
 function renderHome(){
-  const scoped=scopedEvents(),upcoming=upcomingEvents(5).filter(e=>matches([e._name,e._opponent,e._location,e._date,e._type])),games=scoredGames(scoped),record=recordFromGames(games),players=state.members.filter(m=>!isNonPlayer(m)).length,nextGame=upcomingEvents(30).find(e=>e._type==='Game');
-  const alerts=[],soon=upcomingEvents(10);
-  const missingLoc=soon.filter(e=>!e._location).length,missingOpp=soon.filter(e=>e._type==='Game'&&!e._opponent).length;
-  let missingResp=0,knownAvail=false;soon.forEach(e=>{const c=availabilityCountsForEvent(e);if(c.loaded){knownAvail=true;missingResp+=c.none}});
-  if(knownAvail&&missingResp)alerts.push(`${missingResp} availability responses are still missing across upcoming events.`);
-  if(missingLoc)alerts.push(`${missingLoc} upcoming event${missingLoc===1?' is':'s are'} missing a location.`);
-  if(missingOpp)alerts.push(`${missingOpp} upcoming game${missingOpp===1?' is':'s are'} missing an opponent.`);
-  if(state.assignmentsState==='ready'){const unassigned=assignmentRows().filter(a=>!a.member&&a.date>=todayISO()).length;if(unassigned)alerts.push(`${unassigned} upcoming assignment${unassigned===1?' is':'s are'} unassigned.`)}
-  if(!alerts.length)alerts.push('No obvious schedule, availability, or assignment issues in the upcoming window.');
-  $('pageContent').innerHTML=pageHead('Manager Home','What is coming up, who is available, what needs attention, and how the team is performing.')+
-  `<div class="kpis">
-    <div class="kpi"><div class="label">Players</div><div class="value">${players}</div><div class="sub">Current roster</div></div>
-    <div class="kpi"><div class="label">Scoped Events</div><div class="value">${scoped.length}</div><div class="sub">${esc(timeframeLabel())}</div></div>
-    <div class="kpi"><div class="label">Next Game</div><div class="value" style="font-size:13px">${nextGame?esc(shortDate(nextGame._date)):'—'}</div><div class="sub">${nextGame?esc(nextGame._opponent||nextGame._name):'None scheduled'}</div></div>
-    <div class="kpi"><div class="label">Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div><div class="sub">${record.games?`${record.for} for · ${record.against} against`:'Scores not exposed'}</div></div>
-    <div class="kpi"><div class="label">Availability</div><div class="value" style="font-size:13px"><span class="syncdot"></span>Live</div><div class="sub">Upcoming refreshes every 60 sec</div></div>
-  </div>
-  <div class="grid2">
-    <section class="section"><div class="sectionhead"><b>Upcoming</b><button class="btn small" data-go="upcoming" type="button">View All</button></div><div class="sectionbody">${eventCards(upcoming)}</div></section>
-    <section class="section"><div class="sectionhead"><b>Needs Attention</b></div><div class="sectionbody"><div class="alert-list">${alerts.map((a,i)=>`<div class="alert ${alerts.length===1&&a.startsWith('No obvious')?'good':''}">${esc(a)}</div>`).join('')}</div></div></section>
-  </div>`;
-  bindGameDayLinks();document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)))
+  const upcoming=state.events.filter(e=>e._date>=todayISO()).slice(0,5).filter(e=>matches([e._name,e._opponent,e._location,e._date,e._type])),seasonEvents=eventsForTimeframe('season'),games=scoredGames(seasonEvents),record=recordFromGames(games),players=state.members.filter(m=>!isNonPlayer(m)).length,nextGame=state.events.find(e=>e._date>=todayISO()&&e._type==='Game');
+  const alerts=[],soon=state.events.filter(e=>e._date>=todayISO()).slice(0,10);let missing=0,known=false;soon.forEach(e=>{const c=availabilityCountsForEvent(e);if(c.loaded){known=true;missing+=c.none}});
+  if(known&&missing)alerts.push(`${missing} availability responses are still missing across upcoming events.`);
+  const missingLoc=soon.filter(e=>!e._location).length,missingOpp=soon.filter(e=>e._type==='Game'&&!e._opponent).length;if(missingLoc)alerts.push(`${missingLoc} upcoming event${missingLoc===1?' is':'s are'} missing a location.`);if(missingOpp)alerts.push(`${missingOpp} upcoming game${missingOpp===1?' is':'s are'} missing an opponent.`);if(!alerts.length)alerts.push('No obvious schedule or availability issues in the upcoming window.');
+  $('pageContent').innerHTML=pageHead('Manager Home','What is next, who is available, what needs attention, and how the team is doing.')+
+  `<div class="kpis"><div class="kpi"><div class="label">Players</div><div class="value">${players}</div><div class="sub">Current roster</div></div><div class="kpi"><div class="label">Next Game</div><div class="value" style="font-size:13px">${nextGame?esc(shortDate(nextGame._date)):'—'}</div><div class="sub">${nextGame?esc(nextGame._opponent||nextGame._name):'None scheduled'}</div></div><div class="kpi"><div class="label">Season Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div><div class="sub">${record.games?`${record.for} GF · ${record.against} GA`:'Scores not exposed'}</div></div><div class="kpi"><div class="label">Upcoming</div><div class="value">${soon.length}</div><div class="sub">Next scheduled events</div></div><div class="kpi"><div class="label">Availability</div><div class="value" style="font-size:13px"><span class="syncdot"></span>Live</div><div class="sub">Upcoming refreshes every 60 sec</div></div></div>
+  <div class="cards"><section class="card"><div class="cardhead"><b>Upcoming</b><button class="btn small" data-go="schedule" type="button">Open Schedule</button></div><div class="cardbody">${eventCards(upcoming)}</div></section><section class="card"><div class="cardhead"><b>Needs Attention</b></div><div class="cardbody"><div class="alert-list">${alerts.map(a=>`<div class="alert ${alerts.length===1&&a.startsWith('No obvious')?'good':''}">${esc(a)}</div>`).join('')}</div></div></section></div>`;
+  bindEventLinks();document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)))
 }
-function renderUpcoming(){
-  const events=upcomingEvents(50).filter(e=>matches([e._name,e._opponent,e._location,e._date,e._type,e._phase]));
-  $('pageContent').innerHTML=pageHead('Upcoming','Future games, practices, and live team availability. The console refreshes these responses automatically.')+eventCards(events);
-  bindGameDayLinks()
-}
-function renderGameDay(){
-  const games=upcomingEvents(40).filter(e=>e._type==='Game'),selected=games.find(e=>e._id===state.gameDayEventId)||games[0]||upcomingEvents(40)[0];
-  if(!selected){$('pageContent').innerHTML=pageHead('Game Day','Everything needed for the next game.')+'<div class="empty"><b>No upcoming game found</b>Try another timeframe.</div>';return}
-  state.gameDayEventId=selected._id;
-  if(!state.availability.has(selected._id)){
-    $('pageContent').innerHTML=pageHead('Game Day',`${selected._opponent||selected._name} · ${shortDate(selected._date)} ${selected._time}`)+'<div class="loader"><span class="spinner"></span>Loading current availability for this game…</div>';
-    ensureAvailability([selected],{silent:true}).then(()=>{if(state.page==='gameday'&&state.gameDayEventId===selected._id)renderPage()});return
-  }
-  const c=availabilityCountsForEvent(selected),byMember=new Map((state.availability.get(selected._id)||[]).map(a=>[String(a.member_id),a])),groups={Yes:[],Maybe:[],No:[],'No Response':[]};
-  state.members.filter(m=>!isNonPlayer(m)).forEach(m=>{const a=byMember.get(String(m.id)),s=a?normalizeAvailability(a):'No Response';(groups[s]||groups['No Response']).push(memberName(m))});
-  const assigned=state.assignmentsState==='ready'?assignmentRows().filter(a=>a.eventId===selected._id):[];
-  $('pageContent').innerHTML=pageHead('Game Day',`${selected._opponent||selected._name} · ${shortDate(selected._date)} ${selected._time||''} · ${selected._location||'Location not set'}`)+
-  `<div class="toolbar"><div class="field" style="min-width:280px;flex:1"><label>Upcoming Game</label><select id="gameDaySelect">${games.map(e=>`<option value="${esc(e._id)}" ${e._id===selected._id?'selected':''}>${esc(shortDate(e._date))} · ${esc(e._opponent||e._name)}</option>`).join('')}</select></div></div>
-  <div class="kpis">
-    <div class="kpi"><div class="label">Yes</div><div class="value">${c.yes}</div><div class="sub">Expected</div></div>
-    <div class="kpi"><div class="label">Maybe</div><div class="value">${c.maybe}</div><div class="sub">Uncertain</div></div>
-    <div class="kpi"><div class="label">No</div><div class="value">${c.no}</div><div class="sub">Unavailable</div></div>
-    <div class="kpi"><div class="label">No Response</div><div class="value">${c.none}</div><div class="sub">Needs follow-up</div></div>
-    <div class="kpi"><div class="label">Ready</div><div class="value">${c.total?pct(c.yes,c.total).toFixed(0):0}%</div><div class="sub">Yes / roster</div></div>
-  </div>
-  <div class="status-grid">${['Yes','Maybe','No','No Response'].map(s=>`<section class="status-col"><h3>${s} (${groups[s].length})</h3><div class="names">${groups[s].length?groups[s].filter(n=>matches([n])).map(n=>`<div class="person">${highlight(n)}</div>`).join(''):'<div class="person">None</div>'}</div></section>`).join('')}</div>
-  <section class="section" style="margin-top:10px"><div class="sectionhead"><b>Assignments</b></div><div class="sectionbody">${state.assignmentsState==='loading'?'<div class="loader"><span class="spinner"></span>Loading assignments…</div>':assigned.length?assigned.map(a=>`<div class="person">${highlight(a.assignment)} · ${highlight(a.member||'Unassigned')}</div>`).join(''):'<div class="empty"><b>No assignments returned</b></div>'}</div></section>`;
-  $('gameDaySelect').addEventListener('change',e=>{state.gameDayEventId=e.target.value;persist();renderPage()})
+
+function scheduleEvents(){
+  const today=todayISO();let rows=state.events;
+  if(state.scheduleView==='upcoming')rows=rows.filter(e=>e._date>=today);
+  else if(state.scheduleView==='past')rows=rows.filter(e=>e._date<today);
+  if(state.scheduleType)rows=rows.filter(e=>e._type===state.scheduleType);
+  if(state.scheduleOpponents.size)rows=rows.filter(e=>state.scheduleOpponents.has(e._opponent));
+  if(state.scheduleLocations.size)rows=rows.filter(e=>state.scheduleLocations.has(e._location));
+  return rows.filter(e=>matches([e._date,e._time,e._name,e._type,e._opponent,e._location,e._phase]))
 }
 function picker(kind){
-  const set=kind==='opponent'?state.scheduleOpponents:state.scheduleLocations,values=kind==='opponent'?uniq(state.events.map(e=>e._opponent)).sort():uniq(state.events.map(e=>e._location)).sort(),label=kind==='opponent'?'Opponent':'Location';
-  return`<div class="picker"><div class="picker-top"><input id="pickerSearch" type="search" placeholder="Search ${label.toLowerCase()}s..." value=""><button class="btn small" data-clear-picker="${kind}" type="button">Clear</button></div><div id="pickerOptions" class="picker-options">${values.map(v=>`<label class="picker-option"><input type="checkbox" data-filter-kind="${kind}" value="${esc(v)}" ${set.has(v)?'checked':''}><span>${esc(v)}</span></label>`).join('')}</div></div>`
+  const set=kind==='opponent'?state.scheduleOpponents:state.scheduleLocations,values=(kind==='opponent'?uniq(state.events.map(e=>e._opponent)):uniq(state.events.map(e=>e._location))).sort(),label=kind==='opponent'?'Opponent':'Location';
+  return`<div class="picker"><div class="picker-top"><input id="pickerSearch" type="search" placeholder="Search ${label.toLowerCase()}s..."><button class="btn small" data-clear-picker="${kind}" type="button">Clear</button></div><div id="pickerOptions" class="picker-options">${values.map(v=>`<label class="picker-option"><input type="checkbox" data-filter-kind="${kind}" value="${esc(v)}" ${set.has(v)?'checked':''}><span>${esc(v)}</span></label>`).join('')}</div></div>`
 }
-function filteredScheduleEvents(){
-  return scopedEvents().filter(e=>(!state.scheduleType||e._type===state.scheduleType)&&(!state.scheduleOpponents.size||state.scheduleOpponents.has(e._opponent))&&(!state.scheduleLocations.size||state.scheduleLocations.has(e._location))&&matches([e._date,e._time,e._name,e._type,e._opponent,e._location,e._phase]))
+function renderEventDetail(e){
+  if(!state.availability.has(e._id)&&e._tracking!==false){$('pageContent').innerHTML=pageHead('Schedule','Event details stay inside Schedule.')+`<div class="detailbar"><button id="backScheduleLoading" class="btn" type="button">Back to Schedule</button></div><div class="loader"><span class="spinner"></span>Loading current availability for this event…</div>`;$('backScheduleLoading').addEventListener('click',()=>{state.selectedEventId='';persist();renderPage()});ensureAvailability([e],{silent:true}).then(()=>{if(state.page==='schedule'&&state.selectedEventId===e._id)renderPage()});return}
+  const c=availabilityCountsForEvent(e),score=scoreInfo(e),byMember=new Map((state.availability.get(e._id)||[]).map(a=>[String(a.member_id),a])),groups={Yes:[],Maybe:[],No:[],'No Response':[]};
+  if(c.loaded)state.members.filter(m=>!isNonPlayer(m)).forEach(m=>{const a=byMember.get(String(m.id)),s=a?normalizeAvailability(a):'No Response';(groups[s]||groups['No Response']).push(memberName(m))});
+  $('pageContent').innerHTML=pageHead('Schedule',`${e._type} detail · ${shortDate(e._date)} ${e._time||''}`)+`<div class="detailbar"><button id="backSchedule" class="btn" type="button">Back to Schedule</button></div>
+  <div class="kpis"><div class="kpi"><div class="label">Event</div><div class="value" style="font-size:13px">${esc(e._name)}</div><div class="sub">${esc(e._opponent||'')}</div></div><div class="kpi"><div class="label">Location</div><div class="value" style="font-size:13px">${esc(e._location||'—')}</div></div><div class="kpi"><div class="label">Result</div><div class="value">${score?`${score.result} ${score.for}-${score.against}`:'—'}</div></div><div class="kpi"><div class="label">Available</div><div class="value">${c.loaded?c.yes:'—'}</div></div><div class="kpi"><div class="label">No Response</div><div class="value">${c.loaded?c.none:'—'}</div></div></div>
+  ${c.loaded?`<div class="status-grid">${['Yes','Maybe','No','No Response'].map(s=>`<section class="status-col"><h3>${s} (${groups[s].length})</h3><div class="names">${groups[s].length?groups[s].filter(n=>matches([n])).map(n=>`<div class="person">${highlight(n)}</div>`).join(''):'<div class="person">None</div>'}</div></section>`).join('')}</div>`:'<div class="note">Availability tracking is not enabled or not exposed for this event.</div>'}`;
+  $('backSchedule').addEventListener('click',()=>{state.selectedEventId='';persist();renderPage()})
 }
 function renderSchedule(){
-  const oppLabel=state.scheduleOpponents.size?`Opponents (${state.scheduleOpponents.size})`:'All Opponents',locLabel=state.scheduleLocations.size?`Locations (${state.scheduleLocations.size})`:'All Locations';
-  const rows=filteredScheduleEvents().map(e=>({date:e._date,time:e._time,event:e._name,type:e._type,opponent:e._opponent,location:e._location,phase:e._phase}));
+  const selected=state.events.find(e=>e._id===state.selectedEventId);if(selected){renderEventDetail(selected);return}
+  const rows=scheduleEvents().map(e=>({date:e._date,time:e._time,event:e._name,type:e._type,opponent:e._opponent,location:e._location,phase:e._phase,_click:`event:${e._id}`}));
   const cols=[{key:'date',label:'Date'},{key:'time',label:'Time'},{key:'event',label:'Event',cls:'name'},{key:'type',label:'Type'},{key:'opponent',label:'Opponent'},{key:'location',label:'Location'},{key:'phase',label:'Phase'}];
-  $('pageContent').innerHTML=pageHead('Schedule','The current timeframe is applied automatically. Use filters only when you want to narrow the schedule.')+
-  `<div class="toolbar"><div class="field"><label>Event Type</label><select id="scheduleType"><option value="">All Types</option><option ${state.scheduleType==='Game'?'selected':''}>Game</option><option ${state.scheduleType==='Practice'?'selected':''}>Practice</option><option ${state.scheduleType==='Other'?'selected':''}>Other</option></select></div><button class="btn filter-btn ${state.scheduleOpponents.size?'active':''}" data-picker="opponent" type="button">${esc(oppLabel)}</button><button class="btn filter-btn ${state.scheduleLocations.size?'active':''}" data-picker="location" type="button">${esc(locLabel)}</button></div>
-  ${state.openPicker?picker(state.openPicker):''}${dataTable('schedule',cols,rows,'No schedule events found')}`;
-  $('scheduleType').addEventListener('change',e=>{state.scheduleType=e.target.value;persist();renderPage()});
-  document.querySelectorAll('[data-picker]').forEach(b=>b.addEventListener('click',()=>{state.openPicker=state.openPicker===b.dataset.picker?'':b.dataset.picker;renderPage()}));
-  if(state.openPicker){
-    const search=$('pickerSearch');search.addEventListener('input',()=>{
-      const q=search.value.toLowerCase();document.querySelectorAll('.picker-option').forEach(o=>o.classList.toggle('hidden',!o.textContent.toLowerCase().includes(q)));
-      document.querySelectorAll('.picker-option span').forEach(s=>{const raw=s.textContent;s.innerHTML=highlight(raw,search.value)})
-    });
-    document.querySelectorAll('[data-filter-kind]').forEach(cb=>cb.addEventListener('change',()=>{
-      const set=cb.dataset.filterKind==='opponent'?state.scheduleOpponents:state.scheduleLocations;cb.checked?set.add(cb.value):set.delete(cb.value);persist();renderPage()
-    }));
-    document.querySelector('[data-clear-picker]')?.addEventListener('click',e=>{const set=e.currentTarget.dataset.clearPicker==='opponent'?state.scheduleOpponents:state.scheduleLocations;set.clear();persist();renderPage()})
-  }
+  const oppLabel=state.scheduleOpponents.size?`Opponents (${state.scheduleOpponents.size})`:'All Opponents',locLabel=state.scheduleLocations.size?`Locations (${state.scheduleLocations.size})`:'All Locations';
+  $('pageContent').innerHTML=pageHead('Schedule','Upcoming and past events live in one place. Open any event for its details and availability.')+
+  `<div class="toolbar"><div class="field"><label>View</label><select id="scheduleView"><option value="upcoming" ${state.scheduleView==='upcoming'?'selected':''}>Upcoming</option><option value="all" ${state.scheduleView==='all'?'selected':''}>All Events</option><option value="past" ${state.scheduleView==='past'?'selected':''}>Past</option></select></div><div class="field"><label>Type</label><select id="scheduleType"><option value="">All Types</option><option value="Game" ${state.scheduleType==='Game'?'selected':''}>Games</option><option value="Practice" ${state.scheduleType==='Practice'?'selected':''}>Practices</option><option value="Other" ${state.scheduleType==='Other'?'selected':''}>Other</option></select></div><button class="btn filter-btn ${state.scheduleOpponents.size?'active':''}" data-picker="opponent" type="button">${esc(oppLabel)}</button><button class="btn filter-btn ${state.scheduleLocations.size?'active':''}" data-picker="location" type="button">${esc(locLabel)}</button></div>${state.schedulePicker?picker(state.schedulePicker):''}${dataTable('schedule',cols,rows,'No schedule events found')}`;
+  $('scheduleView').addEventListener('change',e=>{state.scheduleView=e.target.value;persist();renderPage()});$('scheduleType').addEventListener('change',e=>{state.scheduleType=e.target.value;persist();renderPage()});
+  document.querySelectorAll('[data-picker]').forEach(b=>b.addEventListener('click',()=>{state.schedulePicker=state.schedulePicker===b.dataset.picker?'':b.dataset.picker;renderPage()}));
+  if(state.schedulePicker){const search=$('pickerSearch');search.addEventListener('input',()=>{const q=search.value.toLowerCase();document.querySelectorAll('.picker-option').forEach(o=>o.classList.toggle('hidden',!o.textContent.toLowerCase().includes(q)));document.querySelectorAll('.picker-option span').forEach(s=>{const raw=s.textContent;s.innerHTML=highlight(raw,search.value)})});document.querySelectorAll('[data-filter-kind]').forEach(cb=>cb.addEventListener('change',()=>{const set=cb.dataset.filterKind==='opponent'?state.scheduleOpponents:state.scheduleLocations;cb.checked?set.add(cb.value):set.delete(cb.value);persist();renderPage()}));document.querySelector('[data-clear-picker]')?.addEventListener('click',e=>{const set=e.currentTarget.dataset.clearPicker==='opponent'?state.scheduleOpponents:state.scheduleLocations;set.clear();persist();renderPage()})}
+}
+
+function renderPlayerDetail(m){
+  const seasonEvents=eventsForTimeframe('season').filter(e=>e._tracking!==false),ready=seasonEvents.every(e=>state.availability.has(e._id));
+  if(!ready){$('pageContent').innerHTML=pageHead('Roster','Player detail stays inside Roster.')+'<div class="detailbar"><button id="backRosterLoading" class="btn" type="button">Back to Roster</button></div><div class="loader"><span class="spinner"></span>Loading this player’s season availability…</div>';$('backRosterLoading').addEventListener('click',()=>{state.selectedMemberId='';persist();renderPage()});ensureAvailability(seasonEvents,{silent:true}).then(()=>{if(state.page==='roster'&&state.selectedMemberId===String(m.id))renderPage()});return}
+  const rows=availabilityRows(seasonEvents).filter(r=>r.memberId===String(m.id)),tracked=trackedAvailabilityEvents(seasonEvents).length,c=counts(rows,tracked),av=pct(c.yes,tracked),rt=rating(av,false);
+  $('pageContent').innerHTML=pageHead('Roster',memberName(m))+`<div class="detailbar"><button id="backRoster" class="btn" type="button">Back to Roster</button></div><div class="kpis"><div class="kpi"><div class="label">Category</div><div class="value" style="font-size:13px">${esc(isNonPlayer(m)?'Staff / Non-player':'Player')}</div></div><div class="kpi"><div class="label">Role</div><div class="value" style="font-size:13px">${esc(rosterRole(m))}</div></div><div class="kpi"><div class="label">Position</div><div class="value" style="font-size:13px">${esc(String(first(m,['position','position_name'],'—')))}</div></div><div class="kpi"><div class="label">Availability</div><div class="value">${tracked?av.toFixed(1)+'%':'—'}</div><div class="sub">${tracked} tracked events</div></div><div class="kpi"><div class="label">Rating</div><div class="value" style="font-size:13px"><span class="rating ${rt.css}">${esc(rt.label)}</span></div></div></div>${dataTable('playerHistory',[{key:'date',label:'Date'},{key:'event',label:'Event',cls:'name'},{key:'type',label:'Type'},{key:'status',label:'Availability'},{key:'opponent',label:'Opponent'},{key:'location',label:'Location'}],rows.filter(r=>matches(Object.values(r))),'No availability history found')}`;
+  $('backRoster').addEventListener('click',()=>{state.selectedMemberId='';persist();renderPage()})
 }
 function renderRoster(){
-  const rows=state.members.map(m=>({name:memberName(m),category:isNonPlayer(m)?'Staff / Non-player':'Player',role:rosterRole(m),position:String(first(m,['position','position_name'],'')).trim()})).filter(r=>matches(Object.values(r)));
-  const cols=[{key:'name',label:'Name',cls:'name'},{key:'category',label:'Category'},{key:'role',label:'Role'},{key:'position',label:'Position'}];
-  const players=rows.filter(r=>r.category==='Player').length,staff=rows.length-players;
-  $('pageContent').innerHTML=pageHead('Roster','Players and staff returned for this TeamSnap team.')+
-  `<div class="kpis"><div class="kpi"><div class="label">Players</div><div class="value">${players}</div></div><div class="kpi"><div class="label">Staff / Non-player</div><div class="value">${staff}</div></div><div class="kpi"><div class="label">Total</div><div class="value">${rows.length}</div></div></div>`+
-  dataTable('roster',cols,rows,'No roster members found')
+  const selected=state.members.find(m=>String(m.id)===state.selectedMemberId);if(selected){renderPlayerDetail(selected);return}
+  const rows=state.members.map(m=>({name:memberName(m),category:isNonPlayer(m)?'Staff / Non-player':'Player',role:rosterRole(m),position:String(first(m,['position','position_name'],'')).trim(),_click:`member:${m.id}`})).filter(r=>matches(Object.values(r)));
+  const cols=[{key:'name',label:'Name',cls:'name'},{key:'category',label:'Category'},{key:'role',label:'Role'},{key:'position',label:'Position'}],players=rows.filter(r=>r.category==='Player').length,staff=rows.length-players;
+  $('pageContent').innerHTML=pageHead('Roster','Players and staff. Open a person for details without leaving Roster.')+`<div class="kpis"><div class="kpi"><div class="label">Players</div><div class="value">${players}</div></div><div class="kpi"><div class="label">Staff / Non-player</div><div class="value">${staff}</div></div><div class="kpi"><div class="label">Total</div><div class="value">${rows.length}</div></div></div>${dataTable('roster',cols,rows,'No roster members found')}`
 }
-function renderPerformance(){
-  const events=scopedEvents(),games=scoredGames(events),record=recordFromGames(games),recent=games.slice(-5).reverse(),h2h=headToHead(events).filter(r=>matches([r.opponent,r.games,r.w,r.l,r.t,r.for,r.against])),avgFor=record.games?record.for/record.games:0,avgAgainst=record.games?record.against/record.games:0;
-  const hcols=[{key:'opponent',label:'Opponent',cls:'name'},{key:'games',label:'GP',num:true},{key:'w',label:'W',num:true},{key:'l',label:'L',num:true},{key:'t',label:'T',num:true},{key:'for',label:'GF',num:true},{key:'against',label:'GA',num:true},{key:'diff',label:'Diff',num:true},{key:'last',label:'Last Meeting'}];
-  let corr='<div class="loader"><span class="spinner"></span>Analyzing availability vs results automatically…</div>';
-  const scored=games.filter(e=>e._tracking!==false),ready=scored.every(e=>state.availability.has(e._id));
-  if(ready&&scored.length){
-    const buckets={W:{yes:0,total:0,games:0},L:{yes:0,total:0,games:0},T:{yes:0,total:0,games:0}};
-    for(const e of scored){const s=scoreInfo(e),rows=availabilityRows([e]).filter(r=>!r.nonPlayer),c=counts(rows,rows.length),b=buckets[s.result];b.yes+=c.yes;b.total+=c.total;b.games++}
-    corr=`<div class="kpis">${['W','T','L'].map(k=>`<div class="kpi"><div class="label">${k==='W'?'Wins':k==='L'?'Losses':'Ties'} Availability</div><div class="value">${buckets[k].total?pct(buckets[k].yes,buckets[k].total).toFixed(1)+'%':'—'}</div><div class="sub">${buckets[k].games} games</div></div>`).join('')}</div>`
-  }else if(scored.length){
-    ensureAvailability(scored,{silent:true}).then(()=>{if(state.page==='performance')renderPage()})
-  }else corr='<div class="note">Availability vs results will appear when scored games and availability data overlap.</div>';
-  $('pageContent').innerHTML=pageHead('Performance','Record, recent form, scoring trends, head-to-head history, and availability correlation for the current timeframe.')+
-  `<div class="kpis">
-    <div class="kpi"><div class="label">Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div><div class="sub">${record.games} scored games</div></div>
-    <div class="kpi"><div class="label">Win %</div><div class="value">${record.games?record.winPct.toFixed(1)+'%':'—'}</div></div>
-    <div class="kpi"><div class="label">Goals For</div><div class="value">${record.games?record.for:'—'}</div><div class="sub">${record.games?avgFor.toFixed(2)+' / game':'Scores not exposed'}</div></div>
-    <div class="kpi"><div class="label">Goals Against</div><div class="value">${record.games?record.against:'—'}</div><div class="sub">${record.games?avgAgainst.toFixed(2)+' / game':'Scores not exposed'}</div></div>
-    <div class="kpi"><div class="label">Differential</div><div class="value">${record.games?(record.diff>0?'+':'')+record.diff:'—'}</div></div>
-  </div>
-  ${!record.games?'<div class="warning">No completed game scores were found in the event fields returned by TeamSnap for this timeframe.</div>':''}
-  <div class="grid2" style="margin-top:10px"><section class="section"><div class="sectionhead"><b>Recent Form</b></div><div class="sectionbody"><div class="form-strip">${recent.length?recent.map(e=>{const s=scoreInfo(e);return`<span class="form-pill ${s.result}" title="${esc(e._opponent)} ${s.for}-${s.against}">${s.result}</span>`}).join(''):'No scored games'}</div></div></section><section class="section"><div class="sectionhead"><b>Scoring</b></div><div class="sectionbody"><div class="person">Average scored: ${record.games?avgFor.toFixed(2):'—'}</div><div class="person">Average allowed: ${record.games?avgAgainst.toFixed(2):'—'}</div></div></section></div>
-  <section class="section" style="margin-top:10px"><div class="sectionhead"><b>Head-to-Head</b></div><div class="sectionbody">${dataTable('h2h',hcols,h2h,'No head-to-head results found')}</div></section>
-  <section class="section" style="margin-top:10px"><div class="sectionhead"><b>Availability vs Results</b></div><div class="sectionbody">${corr}</div></section>`
-}
+
+function typeFilter(events,type){return type==='all'?events:events.filter(e=>e._type===type)}
 function playerAvailabilitySummary(events){
   const tracked=trackedAvailabilityEvents(events),rows=availabilityRows(tracked).filter(r=>!r.nonPlayer),map=new Map(),total=tracked.length;
   for(const r of rows){if(!map.has(r.memberId))map.set(r.memberId,{player:r.player,rows:[]});map.get(r.memberId).rows.push(r)}
   return[...map.values()].map(g=>{const c=counts(g.rows,total),p=pct(c.yes,total),rt=rating(p,tracked.every(e=>e._type==='Game'));return{player:g.player,tracked:total,availability:p,rating:rt.label,ratingClass:rt.css,no:c.no,maybe:c.maybe,noResponse:c.none,countedNo:c.countedNo,c}})
 }
 function renderAvailability(){
-  const events=scopedEvents().filter(e=>e._tracking!==false),ready=events.every(e=>state.availability.has(e._id));
-  const sub=`<div class="subnav">${[['players','Player Availability'],['noresponse','No Response'],['monthly','Monthly'],['readiness','Event Readiness']].map(([v,l])=>`<button class="subbtn ${state.availabilityView===v?'active':''}" data-av-view="${v}" type="button">${l}</button>`).join('')}</div>`;
-  if(!ready){
-    $('pageContent').innerHTML=pageHead('Availability','Historical availability for the current timeframe loads automatically.')+sub+'<div class="loader"><span class="spinner"></span>Loading availability for this timeframe…</div>';
-    ensureAvailability(events,{silent:true}).then(()=>{if(state.page==='availability')renderPage()});bindAvailabilitySubnav();return
-  }
-  const tracked=trackedAvailabilityEvents(events);
-  if(!tracked.length){$('pageContent').innerHTML=pageHead('Availability','Historical availability for the current timeframe.')+sub+'<div class="empty"><b>No tracked availability found</b>TeamSnap did not expose tracked availability for events in this timeframe.</div>';bindAvailabilitySubnav();return}
-  let body='';
-  if(state.availabilityView==='players'){
-    const rows=playerAvailabilitySummary(events).filter(r=>matches([r.player,r.rating]));
-    const cols=[{key:'player',label:'Player',cls:'name'},{key:'tracked',label:'Tracked',num:true},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`},{key:'rating',label:'Rating',render:r=>`<span class="rating ${r.ratingClass}">${esc(r.rating)}</span>`},{key:'mix',label:'Status Mix',render:r=>mixBar(r.c)},{key:'breakdown',label:'Breakdown',render:r=>`<span class="breakdown">${breakdown(r.c)}</span>`}];
-    rows.forEach(r=>{r.mix=r.availability;r.breakdown=r.countedNo});
-    body=dataTable('availabilityPlayers',cols,rows,'No players found')
-  }else if(state.availabilityView==='noresponse'){
-    const rows=playerAvailabilitySummary(events).filter(r=>r.noResponse>0&&matches([r.player])).map(r=>({...r,noResponsePct:pct(r.noResponse,r.tracked)}));
-    body=dataTable('noresponse',[{key:'player',label:'Player',cls:'name'},{key:'tracked',label:'Tracked',num:true},{key:'noResponse',label:'No Response',num:true},{key:'noResponsePct',label:'No Response %',num:true,render:r=>`${r.noResponsePct.toFixed(1)}%`},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`}],rows,'No missing responses')
-  }else if(state.availabilityView==='monthly'){
-    const arows=availabilityRows(tracked).filter(r=>!r.nonPlayer),months=uniq(arows.map(r=>r.month)).sort(),out=[];
-    for(const month of months){const monthEvents=tracked.filter(e=>e._month===month),total=monthEvents.length,by=new Map();arows.filter(r=>r.month===month).forEach(r=>{if(!by.has(r.memberId))by.set(r.memberId,{player:r.player,rows:[]});by.get(r.memberId).rows.push(r)});for(const g of by.values()){const c=counts(g.rows,total);out.push({month,monthLabel:monthLabel(month),player:g.player,tracked:total,availability:pct(c.yes,total),noResponse:c.none})}}
-    body=dataTable('availabilityMonthly',[{key:'month',label:'Month',render:r=>esc(r.monthLabel)},{key:'player',label:'Player',cls:'name'},{key:'tracked',label:'Tracked',num:true},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`},{key:'noResponse',label:'No Response',num:true}],out.filter(r=>matches([r.monthLabel,r.player])),'No monthly availability found')
-  }else{
-    const out=tracked.map(e=>{const rows=availabilityRows([e]).filter(r=>!r.nonPlayer),c=counts(rows,rows.length);return{date:e._date,event:e._name,opponent:e._opponent,location:e._location,yes:c.yes,maybe:c.maybe,no:c.no,noResponse:c.none,ready:pct(c.yes,c.total)}}).filter(r=>matches(Object.values(r)));
-    body=dataTable('readiness',[{key:'date',label:'Date'},{key:'event',label:'Event',cls:'name'},{key:'yes',label:'Expected',num:true},{key:'maybe',label:'Maybe',num:true},{key:'no',label:'No',num:true},{key:'noResponse',label:'No Response',num:true},{key:'ready',label:'Ready %',num:true,render:r=>`${r.ready.toFixed(1)}%`},{key:'opponent',label:'Opponent'},{key:'location',label:'Location'}],out,'No readiness data found')
-  }
-  $('pageContent').innerHTML=pageHead('Availability',`${tracked.length} tracked event${tracked.length===1?'':'s'} in ${timeframeLabel()}.`)+sub+body;bindAvailabilitySubnav()
+  const base=eventsForTimeframe(state.availabilityTimeframe).filter(e=>e._tracking!==false),ready=base.every(e=>state.availability.has(e._id));
+  const controls=`<div class="page-controls"><div class="field"><label>Availability Timeframe</label><select id="availabilityTimeframe">${timeframeOptions(state.availabilityTimeframe)}</select></div></div>`;
+  if(!ready){$('pageContent').innerHTML=pageHead('Availability','Who is coming, who is not responding, and what trends matter.')+controls+'<div class="loader"><span class="spinner"></span>Loading availability for this timeframe…</div>';ensureAvailability(base,{silent:true}).then(()=>{if(state.page==='availability')renderPage()});bindAvailabilityPageControls();return}
+  const tracked=trackedAvailabilityEvents(base),allRows=availabilityRows(tracked).filter(r=>!r.nonPlayer);
+  if(!tracked.length){$('pageContent').innerHTML=pageHead('Availability','Who is coming, who is not responding, and what trends matter.')+controls+'<div class="empty"><b>No tracked availability found</b>TeamSnap did not expose tracked availability for this timeframe.</div>';bindAvailabilityPageControls();return}
+  const teamEvents=typeFilter(tracked,state.availabilityType),teamRows=availabilityRows(teamEvents).filter(r=>!r.nonPlayer),teamC=counts(teamRows,teamRows.length),teamPct=pct(teamC.yes,teamC.total);
+  const players=playerAvailabilitySummary(typeFilter(tracked,state.availabilityPlayerType)).filter(r=>matches([r.player,r.rating])).sort((a,b)=>b.availability-a.availability).slice(0,8);
+  const missingEvents=state.missingScope==='next30'?state.events.filter(e=>e._date>=todayISO()&&e._date<=rangeFor('next30').to&&e._tracking!==false):tracked;
+  const missingRows=availabilityRows(missingEvents).filter(r=>!r.nonPlayer&&r.status==='No Response'),missingMap=new Map();missingRows.forEach(r=>missingMap.set(r.player,(missingMap.get(r.player)||0)+1));const missingTop=[...missingMap.entries()].map(([player,count])=>({player,count})).sort((a,b)=>b.count-a.count).slice(0,8).filter(r=>matches([r.player]));
+  const readinessEvents=state.readinessScope==='next30'?state.events.filter(e=>e._date>=todayISO()&&e._date<=rangeFor('next30').to&&e._tracking!==false).slice(0,8):tracked.slice(-8);const readiness=readinessEvents.map(e=>{const rows=availabilityRows([e]).filter(r=>!r.nonPlayer),c=counts(rows,rows.length);return{date:e._date,event:e._name,yes:c.yes,maybe:c.maybe,noResponse:c.none,ready:pct(c.yes,c.total)}}).filter(r=>matches(Object.values(r)));
+  const trendEvents=typeFilter(tracked,state.trendType),trendRows=availabilityRows(trendEvents).filter(r=>!r.nonPlayer),trendMap=new Map();trendRows.forEach(r=>{if(!trendMap.has(r.month))trendMap.set(r.month,[]);trendMap.get(r.month).push(r)});const trend=[...trendMap.entries()].sort().map(([month,rows])=>{const ev=trendEvents.filter(e=>e._month===month),c=counts(rows,rows.length);return{month,label:monthLabel(month),availability:pct(c.yes,c.total),events:ev.length}});
+
+  $('pageContent').innerHTML=pageHead('Availability','Who is coming, who is not responding, and what trends matter.')+controls+
+  `<div class="cards">
+    <section class="card"><div class="cardhead"><b>Team Availability</b><div class="card-controls"><select id="availabilityType" class="card-filter"><option value="all" ${state.availabilityType==='all'?'selected':''}>All Events</option><option value="Game" ${state.availabilityType==='Game'?'selected':''}>Games</option><option value="Practice" ${state.availabilityType==='Practice'?'selected':''}>Practices</option></select></div></div><div class="cardbody"><div class="metric"><strong>${teamPct.toFixed(1)}%</strong><span>${teamEvents.length} tracked events</span></div><div class="mini-stats"><div class="mini-stat"><b>${teamC.yes}</b><span>Yes</span></div><div class="mini-stat"><b>${teamC.maybe}</b><span>Maybe</span></div><div class="mini-stat"><b>${teamC.none}</b><span>No Response</span></div></div></div></section>
+    <section class="card"><div class="cardhead"><b>Player Availability</b><div class="card-controls"><select id="availabilityPlayerType" class="card-filter"><option value="all" ${state.availabilityPlayerType==='all'?'selected':''}>All Events</option><option value="Game" ${state.availabilityPlayerType==='Game'?'selected':''}>Games</option><option value="Practice" ${state.availabilityPlayerType==='Practice'?'selected':''}>Practices</option></select></div></div><div class="cardbody">${dataTable('availabilityCardPlayers',[{key:'player',label:'Player',cls:'name'},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`},{key:'rating',label:'Rating',render:r=>`<span class="rating ${r.ratingClass}">${esc(r.rating)}</span>`}],players,'No players found')}</div></section>
+    <section class="card"><div class="cardhead"><b>Missing Responses</b><div class="card-controls"><select id="missingScope" class="card-filter"><option value="next30" ${state.missingScope==='next30'?'selected':''}>Next 30 Days</option><option value="timeframe" ${state.missingScope==='timeframe'?'selected':''}>Current Timeframe</option></select></div></div><div class="cardbody"><div class="metric"><strong>${missingRows.length}</strong><span>missing responses</span></div>${missingTop.length?missingTop.map(r=>`<div class="person">${highlight(r.player)} <span style="float:right;font-weight:850">${r.count}</span></div>`).join(''):'<div class="note">No missing responses in this scope.</div>'}</div></section>
+    <section class="card"><div class="cardhead"><b>Event Readiness</b><div class="card-controls"><select id="readinessScope" class="card-filter"><option value="next30" ${state.readinessScope==='next30'?'selected':''}>Next 30 Days</option><option value="timeframe" ${state.readinessScope==='timeframe'?'selected':''}>Current Timeframe</option></select></div></div><div class="cardbody">${dataTable('readinessCard',[{key:'date',label:'Date'},{key:'event',label:'Event',cls:'name'},{key:'yes',label:'Yes',num:true},{key:'maybe',label:'Maybe',num:true},{key:'noResponse',label:'No Response',num:true},{key:'ready',label:'Ready %',num:true,render:r=>`${r.ready.toFixed(1)}%`}],readiness,'No readiness data found')}</div></section>
+    <section class="card wide"><div class="cardhead"><b>Monthly Trend</b><div class="card-controls"><select id="trendType" class="card-filter"><option value="all" ${state.trendType==='all'?'selected':''}>All Events</option><option value="Game" ${state.trendType==='Game'?'selected':''}>Games</option><option value="Practice" ${state.trendType==='Practice'?'selected':''}>Practices</option></select></div></div><div class="cardbody">${dataTable('trendCard',[{key:'month',label:'Month',render:r=>esc(r.label)},{key:'events',label:'Tracked Events',num:true},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`}],trend,'No monthly trend data found')}</div></section>
+  </div>`;
+  bindAvailabilityPageControls();['availabilityType','availabilityPlayerType','missingScope','readinessScope','trendType'].forEach(id=>$(id)?.addEventListener('change',e=>{const map={availabilityType:'availabilityType',availabilityPlayerType:'availabilityPlayerType',missingScope:'missingScope',readinessScope:'readinessScope',trendType:'trendType'};state[map[id]]=e.target.value;persist();renderPage()}))
 }
-function bindAvailabilitySubnav(){document.querySelectorAll('[data-av-view]').forEach(b=>b.addEventListener('click',()=>{state.availabilityView=b.dataset.avView;persist();renderPage()}))}
-function renderAssignments(){
-  if(state.assignmentsState==='idle'){ensureAssignments();$('pageContent').innerHTML=pageHead('Assignments','Team assignments and volunteer coverage load automatically.')+'<div class="loader"><span class="spinner"></span>Loading assignments…</div>';return}
-  if(state.assignmentsState==='loading'){$('pageContent').innerHTML=pageHead('Assignments','Team assignments and volunteer coverage load automatically.')+'<div class="loader"><span class="spinner"></span>Loading assignments…</div>';return}
-  if(state.assignmentsState==='error'){$('pageContent').innerHTML=pageHead('Assignments','Team assignments and volunteer coverage.')+'<div class="warning">The TeamSnap assignments resource was not available for this account/team.</div>';return}
-  const rows=assignmentRows().filter(r=>matches(Object.values(r))),cols=[{key:'date',label:'Date'},{key:'event',label:'Event'},{key:'assignment',label:'Assignment',cls:'name'},{key:'member',label:'Assigned To',render:r=>highlight(r.member||'Unassigned')},{key:'status',label:'Status'}];
-  $('pageContent').innerHTML=pageHead('Assignments','Assignments and volunteer tasks returned for this team.')+dataTable('assignments',cols,rows,'No assignments found')
+function bindAvailabilityPageControls(){$('availabilityTimeframe')?.addEventListener('change',e=>{state.availabilityTimeframe=e.target.value;persist();renderPage()})}
+
+function renderStats(){
+  const events=eventsForTimeframe(state.statsTimeframe),games=scoredGames(events),record=recordFromGames(games),recent=games.slice(-state.statsRecentCount).reverse(),h2h=headToHead(events),opponents=h2h.map(r=>r.opponent).sort();
+  if(!state.statsOpponent||!opponents.includes(state.statsOpponent))state.statsOpponent=opponents[0]||'';const h=h2h.find(r=>r.opponent===state.statsOpponent),oppGames=games.filter(e=>(e._opponent||'(Unknown opponent)')===state.statsOpponent).slice().reverse();
+  const locations=uniq(games.map(e=>e._location)).sort();if(!state.statsLocation||!locations.includes(state.statsLocation))state.statsLocation=locations[0]||'';const locGames=games.filter(e=>e._location===state.statsLocation),locRecord=recordFromGames(locGames);
+  const avgFor=record.games?record.for/record.games:0,avgAgainst=record.games?record.against/record.games:0,shutouts=games.filter(e=>scoreInfo(e)?.against===0).length,bigWin=games.map(e=>({e,s:scoreInfo(e)})).filter(x=>x.s.result==='W').sort((a,b)=>b.s.diff-a.s.diff)[0],bigLoss=games.map(e=>({e,s:scoreInfo(e)})).filter(x=>x.s.result==='L').sort((a,b)=>a.s.diff-b.s.diff)[0];
+  const opponentRows=h2h.sort((a,b)=>b.games-a.games).slice(0,8).filter(r=>matches([r.opponent]));
+  let impact='<div class="loader"><span class="spinner"></span>Analyzing availability impact automatically…</div>';const availGames=games.filter(e=>e._tracking!==false),ready=availGames.every(e=>state.availability.has(e._id));
+  if(ready&&availGames.length){const buckets=[{label:'90%+',min:90,max:101,games:[]},{label:'80–89%',min:80,max:90,games:[]},{label:'Below 80%',min:0,max:80,games:[]}];for(const e of availGames){const rows=availabilityRows([e]).filter(r=>!r.nonPlayer),c=counts(rows,rows.length),a=pct(c.yes,c.total),b=buckets.find(x=>a>=x.min&&a<x.max);if(b)b.games.push(e)}impact=`<div class="mini-stats">${buckets.map(b=>{const r=recordFromGames(b.games);return`<div class="mini-stat"><b>${r.games?`${r.w}-${r.l}-${r.t}`:'—'}</b><span>${b.label} availability · ${r.games} games</span></div>`}).join('')}</div>`}else if(availGames.length)ensureAvailability(availGames,{silent:true}).then(()=>{if(state.page==='stats')renderPage()});else impact='<div class="note">Availability impact will appear when scored games and availability overlap.</div>';
+
+  $('pageContent').innerHTML=pageHead('Stats','Results and derived team intelligence. Each card has only the filter it needs.')+
+  `<div class="page-controls"><div class="field"><label>Stats Timeframe</label><select id="statsTimeframe">${timeframeOptions(state.statsTimeframe)}</select></div></div>
+  <div class="cards">
+    <section class="card"><div class="cardhead"><b>Record</b></div><div class="cardbody"><div class="metric"><strong>${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</strong><span>${record.games?record.winPct.toFixed(1)+'% win rate':'No scored games'}</span></div><div class="mini-stats"><div class="mini-stat"><b>${record.games?record.for:'—'}</b><span>Goals For</span></div><div class="mini-stat"><b>${record.games?record.against:'—'}</b><span>Goals Against</span></div><div class="mini-stat"><b>${record.games?(record.diff>0?'+':'')+record.diff:'—'}</b><span>Differential</span></div></div></div></section>
+    <section class="card"><div class="cardhead"><b>Recent Form</b><div class="card-controls"><select id="statsRecentCount" class="card-filter"><option value="5" ${state.statsRecentCount===5?'selected':''}>Last 5</option><option value="10" ${state.statsRecentCount===10?'selected':''}>Last 10</option></select></div></div><div class="cardbody"><div class="form-strip">${recent.length?recent.map(e=>{const s=scoreInfo(e);return`<span class="form-pill ${s.result}" title="${esc(e._opponent)} ${s.for}-${s.against}">${s.result}</span>`}).join(''):'No scored games'}</div></div></section>
+    <section class="card"><div class="cardhead"><b>Head-to-Head</b><div class="card-controls"><select id="statsOpponent" class="card-filter">${opponents.map(o=>`<option value="${esc(o)}" ${state.statsOpponent===o?'selected':''}>${esc(o)}</option>`).join('')}</select></div></div><div class="cardbody">${h?`<div class="metric"><strong>${h.w}-${h.l}-${h.t}</strong><span>${h.games} meetings</span></div><div class="mini-stats"><div class="mini-stat"><b>${h.for}</b><span>GF</span></div><div class="mini-stat"><b>${h.against}</b><span>GA</span></div><div class="mini-stat"><b>${h.diff>0?'+':''}${h.diff}</b><span>Diff</span></div></div>${oppGames.slice(0,4).map(e=>{const s=scoreInfo(e);return`<div class="person">${esc(shortDate(e._date))} · ${s.result} ${s.for}-${s.against}</div>`}).join('')}`:'<div class="note">No head-to-head scores found.</div>'}</div></section>
+    <section class="card"><div class="cardhead"><b>Scoring</b></div><div class="cardbody"><div class="mini-stats"><div class="mini-stat"><b>${record.games?avgFor.toFixed(2):'—'}</b><span>Goals / Game</span></div><div class="mini-stat"><b>${record.games?avgAgainst.toFixed(2):'—'}</b><span>Allowed / Game</span></div><div class="mini-stat"><b>${record.games?shutouts:'—'}</b><span>Shutouts</span></div></div>${bigWin?`<div class="person">Biggest win · ${esc(bigWin.e._opponent||bigWin.e._name)} ${bigWin.s.for}-${bigWin.s.against}</div>`:''}${bigLoss?`<div class="person">Biggest loss · ${esc(bigLoss.e._opponent||bigLoss.e._name)} ${bigLoss.s.for}-${bigLoss.s.against}</div>`:''}</div></section>
+    <section class="card"><div class="cardhead"><b>Opponent Stats</b></div><div class="cardbody">${dataTable('statsOpponents',[{key:'opponent',label:'Opponent',cls:'name'},{key:'games',label:'GP',num:true},{key:'w',label:'W',num:true},{key:'l',label:'L',num:true},{key:'t',label:'T',num:true},{key:'diff',label:'Diff',num:true}],opponentRows,'No opponent results found')}</div></section>
+    <section class="card"><div class="cardhead"><b>Location Stats</b><div class="card-controls"><select id="statsLocation" class="card-filter">${locations.map(o=>`<option value="${esc(o)}" ${state.statsLocation===o?'selected':''}>${esc(o)}</option>`).join('')}</select></div></div><div class="cardbody">${state.statsLocation?`<div class="metric"><strong>${locRecord.games?`${locRecord.w}-${locRecord.l}-${locRecord.t}`:'—'}</strong><span>${locRecord.games} scored games</span></div><div class="mini-stats"><div class="mini-stat"><b>${locRecord.for}</b><span>GF</span></div><div class="mini-stat"><b>${locRecord.against}</b><span>GA</span></div><div class="mini-stat"><b>${locRecord.games?locRecord.winPct.toFixed(1)+'%':'—'}</b><span>Win Rate</span></div></div>`:'<div class="note">No scored locations found.</div>'}</div></section>
+    <section class="card wide"><div class="cardhead"><b>Availability Impact</b></div><div class="cardbody">${impact}</div></section>
+  </div>`;
+  $('statsTimeframe').addEventListener('change',e=>{state.statsTimeframe=e.target.value;persist();renderPage()});$('statsRecentCount')?.addEventListener('change',e=>{state.statsRecentCount=Number(e.target.value);persist();renderPage()});$('statsOpponent')?.addEventListener('change',e=>{state.statsOpponent=e.target.value;persist();renderPage()});$('statsLocation')?.addEventListener('change',e=>{state.statsLocation=e.target.value;persist();renderPage()})
 }
 
-function reportLibrary(){
-  return`<div class="report-library">
-    <button class="report-card" data-report="team"><b>Team Summary</b><p>Roster, schedule, results, opponents, and locations.</p></button>
-    <button class="report-card" data-report="schedule"><b>Schedule Analysis</b><p>Monthly event workload and event mix.</p></button>
-    <button class="report-card" data-report="opponents"><b>Opponent Analysis</b><p>Frequency and head-to-head by opponent.</p></button>
-    <button class="report-card" data-report="locations"><b>Location Analysis</b><p>Events and results by venue.</p></button>
-    <button class="report-card" data-report="availability"><b>Player Availability</b><p>Historical availability for the current timeframe.</p></button>
-    <button class="report-card" data-report="noresponse"><b>No Response</b><p>Players with missing availability responses.</p></button>
-    <button class="report-card" data-report="readiness"><b>Event Readiness</b><p>Expected players and unresolved responses by event.</p></button>
-    <button class="report-card" data-report="custom"><b>Custom Report</b><p>Choose source, columns, grouping, sorting, and export.</p></button>
-  </div>`
-}
-function reportRows(type){
-  const ev=scopedEvents();
-  if(type==='schedule'){
-    const map=new Map();ev.forEach(e=>{const k=e._month||'Unknown';if(!map.has(k))map.set(k,{month:k,label:monthLabel(k),events:0,games:0,practices:0,other:0});const r=map.get(k);r.events++;if(e._type==='Game')r.games++;else if(e._type==='Practice')r.practices++;else r.other++});return[...map.values()]
-  }
-  if(type==='opponents'){
-    const map=new Map();ev.forEach(e=>{const n=e._opponent||'(No opponent)';if(!map.has(n))map.set(n,{opponent:n,events:0,games:0,practices:0});const r=map.get(n);r.events++;if(e._type==='Game')r.games++;if(e._type==='Practice')r.practices++});const h=new Map(headToHead(ev).map(r=>[r.opponent,r]));return[...map.values()].map(r=>({...r,w:h.get(r.opponent)?.w||0,l:h.get(r.opponent)?.l||0,t:h.get(r.opponent)?.t||0,diff:h.get(r.opponent)?.diff||0}))
-  }
-  if(type==='locations'){
-    const map=new Map();ev.forEach(e=>{const n=e._location||'(No location)';if(!map.has(n))map.set(n,{location:n,events:0,games:0,practices:0,w:0,l:0,t:0});const r=map.get(n);r.events++;if(e._type==='Game'){r.games++;const s=scoreInfo(e);if(s)r[s.result.toLowerCase()]++}if(e._type==='Practice')r.practices++});return[...map.values()]
-  }
-  return[]
-}
+function reportLibrary(){return`<div class="report-library">
+  <button class="report-card" data-report="team"><b>Team Summary</b><p>Formal team snapshot for the selected timeframe.</p></button>
+  <button class="report-card" data-report="season"><b>Season Summary</b><p>Schedule, results, and availability in one summary.</p></button>
+  <button class="report-card" data-report="schedule"><b>Schedule Summary</b><p>Monthly event workload and event mix.</p></button>
+  <button class="report-card" data-report="availability"><b>Availability Summary</b><p>Formal team/player availability summary.</p></button>
+  <button class="report-card" data-report="stats"><b>Stats Summary</b><p>Record, scoring, and opponent results.</p></button>
+  <button class="report-card" data-report="roster"><b>Roster Report</b><p>Exportable player and staff roster.</p></button>
+  <button class="report-card" data-report="custom"><b>Custom Report</b><p>Choose a data source, columns, and optional grouping.</p></button>
+</div>`}
+function reportHeader(title){return pageHead(title,`${timeframeLabel(state.reportsTimeframe)} · remains inside Reports`,'<button id="backReports" class="btn" type="button">All Reports</button><button id="exportReport" class="btn primary" type="button">Export CSV</button>')}
 function renderReports(){
-  if(!state.reportType){
-    $('pageContent').innerHTML=pageHead('Reports','Optional reporting. The global timeframe applies automatically; the app fetches dependencies as needed.')+reportLibrary();
-    document.querySelectorAll('[data-report]').forEach(b=>b.addEventListener('click',()=>{state.reportType=b.dataset.report;persist();renderPage()}));return
-  }
-  const back='<button id="backReportLibrary" class="btn" type="button">All Reports</button>',exportBtn='<button id="exportReport" class="btn primary" type="button">Export CSV</button>';
-  let title='',body='',exportRows=[];
-  if(state.reportType==='team'){
-    const games=scoredGames(),record=recordFromGames(games),players=state.members.filter(m=>!isNonPlayer(m)).length,ev=scopedEvents();
-    title='Team Summary';exportRows=[{Team:first(state.team,['name','team_name'],''),Timeframe:timeframeLabel(),Players:players,Events:ev.length,Games:ev.filter(e=>e._type==='Game').length,Practices:ev.filter(e=>e._type==='Practice').length,Wins:record.w,Losses:record.l,Ties:record.t,GoalsFor:record.for,GoalsAgainst:record.against}];
-    body=`<div class="kpis"><div class="kpi"><div class="label">Players</div><div class="value">${players}</div></div><div class="kpi"><div class="label">Events</div><div class="value">${ev.length}</div></div><div class="kpi"><div class="label">Games / Practices</div><div class="value">${ev.filter(e=>e._type==='Game').length} / ${ev.filter(e=>e._type==='Practice').length}</div></div><div class="kpi"><div class="label">Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div></div><div class="kpi"><div class="label">Goal Diff</div><div class="value">${record.games?(record.diff>0?'+':'')+record.diff:'—'}</div></div></div>`
-  }else if(state.reportType==='schedule'){
-    title='Schedule Analysis';const rows=reportRows('schedule').filter(r=>matches([r.label]));exportRows=rows.map(r=>({Month:r.label,Events:r.events,Games:r.games,Practices:r.practices,Other:r.other}));body=dataTable('reportSchedule',[{key:'month',label:'Month',render:r=>highlight(r.label)},{key:'events',label:'Events',num:true},{key:'games',label:'Games',num:true},{key:'practices',label:'Practices',num:true},{key:'other',label:'Other',num:true}],rows)
-  }else if(state.reportType==='opponents'){
-    title='Opponent Analysis';const rows=reportRows('opponents').filter(r=>matches(Object.values(r)));exportRows=rows;body=dataTable('reportOpp',[{key:'opponent',label:'Opponent',cls:'name'},{key:'events',label:'Events',num:true},{key:'games',label:'Games',num:true},{key:'w',label:'W',num:true},{key:'l',label:'L',num:true},{key:'t',label:'T',num:true},{key:'diff',label:'Diff',num:true}],rows)
-  }else if(state.reportType==='locations'){
-    title='Location Analysis';const rows=reportRows('locations').filter(r=>matches(Object.values(r)));exportRows=rows;body=dataTable('reportLoc',[{key:'location',label:'Location',cls:'name'},{key:'events',label:'Events',num:true},{key:'games',label:'Games',num:true},{key:'practices',label:'Practices',num:true},{key:'w',label:'W',num:true},{key:'l',label:'L',num:true},{key:'t',label:'T',num:true}],rows)
-  }else if(['availability','noresponse','readiness'].includes(state.reportType)){
-    state.availabilityView=state.reportType==='availability'?'players':state.reportType==='noresponse'?'noresponse':'readiness';state.page='availability';renderPage();return
-  }else{
-    renderCustomReport(back,exportBtn);return
-  }
-  $('pageContent').innerHTML=pageHead(title,`${timeframeLabel()} · dependencies loaded automatically`,back+exportBtn)+body;
-  $('backReportLibrary').addEventListener('click',()=>{state.reportType='';persist();renderPage()});
-  $('exportReport').addEventListener('click',()=>downloadCSV(`teamsnap_${state.reportType}_report.csv`,exportRows))
+  const controls=`<div class="page-controls"><div class="field"><label>Report Timeframe</label><select id="reportsTimeframe">${timeframeOptions(state.reportsTimeframe)}</select></div></div>`;
+  if(!state.reportType){$('pageContent').innerHTML=pageHead('Reports','Formal summaries, exports, and custom reporting. Reports never redirect into another area.')+controls+reportLibrary();bindReportsTimeframe();document.querySelectorAll('[data-report]').forEach(b=>b.addEventListener('click',()=>{state.reportType=b.dataset.report;persist();renderPage()}));return}
+  const events=eventsForTimeframe(state.reportsTimeframe);let body='',rows=[],title='';
+  if(state.reportType==='team'){title='Team Summary';const games=scoredGames(events),r=recordFromGames(games),players=state.members.filter(m=>!isNonPlayer(m)).length;rows=[{Team:first(state.team,['name','team_name'],''),Timeframe:timeframeLabel(state.reportsTimeframe),Players:players,Events:events.length,Games:events.filter(e=>e._type==='Game').length,Practices:events.filter(e=>e._type==='Practice').length,Wins:r.w,Losses:r.l,Ties:r.t,GoalsFor:r.for,GoalsAgainst:r.against}];body=`<div class="kpis"><div class="kpi"><div class="label">Players</div><div class="value">${players}</div></div><div class="kpi"><div class="label">Events</div><div class="value">${events.length}</div></div><div class="kpi"><div class="label">Games / Practices</div><div class="value">${events.filter(e=>e._type==='Game').length} / ${events.filter(e=>e._type==='Practice').length}</div></div><div class="kpi"><div class="label">Record</div><div class="value">${r.games?`${r.w}-${r.l}-${r.t}`:'—'}</div></div><div class="kpi"><div class="label">Goal Diff</div><div class="value">${r.games?(r.diff>0?'+':'')+r.diff:'—'}</div></div></div>`}
+  else if(state.reportType==='schedule'){title='Schedule Summary';const map=new Map();events.forEach(e=>{const k=e._month||'Unknown';if(!map.has(k))map.set(k,{month:k,label:monthLabel(k),events:0,games:0,practices:0,other:0});const r=map.get(k);r.events++;if(e._type==='Game')r.games++;else if(e._type==='Practice')r.practices++;else r.other++});rows=[...map.values()];body=dataTable('reportSchedule',[{key:'month',label:'Month',render:r=>esc(r.label)},{key:'events',label:'Events',num:true},{key:'games',label:'Games',num:true},{key:'practices',label:'Practices',num:true},{key:'other',label:'Other',num:true}],rows)}
+  else if(state.reportType==='roster'){title='Roster Report';rows=state.members.map(m=>({Name:memberName(m),Category:isNonPlayer(m)?'Staff / Non-player':'Player',Role:rosterRole(m),Position:String(first(m,['position','position_name'],'')).trim()})).filter(r=>matches(Object.values(r)));body=dataTable('reportRoster',[{key:'Name',label:'Name',cls:'name'},{key:'Category',label:'Category'},{key:'Role',label:'Role'},{key:'Position',label:'Position'}],rows)}
+  else if(state.reportType==='stats'){title='Stats Summary';const games=scoredGames(events),r=recordFromGames(games),h=headToHead(events).filter(x=>matches([x.opponent]));rows=h;body=`<div class="kpis"><div class="kpi"><div class="label">Record</div><div class="value">${r.games?`${r.w}-${r.l}-${r.t}`:'—'}</div></div><div class="kpi"><div class="label">Goals For</div><div class="value">${r.games?r.for:'—'}</div></div><div class="kpi"><div class="label">Goals Against</div><div class="value">${r.games?r.against:'—'}</div></div><div class="kpi"><div class="label">Differential</div><div class="value">${r.games?(r.diff>0?'+':'')+r.diff:'—'}</div></div></div>${dataTable('reportStats',[{key:'opponent',label:'Opponent',cls:'name'},{key:'games',label:'GP',num:true},{key:'w',label:'W',num:true},{key:'l',label:'L',num:true},{key:'t',label:'T',num:true},{key:'diff',label:'Diff',num:true}],h)}`}
+  else if(['availability','season'].includes(state.reportType)){
+    const availEvents=events.filter(e=>e._tracking!==false),ready=availEvents.every(e=>state.availability.has(e._id));
+    if(!ready){$('pageContent').innerHTML=reportHeader(state.reportType==='season'?'Season Summary':'Availability Summary')+controls+'<div class="loader"><span class="spinner"></span>Loading availability required by this report…</div>';bindReportCommon();ensureAvailability(availEvents,{silent:true}).then(()=>{if(state.page==='reports'&&['availability','season'].includes(state.reportType))renderPage()});return}
+    const tracked=trackedAvailabilityEvents(availEvents),players=playerAvailabilitySummary(tracked).filter(r=>matches([r.player])),all=availabilityRows(tracked).filter(r=>!r.nonPlayer),c=counts(all,all.length),teamPct=pct(c.yes,c.total);title=state.reportType==='season'?'Season Summary':'Availability Summary';
+    if(state.reportType==='availability'){rows=players.map(r=>({Player:r.player,Tracked:r.tracked,Availability:`${r.availability.toFixed(1)}%`,Rating:r.rating,No:r.no,Maybe:r.maybe,NoResponse:r.noResponse}));body=`<div class="kpis"><div class="kpi"><div class="label">Team Availability</div><div class="value">${teamPct.toFixed(1)}%</div></div><div class="kpi"><div class="label">Tracked Events</div><div class="value">${tracked.length}</div></div><div class="kpi"><div class="label">No Response</div><div class="value">${c.none}</div></div></div>${dataTable('reportAvailability',[{key:'player',label:'Player',cls:'name'},{key:'tracked',label:'Tracked',num:true},{key:'availability',label:'Availability',num:true,render:r=>`${r.availability.toFixed(1)}%`},{key:'rating',label:'Rating'},{key:'noResponse',label:'No Response',num:true}],players)}`}
+    else{const games=scoredGames(events),r=recordFromGames(games);rows=[{Timeframe:timeframeLabel(state.reportsTimeframe),Events:events.length,TrackedAvailabilityEvents:tracked.length,TeamAvailability:`${teamPct.toFixed(1)}%`,Wins:r.w,Losses:r.l,Ties:r.t,GoalsFor:r.for,GoalsAgainst:r.against}];body=`<div class="kpis"><div class="kpi"><div class="label">Events</div><div class="value">${events.length}</div></div><div class="kpi"><div class="label">Availability</div><div class="value">${teamPct.toFixed(1)}%</div></div><div class="kpi"><div class="label">Record</div><div class="value">${r.games?`${r.w}-${r.l}-${r.t}`:'—'}</div></div><div class="kpi"><div class="label">Goals For</div><div class="value">${r.games?r.for:'—'}</div></div><div class="kpi"><div class="label">Goals Against</div><div class="value">${r.games?r.against:'—'}</div></div></div>`}
+  }else{renderCustomReport(controls);return}
+  $('pageContent').innerHTML=reportHeader(title)+controls+body;bindReportCommon();$('exportReport').addEventListener('click',()=>downloadCSV(`teamsnap_${state.reportType}_report.csv`,rows))
 }
-function customSourceRows(source){
-  if(source==='events')return scopedEvents().map(e=>({date:e._date,time:e._time,event:e._name,type:e._type,phase:e._phase,opponent:e._opponent,location:e._location}));
-  if(source==='roster')return state.members.map(m=>({name:memberName(m),category:isNonPlayer(m)?'Non-player':'Player',role:rosterRole(m),position:String(first(m,['position','position_name'],'')).trim()}));
-  if(source==='assignments')return assignmentRows();
-  if(source==='availability')return availabilityRows(scopedEvents()).filter(r=>!r.nonPlayer).map(r=>({date:r.date,event:r.event,type:r.type,player:r.player,status:r.status,opponent:r.opponent,location:r.location,season:r.season,phase:r.phase}));
-  return[]
-}
-function renderCustomReport(back,exportBtn){
-  const source=state.reportSource;
-  if(source==='assignments'&&state.assignmentsState!=='ready'){ensureAssignments();$('pageContent').innerHTML=pageHead('Custom Report','Loading the selected data source automatically.',back)+'<div class="loader"><span class="spinner"></span>Loading assignments…</div>';$('backReportLibrary').addEventListener('click',()=>{state.reportType='';persist();renderPage()});return}
-  const scope=scopedEvents();if(source==='availability'&&!scope.filter(e=>e._tracking!==false).every(e=>state.availability.has(e._id))){$('pageContent').innerHTML=pageHead('Custom Report','Loading the selected data source automatically.',back)+'<div class="loader"><span class="spinner"></span>Loading availability…</div>';$('backReportLibrary').addEventListener('click',()=>{state.reportType='';persist();renderPage()});ensureAvailability(scope,{silent:true}).then(()=>{if(state.page==='reports'&&state.reportType==='custom')renderPage()});return}
-  let rows=customSourceRows(source).filter(r=>matches(Object.values(r))),allCols=uniq(rows.slice(0,100).flatMap(r=>Object.keys(r)));
-  if(!state.reportColumns.length)state.reportColumns=allCols.slice(0,Math.min(6,allCols.length));
-  if(state.reportGroupBy){
-    const map=new Map();rows.forEach(r=>{const k=String(r[state.reportGroupBy]??'(blank)');if(!map.has(k))map.set(k,{[state.reportGroupBy]:k,count:0});map.get(k).count++});rows=[...map.values()]
-  }
-  const cols=(state.reportGroupBy?[state.reportGroupBy,'count']:state.reportColumns).filter(c=>rows.some(r=>c in r)).map(c=>({key:c,label:c.replace(/_/g,' ').replace(/\b\w/g,x=>x.toUpperCase())}));
-  $('pageContent').innerHTML=pageHead('Custom Report',`${timeframeLabel()} · data loads automatically`,back+exportBtn)+
-  `<div class="custom-grid"><aside class="custom-controls"><div class="field"><label>Data Source</label><select id="reportSource"><option value="events" ${source==='events'?'selected':''}>Events</option><option value="roster" ${source==='roster'?'selected':''}>Roster</option><option value="availability" ${source==='availability'?'selected':''}>Availability</option><option value="assignments" ${source==='assignments'?'selected':''}>Assignments</option></select></div><div class="field" style="margin-top:8px"><label>Group By</label><select id="reportGroup"><option value="">No grouping</option>${allCols.map(c=>`<option value="${esc(c)}" ${state.reportGroupBy===c?'selected':''}>${esc(c.replace(/_/g,' '))}</option>`).join('')}</select></div><div style="margin-top:9px;font-size:9px;font-weight:850;color:var(--muted);text-transform:uppercase">Columns</div><div class="column-list">${allCols.map(c=>`<label class="column-opt"><input type="checkbox" value="${esc(c)}" ${state.reportColumns.includes(c)?'checked':''}><span>${esc(c.replace(/_/g,' '))}</span></label>`).join('')}</div></aside><div>${dataTable('custom',cols,rows,'No custom report rows found')}</div></div>`;
-  $('backReportLibrary').addEventListener('click',()=>{state.reportType='';persist();renderPage()});
-  $('exportReport').addEventListener('click',()=>downloadCSV('teamsnap_custom_report.csv',rows.map(r=>Object.fromEntries(cols.map(c=>[c.label,r[c.key]])))));
-  $('reportSource').addEventListener('change',e=>{state.reportSource=e.target.value;state.reportColumns=[];state.reportGroupBy='';persist();renderPage()});
-  $('reportGroup').addEventListener('change',e=>{state.reportGroupBy=e.target.value;persist();renderPage()});
-  document.querySelectorAll('.column-opt input').forEach(cb=>cb.addEventListener('change',()=>{state.reportColumns=[...document.querySelectorAll('.column-opt input:checked')].map(x=>x.value);persist();renderPage()}))
+function bindReportsTimeframe(){$('reportsTimeframe')?.addEventListener('change',e=>{state.reportsTimeframe=e.target.value;persist();renderPage()})}
+function bindReportCommon(){bindReportsTimeframe();$('backReports')?.addEventListener('click',()=>{state.reportType='';persist();renderPage()})}
+function customSourceRows(source,events){if(source==='events')return events.map(e=>({date:e._date,time:e._time,event:e._name,type:e._type,phase:e._phase,opponent:e._opponent,location:e._location}));if(source==='roster')return state.members.map(m=>({name:memberName(m),category:isNonPlayer(m)?'Non-player':'Player',role:rosterRole(m),position:String(first(m,['position','position_name'],'')).trim()}));if(source==='availability')return availabilityRows(events).filter(r=>!r.nonPlayer).map(r=>({date:r.date,event:r.event,type:r.type,player:r.player,status:r.status,opponent:r.opponent,location:r.location,season:r.season,phase:r.phase}));return[]}
+function renderCustomReport(controls){
+  const events=eventsForTimeframe(state.reportsTimeframe),source=state.reportSource;if(source==='availability'&&!events.filter(e=>e._tracking!==false).every(e=>state.availability.has(e._id))){$('pageContent').innerHTML=reportHeader('Custom Report')+controls+'<div class="loader"><span class="spinner"></span>Loading availability for the selected data source…</div>';bindReportCommon();ensureAvailability(events,{silent:true}).then(()=>{if(state.page==='reports'&&state.reportType==='custom')renderPage()});return}
+  let data=customSourceRows(source,events).filter(r=>matches(Object.values(r))),allCols=uniq(data.slice(0,100).flatMap(r=>Object.keys(r)));if(!state.reportColumns.length)state.reportColumns=allCols.slice(0,Math.min(6,allCols.length));if(state.reportGroupBy){const map=new Map();data.forEach(r=>{const k=String(r[state.reportGroupBy]??'(blank)');if(!map.has(k))map.set(k,{[state.reportGroupBy]:k,count:0});map.get(k).count++});data=[...map.values()]}
+  const cols=(state.reportGroupBy?[state.reportGroupBy,'count']:state.reportColumns).filter(c=>data.some(r=>c in r)).map(c=>({key:c,label:c.replace(/_/g,' ').replace(/\b\w/g,x=>x.toUpperCase())}));
+  $('pageContent').innerHTML=reportHeader('Custom Report')+controls+`<div class="custom-grid"><aside class="custom-controls"><div class="field"><label>Data Source</label><select id="reportSource"><option value="events" ${source==='events'?'selected':''}>Events</option><option value="roster" ${source==='roster'?'selected':''}>Roster</option><option value="availability" ${source==='availability'?'selected':''}>Availability</option></select></div><div class="field" style="margin-top:8px"><label>Group By</label><select id="reportGroup"><option value="">No grouping</option>${allCols.map(c=>`<option value="${esc(c)}" ${state.reportGroupBy===c?'selected':''}>${esc(c.replace(/_/g,' '))}</option>`).join('')}</select></div><div style="margin-top:9px;font-size:9px;font-weight:850;color:var(--muted);text-transform:uppercase">Columns</div><div class="column-list">${allCols.map(c=>`<label class="column-opt"><input type="checkbox" value="${esc(c)}" ${state.reportColumns.includes(c)?'checked':''}><span>${esc(c.replace(/_/g,' '))}</span></label>`).join('')}</div></aside><div>${dataTable('custom',cols,data,'No custom report rows found')}</div></div>`;
+  bindReportCommon();
+  $('exportReport').addEventListener('click',()=>{
+    const exportRows=data.map(r=>Object.fromEntries(cols.map(c=>[c.label,r[c.key]])));
+    downloadCSV('teamsnap_custom_report.csv',exportRows);
+  });
+  $('reportSource').addEventListener('change',e=>{
+    state.reportSource=e.target.value;
+    state.reportColumns=[];
+    state.reportGroupBy='';
+    persist();
+    renderPage();
+  });
+  $('reportGroup').addEventListener('change',e=>{
+    state.reportGroupBy=e.target.value;
+    persist();
+    renderPage();
+  });
+  document.querySelectorAll('.column-opt input').forEach(cb=>cb.addEventListener('change',()=>{
+    state.reportColumns=[...document.querySelectorAll('.column-opt input:checked')].map(x=>x.value);
+    persist();
+    renderPage();
+  }));
 }
 
-function timeframeLabel(){
-  return{season:'Current Season',next30:'Next 30 Days',thisMonth:'This Month',last30:'Last 30 Days',lastSeason:'Last Season',all:'All Events',custom:`${state.customFrom||'Start'} – ${state.customTo||'End'}`}[state.timeframe]||'Current Season'
-}
 function renderPage(){
-  if(!state.team)return;
-  document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===state.page));
-  updateSyncText();
-  if(state.page==='home')renderHome();
-  else if(state.page==='upcoming')renderUpcoming();
-  else if(state.page==='gameday')renderGameDay();
-  else if(state.page==='schedule')renderSchedule();
-  else if(state.page==='roster')renderRoster();
-  else if(state.page==='performance')renderPerformance();
-  else if(state.page==='availability')renderAvailability();
-  else if(state.page==='assignments')renderAssignments();
-  else renderReports()
+  if(!state.team)return;document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===state.page));updateSyncText();
+  if(state.page==='home')renderHome();else if(state.page==='schedule')renderSchedule();else if(state.page==='roster')renderRoster();else if(state.page==='availability')renderAvailability();else if(state.page==='stats')renderStats();else renderReports()
 }
-function go(page){state.page=page;state.openPicker='';persist();renderPage();requestAnimationFrame(()=>$('appShell').scrollIntoView({behavior:'smooth',block:'start'}))}
+function go(page){state.page=page;state.schedulePicker='';state.selectedEventId='';state.selectedMemberId='';persist();renderPage();requestAnimationFrame(()=>$('appShell').scrollIntoView({behavior:'smooth',block:'start'}))}
 
 function csvEscape(v){let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s=`'${s}`;return/[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s}
-function downloadCSV(filename,rows){
-  if(!rows.length)return;const keys=Object.keys(rows[0]),lines=[keys.map(csvEscape).join(',')];rows.forEach(r=>lines.push(keys.map(k=>csvEscape(r[k])).join(',')));
-  const blob=new Blob(["\ufeff"+lines.join('\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
-}
+function downloadCSV(filename,rows){if(!rows.length)return;const keys=Object.keys(rows[0]),lines=[keys.map(csvEscape).join(',')];rows.forEach(r=>lines.push(keys.map(k=>csvEscape(r[k])).join(',')));const blob=new Blob(["\ufeff"+lines.join('\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 
+function getSnapshot(){try{const raw=sessionStorage.getItem(SESSION_STATE_KEY);return raw?JSON.parse(raw):null}catch{return null}}
+function persist(){try{const s={clientId:$('clientId')?.value.trim()||state.clientId||'',teamId:String(state.team?.id||$('teamSelect')?.value||''),page:state.page,search:state.search,sorts:state.sorts,scheduleView:state.scheduleView,scheduleType:state.scheduleType,scheduleOpponents:[...state.scheduleOpponents],scheduleLocations:[...state.scheduleLocations],selectedEventId:state.selectedEventId,selectedMemberId:state.selectedMemberId,availabilityTimeframe:state.availabilityTimeframe,availabilityType:state.availabilityType,availabilityPlayerType:state.availabilityPlayerType,missingScope:state.missingScope,readinessScope:state.readinessScope,trendType:state.trendType,statsTimeframe:state.statsTimeframe,statsRecentCount:state.statsRecentCount,statsOpponent:state.statsOpponent,statsLocation:state.statsLocation,reportsTimeframe:state.reportsTimeframe,reportType:state.reportType,reportSource:state.reportSource,reportColumns:state.reportColumns,reportGroupBy:state.reportGroupBy};sessionStorage.setItem(SESSION_STATE_KEY,JSON.stringify(s));if(state.token)sessionStorage.setItem(SESSION_TOKEN_KEY,state.token)}catch{}}
+function clearSession(){try{sessionStorage.removeItem(SESSION_STATE_KEY);sessionStorage.removeItem(SESSION_TOKEN_KEY)}catch{}}
+function applySnapshot(s){state.page=['home','schedule','roster','availability','stats','reports'].includes(s.page)?s.page:'home';state.search=s.search||'';state.sorts=s.sorts||{};state.scheduleView=s.scheduleView||'upcoming';state.scheduleType=s.scheduleType||'';state.scheduleOpponents=new Set(s.scheduleOpponents||[]);state.scheduleLocations=new Set(s.scheduleLocations||[]);state.selectedEventId=s.selectedEventId||'';state.selectedMemberId=s.selectedMemberId||'';state.availabilityTimeframe=s.availabilityTimeframe||'season';state.availabilityType=s.availabilityType||'all';state.availabilityPlayerType=s.availabilityPlayerType||'all';state.missingScope=s.missingScope||'next30';state.readinessScope=s.readinessScope||'next30';state.trendType=s.trendType||'all';state.statsTimeframe=s.statsTimeframe||'season';state.statsRecentCount=Number(s.statsRecentCount)||5;state.statsOpponent=s.statsOpponent||'';state.statsLocation=s.statsLocation||'';state.reportsTimeframe=s.reportsTimeframe||'season';state.reportType=s.reportType||'';state.reportSource=s.reportSource||'events';state.reportColumns=Array.isArray(s.reportColumns)?s.reportColumns:[];state.reportGroupBy=s.reportGroupBy||'';$('globalSearch').value=state.search}
 function randomState(){const bytes=new Uint8Array(24);crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('')}
 function isOAuthCallback(){const p=new URLSearchParams(location.search);return p.has('code')||p.has('error')}
-function handleOAuthCallbackPage(){
-  if(!isOAuthCallback())return false;const p=new URLSearchParams(location.search),payload={type:'teamsnap-oauth-callback',code:p.get('code')||'',state:p.get('state')||'',error:p.get('error')||'',errorDescription:p.get('error_description')||''};
-  if(window.opener&&!window.opener.closed){window.opener.postMessage(payload,location.origin);document.body.innerHTML='<div style="font-family:Segoe UI,Arial,sans-serif;padding:32px;text-align:center"><h2>TeamSnap authorization complete</h2><p>You can close this window.</p></div>';setTimeout(()=>window.close(),250);return true}
-  history.replaceState({},document.title,location.pathname);return false
-}
-async function exchangeOAuthCode(code){
-  if(!state.clientId||!state.clientSecret)throw new Error('Client ID or Client Secret is no longer available. Start Connect TeamSnap again.');
-  const body=new URLSearchParams({client_id:state.clientId,client_secret:state.clientSecret,redirect_uri:REDIRECT_URI,grant_type:'authorization_code',code});
-  const res=await browserFetch(`${AUTH_BASE}/oauth/token`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded',Accept:'application/json'},body},'TeamSnap token exchange'),data=await res.json();
-  if(!data.access_token)throw new Error('TeamSnap did not return an access token.');
-  $('clientSecret').value='';state.clientSecret='';await connectWithToken(data.access_token)
-}
-async function connectWithToken(token){
-  state.token=String(token||'').trim();if(!state.token)throw new Error('Enter an access token.');
-  setBusy(true);
-  try{
-    const payload=await apiJSON(`${API_BASE}/me`),rows=collectionItems(payload);if(!rows.length)throw new Error('TeamSnap /me returned no user record.');
-    state.me=rows[0];try{sessionStorage.setItem(SESSION_TOKEN_KEY,state.token)}catch{}
-    const name=`${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim()||'TeamSnap user';
-    $('connectedUser').textContent=`TeamSnap connected as ${name}`;$('connectSetup').classList.add('hidden');$('connectedState').classList.remove('hidden');$('appShell').classList.remove('hidden');authStatus(`Connected as ${name}`,'good');
-    await loadTeams()
-  }catch(err){state.token='';throw err}finally{setBusy(false)}
-}
-async function loadTeams(){
-  if(!state.me)return;setBusy(true);status('Loading teams…');
-  try{
-    state.teams=await apiSearch('teams',{user_id:state.me.id});state.teams.sort((a,b)=>String(first(a,['name','team_name'],'')).localeCompare(String(first(b,['name','team_name'],''))));
-    $('teamSelect').innerHTML='<option value="">Select a team...</option>'+state.teams.map(t=>`<option value="${esc(String(t.id))}">${esc(String(first(t,['name','team_name'],`Team ${t.id}`)))}</option>`).join('');
-    const saved=String(state.restoreSnapshot?.teamId||''),exists=saved&&state.teams.some(t=>String(t.id)===saved);
-    if(state.restoring&&exists){$('teamSelect').value=saved;await loadTeamData(saved,true)}
-    else if(state.teams.length===1){$('teamSelect').value=String(state.teams[0].id);await loadTeamData(state.teams[0].id,false)}
-    else{state.restoring=false;state.restoreSnapshot=null;status('Choose a team to open the manager console.','good')}
-  }finally{setBusy(false)}
-}
-async function loadTeamData(teamId,restore=false){
-  if(!teamId)return;setBusy(true);status('Loading team data automatically…');
-  stopLive();state.team=state.teams.find(t=>String(t.id)===String(teamId))||null;state.events=[];state.members=[];state.locations=[];state.opponents=[];state.availability.clear();state.availabilityUpdated.clear();state.assignments=[];state.assignmentsState='idle';
-  try{
-    const[events,members,locations,opponents]=await Promise.all([apiSearch('events',{team_id:teamId}),apiSearch('members',{team_id:teamId}),apiSearch('locations',{team_id:teamId}).catch(()=>[]),apiSearch('opponents',{team_id:teamId}).catch(()=>[])]);
-    state.events=events;state.members=members;state.locations=locations;state.opponents=opponents;enrichEvents();state.baseLoadedAt=Date.now();
-    if(restore&&state.restoreSnapshot)applySnapshot(state.restoreSnapshot);else{state.page='home';state.timeframe='season';state.search='';$('timeframeSelect').value='season';$('globalSearch').value=''}
-    $('customRange').classList.toggle('hidden',state.timeframe!=='custom');state.restoreSnapshot=null;state.restoring=false;status(`${state.events.length} events and ${state.members.length} roster members loaded.`,'good');
-    renderPage();startLive();ensureAssignments();persist()
-  }catch(err){status(err.message,'bad')}finally{setBusy(false)}
-}
-function applySnapshot(s){
-  state.page=s.page||'home';state.timeframe=s.timeframe||'season';state.customFrom=s.customFrom||'';state.customTo=s.customTo||'';state.search=s.search||'';state.gameDayEventId=s.gameDayEventId||'';state.availabilityView=s.availabilityView||'players';state.reportType=s.reportType||'';state.scheduleType=s.scheduleType||'';state.scheduleOpponents=new Set(s.scheduleOpponents||[]);state.scheduleLocations=new Set(s.scheduleLocations||[]);state.reportSource=s.reportSource||'events';state.reportColumns=Array.isArray(s.reportColumns)?s.reportColumns:[];state.reportGroupBy=s.reportGroupBy||'';state.sorts=s.sorts||{};
-  $('timeframeSelect').value=state.timeframe;$('globalSearch').value=state.search;$('customFrom').value=state.customFrom;$('customTo').value=state.customTo
-}
-async function restoreSession(){
-  const snap=getSnapshot();let token='';try{token=sessionStorage.getItem(SESSION_TOKEN_KEY)||''}catch{}
-  if(snap?.clientId)$('clientId').value=snap.clientId;if(!token)return;
-  state.restoreSnapshot=snap;state.restoring=true;authStatus('Restoring TeamSnap session…','warn');
-  try{await connectWithToken(token)}catch(err){clearSession();state.restoreSnapshot=null;state.restoring=false;authStatus(`Saved session could not be restored: ${err.message}`,'bad')}
-}
+function handleOAuthCallbackPage(){if(!isOAuthCallback())return false;const p=new URLSearchParams(location.search),payload={type:'teamsnap-oauth-callback',code:p.get('code')||'',state:p.get('state')||'',error:p.get('error')||'',errorDescription:p.get('error_description')||''};if(window.opener&&!window.opener.closed){window.opener.postMessage(payload,location.origin);document.body.innerHTML='<div style="font-family:Segoe UI,Arial,sans-serif;padding:32px;text-align:center"><h2>TeamSnap authorization complete</h2><p>You can close this window.</p></div>';setTimeout(()=>window.close(),250);return true}history.replaceState({},document.title,location.pathname);return false}
+async function exchangeOAuthCode(code){if(!state.clientId||!state.clientSecret)throw new Error('Client ID or Client Secret is no longer available. Start Connect TeamSnap again.');const body=new URLSearchParams({client_id:state.clientId,client_secret:state.clientSecret,redirect_uri:REDIRECT_URI,grant_type:'authorization_code',code}),res=await browserFetch(`${AUTH_BASE}/oauth/token`,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded',Accept:'application/json'},body},'TeamSnap token exchange'),data=await res.json();if(!data.access_token)throw new Error('TeamSnap did not return an access token.');$('clientSecret').value='';state.clientSecret='';await connectWithToken(data.access_token)}
+async function connectWithToken(token){state.token=String(token||'').trim();if(!state.token)throw new Error('Enter an access token.');setBusy(true);try{const payload=await apiJSON(`${API_BASE}/me`),rows=collectionItems(payload);if(!rows.length)throw new Error('TeamSnap /me returned no user record.');state.me=rows[0];try{sessionStorage.setItem(SESSION_TOKEN_KEY,state.token)}catch{}const name=`${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim()||'TeamSnap user';$('connectedUser').textContent=`TeamSnap connected as ${name}`;$('connectSetup').classList.add('hidden');$('connectedState').classList.remove('hidden');$('appShell').classList.remove('hidden');authStatus(`Connected as ${name}`,'good');await loadTeams()}catch(err){state.token='';throw err}finally{setBusy(false)}}
+async function loadTeams(){if(!state.me)return;setBusy(true);status('Loading teams…');try{state.teams=await apiSearch('teams',{user_id:state.me.id});state.teams.sort((a,b)=>String(first(a,['name','team_name'],'')).localeCompare(String(first(b,['name','team_name'],''))));$('teamSelect').innerHTML='<option value="">Select a team...</option>'+state.teams.map(t=>`<option value="${esc(String(t.id))}">${esc(String(first(t,['name','team_name'],`Team ${t.id}`)))}</option>`).join('');const saved=String(state.restoreSnapshot?.teamId||''),exists=saved&&state.teams.some(t=>String(t.id)===saved);if(state.restoring&&exists){$('teamSelect').value=saved;await loadTeamData(saved,true)}else if(state.teams.length===1){$('teamSelect').value=String(state.teams[0].id);await loadTeamData(state.teams[0].id,false)}else{state.restoring=false;state.restoreSnapshot=null;status('Choose a team to open the manager console.','good')}}finally{setBusy(false)}}
+async function loadTeamData(teamId,restore=false){if(!teamId)return;setBusy(true);status('Loading team data automatically…');stopLive();state.team=state.teams.find(t=>String(t.id)===String(teamId))||null;state.events=[];state.members=[];state.locations=[];state.opponents=[];state.availability.clear();state.availabilityUpdated.clear();try{const[events,members,locations,opponents]=await Promise.all([apiSearch('events',{team_id:teamId}),apiSearch('members',{team_id:teamId}),apiSearch('locations',{team_id:teamId}).catch(()=>[]),apiSearch('opponents',{team_id:teamId}).catch(()=>[])]);state.events=events;state.members=members;state.locations=locations;state.opponents=opponents;enrichEvents();state.baseLoadedAt=Date.now();if(restore&&state.restoreSnapshot)applySnapshot(state.restoreSnapshot);else{state.page='home';state.search='';$('globalSearch').value=''}state.restoreSnapshot=null;state.restoring=false;status(`${state.events.length} events and ${state.members.length} roster members loaded.`,'good');renderPage();startLive();persist()}catch(err){status(err.message,'bad')}finally{setBusy(false)}}
+async function restoreSession(){const snap=getSnapshot();let token='';try{token=sessionStorage.getItem(SESSION_TOKEN_KEY)||''}catch{}if(snap?.clientId)$('clientId').value=snap.clientId;if(!token)return;state.restoreSnapshot=snap;state.restoring=true;authStatus('Restoring TeamSnap session…','warn');try{await connectWithToken(token)}catch(err){clearSession();state.restoreSnapshot=null;state.restoring=false;authStatus(`Saved session could not be restored: ${err.message}`,'bad')}}
 
 if(handleOAuthCallbackPage())return;
-
-$('connectOAuthBtn').addEventListener('click',()=>{
-  const clientId=$('clientId').value.trim(),secret=$('clientSecret').value;if(!clientId||!secret){authStatus('Enter the TeamSnap Client ID / UID and Client Secret first.','bad');return}
-  state.clientId=clientId;state.clientSecret=secret;state.oauthState=randomState();persist();
-  const u=new URL(`${AUTH_BASE}/oauth/authorize`);u.searchParams.set('client_id',clientId);u.searchParams.set('redirect_uri',REDIRECT_URI);u.searchParams.set('response_type','code');u.searchParams.set('scope','read');u.searchParams.set('state',state.oauthState);
-  const width=620,height=760,left=Math.max(0,Math.round((screen.width-width)/2)),top=Math.max(0,Math.round((screen.height-height)/2));
-  state.authPopup=window.open(u.toString(),'teamsnap_oauth',`popup=yes,width=${width},height=${height},left=${left},top=${top}`);
-  if(!state.authPopup){authStatus('The authorization popup was blocked. Allow popups for this site and try again.','bad');return}
-  authStatus('TeamSnap authorization opened. Complete login/approval in the popup.','warn')
-});
-window.addEventListener('message',async e=>{
-  if(e.origin!==location.origin)return;const d=e.data||{};if(d.type!=='teamsnap-oauth-callback')return;
-  if(d.error){authStatus(`TeamSnap authorization failed: ${d.errorDescription||d.error}`,'bad');return}
-  if(!d.state||d.state!==state.oauthState){authStatus('TeamSnap authorization returned an invalid state value. Start Connect TeamSnap again.','bad');return}
-  if(!d.code){authStatus('TeamSnap did not return an authorization code.','bad');return}
-  state.oauthState='';setBusy(true);authStatus('Authorization approved. Finishing connection…','warn');
-  try{await exchangeOAuthCode(d.code)}catch(err){authStatus(err.message,'bad')}finally{setBusy(false)}
-});
+$('connectOAuthBtn').addEventListener('click',()=>{const clientId=$('clientId').value.trim(),secret=$('clientSecret').value;if(!clientId||!secret){authStatus('Enter the TeamSnap Client ID / UID and Client Secret first.','bad');return}state.clientId=clientId;state.clientSecret=secret;state.oauthState=randomState();persist();const u=new URL(`${AUTH_BASE}/oauth/authorize`);u.searchParams.set('client_id',clientId);u.searchParams.set('redirect_uri',REDIRECT_URI);u.searchParams.set('response_type','code');u.searchParams.set('scope','read');u.searchParams.set('state',state.oauthState);const width=620,height=760,left=Math.max(0,Math.round((screen.width-width)/2)),top=Math.max(0,Math.round((screen.height-height)/2));state.authPopup=window.open(u.toString(),'teamsnap_oauth',`popup=yes,width=${width},height=${height},left=${left},top=${top}`);if(!state.authPopup){authStatus('The authorization popup was blocked. Allow popups for this site and try again.','bad');return}authStatus('TeamSnap authorization opened. Complete login/approval in the popup.','warn')});
+window.addEventListener('message',async e=>{if(e.origin!==location.origin)return;const d=e.data||{};if(d.type!=='teamsnap-oauth-callback')return;if(d.error){authStatus(`TeamSnap authorization failed: ${d.errorDescription||d.error}`,'bad');return}if(!d.state||d.state!==state.oauthState){authStatus('TeamSnap authorization returned an invalid state value. Start Connect TeamSnap again.','bad');return}if(!d.code){authStatus('TeamSnap did not return an authorization code.','bad');return}state.oauthState='';setBusy(true);authStatus('Authorization approved. Finishing connection…','warn');try{await exchangeOAuthCode(d.code)}catch(err){authStatus(err.message,'bad')}finally{setBusy(false)}});
 $('useTokenBtn').addEventListener('click',async()=>{try{await connectWithToken($('accessToken').value);$('accessToken').value=''}catch(err){authStatus(err.message,'bad')}});
-$('copyRedirectBtn').addEventListener('click',async()=>{
-  const value=$('redirectDisplay').textContent.trim();try{await navigator.clipboard.writeText(value);$('copyRedirectBtn').textContent='Copied';setTimeout(()=>$('copyRedirectBtn').textContent='Copy',1200)}catch{const range=document.createRange();range.selectNodeContents($('redirectDisplay'));const sel=getSelection();sel.removeAllRanges();sel.addRange(range);$('copyRedirectBtn').textContent='Select & Copy'}
-});
-$('disconnectBtn').addEventListener('click',()=>{
-  stopLive();clearSession();state.token='';state.clientSecret='';state.me=null;state.teams=[];state.team=null;state.events=[];state.members=[];state.availability.clear();$('clientSecret').value='';$('connectedState').classList.add('hidden');$('connectSetup').classList.remove('hidden');$('appShell').classList.add('hidden');authStatus('Disconnected.')
-});
-$('clientId').addEventListener('input',persist);
-$('teamSelect').addEventListener('change',e=>{persist();loadTeamData(e.target.value,false)});
-$('timeframeSelect').addEventListener('change',e=>{state.timeframe=e.target.value;state.reportType='';$('customRange').classList.toggle('hidden',state.timeframe!=='custom');persist();renderPage()});
-$('customFrom').addEventListener('change',e=>{state.customFrom=e.target.value;persist();renderPage()});
-$('customTo').addEventListener('change',e=>{state.customTo=e.target.value;persist();renderPage()});
-$('globalSearch').addEventListener('input',e=>{state.search=e.target.value;renderPage();persist()});
-document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
-$('pageContent').addEventListener('click',e=>{
-  const th=e.target.closest('[data-sort-table]');if(th){const id=th.dataset.sortTable,key=th.dataset.sortKey,cfg=sortConfig(id,key);if(cfg.key===key)cfg.dir*=-1;else{cfg.key=key;cfg.dir=1}persist();renderPage();return}
-});
-$('pageContent').addEventListener('change',e=>{
-  const sel=e.target.closest('[data-mobile-sort]');if(sel){const cfg=sortConfig(sel.dataset.mobileSort,sel.value);cfg.key=sel.value;persist();renderPage()}
-});
-$('pageContent').addEventListener('click',e=>{
-  const b=e.target.closest('[data-mobile-dir]');if(b){const cfg=sortConfig(b.dataset.mobileDir,'');cfg.dir*=-1;persist();renderPage()}
-});
+$('copyRedirectBtn').addEventListener('click',async()=>{const value=$('redirectDisplay').textContent.trim();try{await navigator.clipboard.writeText(value);$('copyRedirectBtn').textContent='Copied';setTimeout(()=>$('copyRedirectBtn').textContent='Copy',1200)}catch{const range=document.createRange();range.selectNodeContents($('redirectDisplay'));const sel=getSelection();sel.removeAllRanges();sel.addRange(range);$('copyRedirectBtn').textContent='Select & Copy'}});
+$('disconnectBtn').addEventListener('click',()=>{stopLive();clearSession();state.token='';state.clientSecret='';state.me=null;state.teams=[];state.team=null;state.events=[];state.members=[];state.availability.clear();$('clientSecret').value='';$('connectedState').classList.add('hidden');$('connectSetup').classList.remove('hidden');$('appShell').classList.add('hidden');authStatus('Disconnected.')});
+$('clientId').addEventListener('input',persist);$('teamSelect').addEventListener('change',e=>{persist();loadTeamData(e.target.value,false)});$('globalSearch').addEventListener('input',e=>{state.search=e.target.value;renderPage();persist()});document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+$('pageContent').addEventListener('click',e=>{const th=e.target.closest('[data-sort-table]');if(th){const id=th.dataset.sortTable,key=th.dataset.sortKey,cfg=sortConfig(id,key);if(cfg.key===key)cfg.dir*=-1;else{cfg.key=key;cfg.dir=1}persist();renderPage();return}const row=e.target.closest('[data-row-action]');if(row){const [kind,id]=row.dataset.rowAction.split(':');if(kind==='event'){state.selectedEventId=id;state.page='schedule'}else if(kind==='member'){state.selectedMemberId=id;state.page='roster'}persist();renderPage()}});
+$('pageContent').addEventListener('change',e=>{const sel=e.target.closest('[data-mobile-sort]');if(sel){const cfg=sortConfig(sel.dataset.mobileSort,sel.value);cfg.key=sel.value;persist();renderPage()}});
+$('pageContent').addEventListener('click',e=>{const b=e.target.closest('[data-mobile-dir]');if(b){const cfg=sortConfig(b.dataset.mobileDir,'');cfg.dir*=-1;persist();renderPage()}});
 restoreSession();
 })();
 </script>
