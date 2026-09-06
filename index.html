@@ -64,6 +64,7 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 .modal{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-bg{position:absolute;inset:0;background:rgba(4,10,20,.5)}.modal-card{position:relative;background:#fff;width:min(620px,100%);max-height:min(800px,92vh);overflow:auto;border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.24)}.modal-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head h2{font-size:18px;margin:0}.modal-body{padding:20px}.modal-foot{padding:13px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
 .rule-grid{display:grid;grid-template-columns:1fr 130px;gap:10px 18px;align-items:center}.rule-grid .rule-title{font-size:13px;font-weight:800}.rule-grid .rule-desc{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}.rule-grid input{height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px;width:100%}
 .toast-wrap{position:fixed;right:18px;bottom:18px;z-index:1000;display:flex;flex-direction:column;gap:8px;width:min(390px,calc(100vw - 36px))}.toast{background:#132035;color:#fff;border-radius:11px;padding:12px 13px;box-shadow:0 12px 32px rgba(0,0,0,.22);display:flex;gap:10px;align-items:flex-start;animation:toastin .2s ease}.toast.error{background:#7e2630}.toast.success{background:#135f45}.toast i{margin-top:1px}.toast b{font-size:12px;display:block}.toast span{font-size:11px;color:rgba(255,255,255,.78);display:block;margin-top:2px;line-height:1.4}@keyframes toastin{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+.data-state{display:flex;align-items:flex-start;gap:10px;margin:0 0 14px;padding:11px 13px;border:1px solid #dbe5f2;border-radius:10px;background:#f7faff;color:#536178;font-size:12px;line-height:1.45}.data-state i{font-size:16px;color:var(--brand);margin-top:1px}.data-state.error{background:var(--danger-soft);border-color:#f2c9cd;color:#8e343a}.data-state.error i{color:var(--danger)}.data-state .btn{margin-left:auto;flex:0 0 auto}
 .loading-block{display:flex;align-items:center;justify-content:center;gap:9px;padding:40px;color:var(--muted);font-size:13px}.spinner{width:18px;height:18px;border:2px solid #d8e0eb;border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .small-note{font-size:11px;color:var(--muted);line-height:1.5}.right{text-align:right}.divider{height:1px;background:var(--line);margin:14px 0}.section-title{font-size:13px;font-weight:850;margin:0 0 10px}.click-link{color:var(--brand);font-weight:760;cursor:pointer}.click-link:hover{text-decoration:underline}
 @media(max-width:1150px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.report-templates{grid-template-columns:repeat(3,1fr)}.topbar{grid-template-columns:auto minmax(220px,1fr) auto}.team-select{display:none}.span-4{grid-column:span 2}.span-3{grid-column:span 2}}
@@ -136,11 +137,12 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='1.0.0';
+const VERSION='1.1.0';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v1';
 const RULES_KEY='tsmc.rules.v1';
+const CONFIG_KEY='tsmc.config.v1';
 const DEFAULT_RULES={
   minConfirmedGame:11,
   gameResponseHours:48,
@@ -174,6 +176,9 @@ const state={
   filters:{schedule:{range:'upcoming',type:'all',opponent:'all',location:'all'},availability:{range:'season',eventType:'all',missingScope:'next30'},stats:{range:'season'},reports:{range:'season'}},
   sorts:{schedule:{key:'date',dir:'asc'},roster:{key:'name',dir:'asc'},availability:{key:'pct',dir:'desc'}},
   report:{template:'team',source:'summary',columns:['Metric','Value'],group:'none'},rules:{...DEFAULT_RULES},lastLoaded:null,
+  selection:{type:null,id:null},
+  lifecycle:{core:'idle',availability:'idle',resourceErrors:{},teamLoadSeq:0,availabilityLoadSeq:0,lastAvailabilityLoaded:null},
+  runtime:{coreController:null,availabilityController:null,availabilityPromise:null,refreshTimer:null},
   derived:{events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()}
 };
 
@@ -206,31 +211,54 @@ function mark(text,q=state.search){const safe=esc(text);if(!q?.trim())return saf
 function matchesSearch(values){const q=state.search.trim().toLowerCase();if(!q)return true;return values.some(v=>String(v??'').toLowerCase().includes(q));}
 function toast(title,detail='',type='info',ms=4300){const wrap=$('#toastWrap');const el=document.createElement('div');el.className=`toast ${type==='error'?'error':type==='success'?'success':''}`;el.innerHTML=`<i class="bi ${type==='error'?'bi-exclamation-triangle':type==='success'?'bi-check-circle':'bi-info-circle'}"></i><div><b>${esc(title)}</b>${detail?`<span>${esc(detail)}</span>`:''}</div>`;wrap.appendChild(el);setTimeout(()=>el.remove(),ms);}
 function setLoading(on){const p=$('#progress');p.classList.toggle('active',on);p.classList.toggle('progress-indeterminate',on);if(!on){p.style.width='100%';setTimeout(()=>{p.style.width='0';},220);}else p.style.width='';}
-function saveSession(){const clean={token:state.token,clientId:state.clientId,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
-function loadSession(){try{const s=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(s)Object.assign(state,s);}catch{}try{state.rules={...DEFAULT_RULES,...JSON.parse(localStorage.getItem(RULES_KEY)||'{}')};}catch{state.rules={...DEFAULT_RULES};}}
+function saveSession(){const clean={token:state.token,clientId:state.clientId,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
+function loadSession(){
+  try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(saved){const selection=saved.selection&&typeof saved.selection==='object'?saved.selection:{type:null,id:null};Object.assign(state,saved,{selection});}}catch{}
+  try{state.rules={...DEFAULT_RULES,...JSON.parse(localStorage.getItem(RULES_KEY)||'{}')};}catch{state.rules={...DEFAULT_RULES};}
+  try{const config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}');if(!state.clientId&&config.clientId)state.clientId=config.clientId;if(config.redirectUri)state.redirectUri=config.redirectUri;}catch{}
+}
 function saveRules(){localStorage.setItem(RULES_KEY,JSON.stringify(state.rules));}
-function showLogin(error=''){ $('#loginScreen').classList.remove('hidden');$('#appShell').classList.add('hidden');if(state.clientId)$('#clientId').value=state.clientId;const e=$('#errorLogin');if(error){e.textContent=error;e.classList.remove('hidden');}else e.classList.add('hidden');}
+function showLogin(error=''){ $('#loginScreen').classList.remove('hidden');$('#appShell').classList.add('hidden');if(state.clientId)$('#clientId').value=state.clientId;if(state.redirectUri)$('#redirectUri').value=state.redirectUri;const e=$('#errorLogin');if(error){e.textContent=error;e.classList.remove('hidden');}else e.classList.add('hidden');}
 function showApp(){ $('#loginScreen').classList.add('hidden');$('#appShell').classList.remove('hidden'); }
 function openModal(id){$(`#${id}`).classList.add('open');}
 function closeModal(id){$(`#${id}`).classList.remove('open');}
-function closeDrawer(){const d=$('#detailDrawer');d.classList.remove('open');document.body.style.overflow='';}
+function closeDrawer(options={}){const d=$('#detailDrawer');d.classList.remove('open');document.body.style.overflow='';if(!options.preserveSelection){state.selection={type:null,id:null};saveSession();}}
 function openDrawer(title,html,wide=false){$('#drawerTitle').textContent=title;$('#drawerContent').innerHTML=html;$('#drawerPanel').classList.toggle('drawer-wide',wide);$('#detailDrawer').classList.add('open');document.body.style.overflow='hidden';}
-function setView(view){state.view=view;state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));saveSession();render();}
+function setView(view){closeDrawer();state.view=view;state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));saveSession();render();ensureDataForView();}
 function tableCell(label,html,cls=''){return `<td data-label="${esc(label)}" class="${cls}">${html}</td>`;}
 function emptyState(icon,title,detail){return `<div class="empty"><i class="bi ${icon}"></i><b>${esc(title)}</b><span>${esc(detail)}</span></div>`;}
 function loadingState(label='Loading data'){return `<div class="loading-block"><span class="spinner"></span>${esc(label)}</div>`;}
 
 function collectionObjects(payload){return (payload?.collection?.items||[]).map(item=>{const o={};for(const d of item.data||[])o[d.name]=d.value;for(const l of item.links||[])if(l.rel&&!o[`_link_${l.rel}`])o[`_link_${l.rel}`]=l.href;o._href=item.href||item.links?.find(l=>l.rel==='self')?.href||null;return o;});}
 function collectionLink(payload,rel){return payload?.collection?.links?.find(l=>l.rel===rel)?.href||payload?.collection?.items?.flatMap(i=>i.links||[]).find(l=>l.rel===rel)?.href||null;}
-async function apiJson(url){const res=await fetch(url,{headers:{Authorization:`Bearer ${state.token}`,Accept:'application/vnd.collection+json, application/json'}});if(res.status===401){disconnect(false);throw new Error('TeamSnap authorization expired. Please connect again.');}if(!res.ok){let message=`TeamSnap request failed (${res.status})`;try{const body=await res.json();message=body?.collection?.error?.message||body?.error||body?.message||message;}catch{}throw new Error(message);}return res.json();}
-async function fetchCollection(pathOrUrl,params={}){
+class AuthExpiredError extends Error{constructor(message='TeamSnap authorization expired. Please connect again.'){super(message);this.name='AuthExpiredError';}}
+function isAbortError(error){return error?.name==='AbortError';}
+function abortTeamRequests(){
+  try{state.runtime.coreController?.abort();}catch{}
+  try{state.runtime.availabilityController?.abort();}catch{}
+  state.runtime.coreController=null;
+  state.runtime.availabilityController=null;
+  state.runtime.availabilityPromise=null;
+}
+async function apiJson(url,options={}){
+  const res=await fetch(url,{signal:options.signal,headers:{Authorization:`Bearer ${state.token}`,Accept:'application/vnd.collection+json, application/json'}});
+  if(res.status===401)throw new AuthExpiredError();
+  if(!res.ok){
+    let message=`TeamSnap request failed (${res.status})`;
+    try{const body=await res.json();message=body?.collection?.error?.message||body?.error||body?.message||message;}catch{}
+    throw new Error(message);
+  }
+  return res.json();
+}
+async function fetchCollection(pathOrUrl,params={},options={}){
   let url=pathOrUrl.startsWith('http')?new URL(pathOrUrl):new URL(`${API}/${pathOrUrl.replace(/^\//,'')}`);
   for(const [k,v] of Object.entries(params))if(v!==undefined&&v!==null&&v!=='')url.searchParams.set(k,v);
   if(!url.searchParams.has('page_size'))url.searchParams.set('page_size','100');
   let out=[],page=0,seen=new Set();
   while(url&&page<250){
+    if(options.signal?.aborted)throw new DOMException('Aborted','AbortError');
     const key=url.toString();if(seen.has(key))break;seen.add(key);page++;
-    const payload=await apiJson(key);out.push(...collectionObjects(payload));
+    const payload=await apiJson(key,options);out.push(...collectionObjects(payload));
     const next=collectionLink(payload,'next');
     if(next){url=new URL(next);continue;}
     const pi=payload?.collection?.page_info;
@@ -248,24 +276,105 @@ async function loadIdentityAndTeams(){
   fillTeamSwitchers();saveSession();
 }
 function fillTeamSwitchers(){const html=state.teams.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(t.name||t.team_name||`Team ${t.id}`)}</option>`).join('');$('#teamSwitcher').innerHTML=html;$('#mobileTeamSelect').innerHTML=html;}
-async function loadTeam(teamId,{quiet=false}={}){
-  state.teamId=teamId;fillTeamSwitchers();if(!quiet)setLoading(true);
-  try{
-    const team=state.teams.find(t=>sameId(t.id,teamId))||{id:teamId};state.data.team=team;
-    const [events,members,locations,opponents,availabilities]=await Promise.all([
-      fetchCollection('events/search',{team_id:teamId,sort_start_date:'asc'}),
-      fetchCollection('members/search',{team_id:teamId}),
-      fetchCollection('locations/search',{team_id:teamId}),
-      fetchCollection('opponents/search',{team_id:teamId}),
-      fetchCollection('availabilities/search',{team_id:teamId})
-    ]);
-    state.data.events=events;state.data.members=members;state.data.locations=locations;state.data.opponents=opponents;state.data.availabilities=availabilities;state.lastLoaded=new Date();
-    buildDerived();saveSession();render();
-    if(!quiet)toast('Team loaded',`${team.name||'Team'} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
-  }catch(e){console.error(e);toast('Could not load TeamSnap data',e.message,'error',7000);if(!state.data.events.length)$('#viewRoot').innerHTML=emptyState('bi-cloud-slash','Unable to load team data',e.message);}
-  finally{if(!quiet)setLoading(false);}
+function resetTeamData(team){
+  state.data={team,events:[],members:[],locations:[],opponents:[],availabilities:[]};
+  state.lifecycle.availability='idle';
+  state.lifecycle.lastAvailabilityLoaded=null;
+  state.lifecycle.resourceErrors={};
+  buildDerived();
 }
-async function refreshAvailabilityQuiet(){if(!state.token||!state.teamId)return;try{const [events,avail]=await Promise.all([fetchCollection('events/search',{team_id:state.teamId,sort_start_date:'asc'}),fetchCollection('availabilities/search',{team_id:state.teamId})]);state.data.events=events;state.data.availabilities=avail;state.lastLoaded=new Date();buildDerived();render();}catch(e){console.warn('Background refresh failed',e);}}
+function currentLoad(seq,teamId){return seq===state.lifecycle.teamLoadSeq&&sameId(teamId,state.teamId);}
+function availabilityReady(){return state.lifecycle.availability==='ready';}
+function availabilityLoading(){return state.lifecycle.availability==='loading';}
+function viewNeedsAvailability(view=state.view){
+  if(['home','schedule','availability','stats'].includes(view))return true;
+  return view==='reports'&&['availability','season'].includes(state.report.source);
+}
+function availabilityStateNotice(){
+  if(!viewNeedsAvailability())return '';
+  if(state.lifecycle.availability==='loading'||state.lifecycle.availability==='idle')return `<div class="data-state"><i class="bi bi-arrow-repeat"></i><div><b>Loading TeamSnap availability</b><br>Core team data is already usable. Availability-based counts and patterns will appear automatically.</div></div>`;
+  if(state.lifecycle.availability==='error')return `<div class="data-state error"><i class="bi bi-exclamation-triangle"></i><div><b>Availability could not be loaded</b><br>${esc(state.lifecycle.resourceErrors.availabilities||'TeamSnap availability request failed.')}</div><button class="btn btn-sm btn-secondary" id="retryAvailability">Retry</button></div>`;
+  return '';
+}
+function bindAvailabilityRetry(){const b=$('#retryAvailability');if(b)b.onclick=()=>ensureAvailability({force:true,quiet:false});}
+function ensureDataForView(){if(viewNeedsAvailability())ensureAvailability({quiet:true});}
+async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailability=false}={}){
+  abortTeamRequests();
+  const seq=++state.lifecycle.teamLoadSeq;
+  state.lifecycle.availabilityLoadSeq++;
+  const team=state.teams.find(t=>sameId(t.id,teamId))||{id:teamId};
+  state.teamId=teamId;
+  if(!preserveSelection){state.selection={type:null,id:null};closeDrawer({preserveSelection:true});}
+  else closeDrawer({preserveSelection:true});
+  resetTeamData(team);
+  state.lifecycle.core='loading';
+  fillTeamSwitchers();saveSession();render();
+  if(!quiet)setLoading(true);
+  const controller=new AbortController();state.runtime.coreController=controller;
+  const resources={
+    events:fetchCollection('events/search',{team_id:teamId,sort_start_date:'asc'},{signal:controller.signal}),
+    members:fetchCollection('members/search',{team_id:teamId},{signal:controller.signal}),
+    locations:fetchCollection('locations/search',{team_id:teamId},{signal:controller.signal}),
+    opponents:fetchCollection('opponents/search',{team_id:teamId},{signal:controller.signal})
+  };
+  try{
+    const keys=Object.keys(resources),results=await Promise.allSettled(Object.values(resources));
+    if(!currentLoad(seq,teamId))return false;
+    const errors={};let authError=null;
+    results.forEach((r,i)=>{const key=keys[i];if(r.status==='fulfilled')state.data[key]=r.value;else if(r.reason instanceof AuthExpiredError)authError=r.reason;else if(!isAbortError(r.reason))errors[key]=r.reason?.message||String(r.reason);});
+    if(authError)throw authError;
+    state.lifecycle.resourceErrors=errors;
+    const requiredFailed=['events','members'].filter(k=>errors[k]);
+    state.lifecycle.core=requiredFailed.length===2?'error':Object.keys(errors).length?'partial':'ready';
+    state.lastLoaded=new Date();buildDerived();saveSession();render();
+    if(requiredFailed.length){toast('Some team data could not load',requiredFailed.map(k=>`${k}: ${errors[k]}`).join(' · '),'error',7000);}
+    else if(Object.keys(errors).length){toast('Team loaded with limited data',Object.keys(errors).map(k=>`${k}: ${errors[k]}`).join(' · '),'info',6500);}
+    else if(!quiet)toast('Team loaded',`${team.name||'Team'} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
+    const shouldLoadAvailability=forceAvailability||viewNeedsAvailability()||state.selection?.type;
+    if(shouldLoadAvailability)ensureAvailability({force:forceAvailability,quiet:true});
+    if(preserveSelection)restoreSelection();
+    return true;
+  }catch(e){
+    if(isAbortError(e)||!currentLoad(seq,teamId))return false;
+    console.error(e);
+    if(e instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);disconnect(false);return false;}
+    state.lifecycle.core='error';state.lifecycle.resourceErrors.core=e.message;render();toast('Could not load team',e.message,'error',7000);return false;
+  }finally{
+    if(currentLoad(seq,teamId)){state.runtime.coreController=null;if(!quiet)setLoading(false);}
+  }
+}
+async function ensureAvailability({force=false,quiet=true}={}){
+  if(!state.token||!state.teamId||!['ready','partial'].includes(state.lifecycle.core))return false;
+  if(state.lifecycle.availability==='ready'&&!force)return true;
+  if(state.lifecycle.availability==='loading'&&!force&&state.runtime.availabilityPromise)return state.runtime.availabilityPromise;
+  try{state.runtime.availabilityController?.abort();}catch{}
+  const teamId=state.teamId,teamSeq=state.lifecycle.teamLoadSeq,seq=++state.lifecycle.availabilityLoadSeq;
+  const controller=new AbortController();state.runtime.availabilityController=controller;state.lifecycle.availability='loading';delete state.lifecycle.resourceErrors.availabilities;
+  if(!quiet)setLoading(true);render();
+  const promise=(async()=>{
+    try{
+      const avail=await fetchCollection('availabilities/search',{team_id:teamId},{signal:controller.signal});
+      if(teamSeq!==state.lifecycle.teamLoadSeq||seq!==state.lifecycle.availabilityLoadSeq||!sameId(teamId,state.teamId))return false;
+      state.data.availabilities=avail;state.lifecycle.availability='ready';state.lifecycle.lastAvailabilityLoaded=new Date();state.lastLoaded=new Date();buildDerived();render();restoreSelection();return true;
+    }catch(e){
+      if(isAbortError(e)||teamSeq!==state.lifecycle.teamLoadSeq||!sameId(teamId,state.teamId))return false;
+      if(e instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);disconnect(false);return false;}
+      console.error(e);state.lifecycle.availability='error';state.lifecycle.resourceErrors.availabilities=e.message;render();if(!quiet)toast('Availability could not load',e.message,'error',6500);return false;
+    }finally{
+      if(seq===state.lifecycle.availabilityLoadSeq){state.runtime.availabilityController=null;state.runtime.availabilityPromise=null;if(!quiet)setLoading(false);}
+    }
+  })();
+  state.runtime.availabilityPromise=promise;return promise;
+}
+async function refreshAvailabilityQuiet(){
+  if(!state.token||!state.teamId||document.hidden||!viewNeedsAvailability())return;
+  await ensureAvailability({force:true,quiet:true});
+}
+function startRefreshTimer(){
+  if(state.runtime.refreshTimer)clearInterval(state.runtime.refreshTimer);
+  state.runtime.refreshTimer=setInterval(refreshAvailabilityQuiet,5*60*1000);
+}
+function stopRefreshTimer(){if(state.runtime.refreshTimer){clearInterval(state.runtime.refreshTimer);state.runtime.refreshTimer=null;}}
 
 function buildDerived(){
   const L=new Map(state.data.locations.map(x=>[String(x.id),x]));
@@ -299,10 +408,12 @@ function isPlayerMember(m){
   return !bool(m.is_manager)&&!bool(m.is_owner);
 }
 function activePlayers(){return state.derived.players;}
-function eventTracksAvailability(e){
+function eventConfiguredForAvailability(e){
   for(const key of ['is_availability_enabled','availability_enabled','tracks_availability','is_availability_tracking_enabled'])if(e[key]!==undefined&&e[key]!==null)return bool(e[key]);
   return state.derived.availabilityByEvent.has(String(e.id));
 }
+function eventTracksAvailability(e){return availabilityReady()&&eventConfiguredForAvailability(e);}
+function eventAvailabilityStateText(e){if(eventTracksAvailability(e))return '';if(eventConfiguredForAvailability(e)&&!availabilityReady())return state.lifecycle.availability==='error'?'Unavailable':'Loading';return 'Not tracked';}
 function availabilityStatus(eid,mid){
   const event=state.derived.events.find(e=>sameId(e.id,eid));if(!event||!eventTracksAvailability(event))return 'untracked';
   const a=state.derived.availabilityByKey.get(`${eid}|${mid}`);if(!a||a.status_code===null||a.status_code===undefined||a.status_code==='')return 'none';
@@ -377,7 +488,28 @@ function statInsights(range='season'){
 function readinessColor(p){return p>=80?'var(--success)':p>=60?'var(--warn)':'var(--danger)';}
 function renderInsights(insights){return insights.length?insights.map(x=>`<div class="insight"><i class="bi ${x.icon}"></i><div><b>${esc(x.title)}</b><span>${esc(x.text)}</span></div></div>`).join(''):emptyState('bi-lightbulb','No pattern yet','More TeamSnap history is needed for meaningful patterns.');}
 
-function render(){if(!state.token)return showLogin();showApp();if(!state.data.team){$('#viewRoot').innerHTML=loadingState('Loading TeamSnap team');return;}const fn={home:renderHome,schedule:renderSchedule,roster:renderRoster,availability:renderAvailability,stats:renderStats,reports:renderReports}[state.view]||renderHome;fn();}
+function coreStateNotice(){
+  const errors=state.lifecycle.resourceErrors||{};
+  if(state.lifecycle.core==='partial')return `<div class="data-state error"><i class="bi bi-exclamation-triangle"></i><div><b>Some TeamSnap data is unavailable</b><br>${esc(Object.entries(errors).filter(([k])=>k!=='availabilities').map(([k,v])=>`${k}: ${v}`).join(' · '))}</div><button class="btn btn-sm btn-secondary" id="retryCore">Retry</button></div>`;
+  return '';
+}
+function bindLifecycleActions(){const core=$('#retryCore');if(core)core.onclick=()=>loadTeam(state.teamId,{quiet:false,preserveSelection:true,forceAvailability:viewNeedsAvailability()});bindAvailabilityRetry();}
+function render(){
+  if(!state.token)return showLogin();
+  showApp();
+  if(!state.data.team){$('#viewRoot').innerHTML=loadingState('Loading TeamSnap team');return;}
+  if(state.lifecycle.core==='loading'){$('#viewRoot').innerHTML=`${pageHead(state.data.team?.name||'Team','Loading schedule and roster from TeamSnap')}${loadingState('Loading core team data')}`;return;}
+  if(state.lifecycle.core==='error'){$('#viewRoot').innerHTML=`${pageHead(state.data.team?.name||'Team','TeamSnap core data could not be loaded')}<div class="data-state error"><i class="bi bi-cloud-slash"></i><div><b>Team data is unavailable</b><br>${esc(state.lifecycle.resourceErrors.core||state.lifecycle.resourceErrors.events||state.lifecycle.resourceErrors.members||'TeamSnap request failed.')}</div><button class="btn btn-sm btn-secondary" id="retryCore">Retry</button></div>`;bindLifecycleActions();return;}
+  if(state.view==='availability'&&!availabilityReady()){
+    $('#viewRoot').innerHTML=`${pageHead('Availability','Who is coming and what participation patterns exist?')}${availabilityStateNotice()}${state.lifecycle.availability==='error'?'':loadingState('Loading availability history')}`;
+    bindLifecycleActions();return;
+  }
+  const fn={home:renderHome,schedule:renderSchedule,roster:renderRoster,availability:renderAvailability,stats:renderStats,reports:renderReports}[state.view]||renderHome;
+  fn();
+  const notices=`${coreStateNotice()}${!availabilityReady()?availabilityStateNotice():''}`;
+  if(notices)$('#viewRoot').insertAdjacentHTML('afterbegin',notices);
+  bindLifecycleActions();
+}
 function pageHead(title,subtitle,actions=''){return `<div class="page-head"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div>${actions?`<div class="page-actions">${actions}</div>`:''}</div>`;}
 function metricCard(label,value,detail,icon){return `<div class="card metric"><div class="label">${esc(label)}</div><div class="value">${value}</div><div class="detail">${detail}</div><div class="metric-icon"><i class="bi ${icon}"></i></div></div>`;}
 function renderHome(){
@@ -392,7 +524,7 @@ function renderHome(){
     metricCard('Upcoming Events',state.derived.events.filter(e=>toDate(e._date)>=startDay(now())).length,alerts.filter(a=>a.severity==='danger').length?`<span style="color:var(--danger);font-weight:800">${alerts.filter(a=>a.severity==='danger').length} urgent</span>`:'No urgent attention items','bi-clock-history')
   ].join('');
   const alertHtml=alerts.length?alerts.slice(0,10).map(a=>`<div class="attention-item clickable-attention" data-event-id="${esc(a.eventId||'')}" data-player-id="${esc(a.playerId||'')}"><div class="attention-icon ${a.severity}"><i class="bi ${a.icon}"></i></div><div><div class="attention-title">${esc(a.title)}</div><div class="attention-detail">${esc(a.detail)}</div></div><div class="attention-meta">${a.eventId?fmtShortDate(a.date):''}</div></div>`).join(''):emptyState('bi-check-circle','Nothing needs attention','Your current manager rules do not flag any issues.');
-  const upcomingHtml=upcoming.length?upcoming.map(e=>{const av=eventTracksAvailability(e)?eventAvailability(e):null;return `<article class="event-card" data-open-event="${esc(e.id)}"><div class="event-date">${fmtDate(e._date,{weekday:'short',month:'short',day:'numeric'})} · ${fmtTime(e._date)}</div><div class="event-name">${mark(eventTitle(e))}</div><div class="event-meta">${esc(e._type)}${e._location?` · ${esc(e._location)}`:''}</div>${av?`<div class="readiness"><div class="bar"><span style="width:${av.pct}%;background:${readinessColor(av.pct)}"></span></div><span>${av.yes}/${av.total} Yes</span></div>`:'<div class="small-note" style="margin-top:10px">Availability not tracked</div>'}</article>`;}).join(''):emptyState('bi-calendar-x','No upcoming events','TeamSnap did not return any future events for this team.');
+  const upcomingHtml=upcoming.length?upcoming.map(e=>{const av=eventTracksAvailability(e)?eventAvailability(e):null;return `<article class="event-card" data-open-event="${esc(e.id)}"><div class="event-date">${fmtDate(e._date,{weekday:'short',month:'short',day:'numeric'})} · ${fmtTime(e._date)}</div><div class="event-name">${mark(eventTitle(e))}</div><div class="event-meta">${esc(e._type)}${e._location?` · ${esc(e._location)}`:''}</div>${av?`<div class="readiness"><div class="bar"><span style="width:${av.pct}%;background:${readinessColor(av.pct)}"></span></div><span>${av.yes}/${av.total} Yes</span></div>`:`<div class="small-note" style="margin-top:10px">Availability ${esc(eventAvailabilityStateText(e).toLowerCase())}</div>`}</article>`;}).join(''):emptyState('bi-calendar-x','No upcoming events','TeamSnap did not return any future events for this team.');
   const nextSection=game?`<div class="card"><div class="card-head"><div><h3>Next Game</h3><p>${esc(eventOpponent(game))}</p></div><button class="btn btn-secondary btn-sm" data-open-event="${esc(game.id)}">Open event</button></div><div class="card-body"><div class="kpi-inline"><div><b>${fmtShortDate(game._date)}</b><span>Date</span></div><div><b>${fmtTime(game._date)}</b><span>Time</span></div><div><b>${esc(game._location||'TBD')}</b><span>Location</span></div>${nextAvail?`<div><b>${nextAvail.yes}</b><span>Yes</span></div><div><b>${nextAvail.none}</b><span>No Response</span></div>`:''}</div>${nextAvail?`<div class="readiness" style="margin-top:18px"><div class="bar"><span style="width:${nextAvail.pct}%;background:${readinessColor(nextAvail.pct)}"></span></div><span>${nextAvail.pct}% readiness</span></div>`:''}</div></div>`:'';
   $('#viewRoot').innerHTML=`${pageHead('Home','What needs your attention right now?')}<div class="grid grid-4">${cards}</div><div class="grid grid-3" style="margin-top:16px"><div class="card span-2"><div class="card-head"><div><h3>Manager Attention</h3><p>Prioritized using your configured rules</p></div><button class="btn btn-ghost btn-sm" id="homeRulesBtn"><i class="bi bi-sliders"></i>Rules</button></div><div class="card-body" style="padding-top:4px;padding-bottom:4px"><div class="attention-list">${alertHtml}</div></div></div><div class="grid grid-1">${nextSection}<div class="card"><div class="card-head"><div><h3>Smart Patterns</h3><p>Derived from TeamSnap history</p></div></div><div class="card-body">${renderInsights(teamInsights('season').slice(0,3))}</div></div></div><div class="card span-3"><div class="card-head"><div><h3>Coming Up</h3><p>Games, practices, and other events</p></div><button class="btn btn-secondary btn-sm" data-go-view="schedule">Full schedule</button></div><div class="card-body"><div class="event-strip">${upcomingHtml}</div></div></div></div>`;
   $('#homeRulesBtn')?.addEventListener('click',()=>openRules());bindCommonActions();
@@ -409,7 +541,7 @@ function scheduleFiltered(){
 function sortTh(label,key,current){const active=current.key===key;return `<th class="sortable ${key==='readiness'?'num':''}" data-sort-key="${key}">${esc(label)}<i class="bi ${active?(current.dir==='asc'?'bi-caret-up-fill':'bi-caret-down-fill'):'bi-arrow-down-up'} sort-icon"></i></th>`;}
 function renderSchedule(){
   const f=state.filters.schedule,evs=scheduleFiltered();const oppOpts=`<option value="all">All opponents</option>`+state.data.opponents.map(o=>`<option value="${esc(o.id)}" ${String(o.id)===f.opponent?'selected':''}>${esc(o.name||o.label||`Opponent ${o.id}`)}</option>`).join('');const locOpts=`<option value="all">All locations</option>`+state.data.locations.map(l=>`<option value="${esc(l.id)}" ${String(l.id)===f.location?'selected':''}>${esc(l.name||l.label||`Location ${l.id}`)}</option>`).join('');
-  const rows=evs.map(e=>{const av=eventTracksAvailability(e)?eventAvailability(e):null;return `<tr class="clickable" data-open-event="${esc(e.id)}">${tableCell('Date',`<div class="cell-main">${fmtDate(e._date,{month:'short',day:'numeric',year:'numeric'})}</div><div class="cell-sub">${fmtTime(e._date)}</div>`)}${tableCell('Event',`<div class="cell-main">${mark(eventTitle(e))}</div>${e.season_phase?`<div class="cell-sub">${esc(e.season_phase)}</div>`:''}`)}${tableCell('Type',`<span class="badge ${e._isGame?'badge-info':'badge-neutral'}">${esc(e._type)}</span>`)}${tableCell('Opponent',mark(e._opponent||'—'))}${tableCell('Location',mark(e._location||'—'))}${tableCell('Readiness',av?`<div class="right"><b>${av.pct}%</b><div class="cell-sub">${av.yes} Yes · ${av.none} NR</div></div>`:'<span class="muted">Not tracked</span>','num')}</tr>`;}).join('');
+  const rows=evs.map(e=>{const av=eventTracksAvailability(e)?eventAvailability(e):null;return `<tr class="clickable" data-open-event="${esc(e.id)}">${tableCell('Date',`<div class="cell-main">${fmtDate(e._date,{month:'short',day:'numeric',year:'numeric'})}</div><div class="cell-sub">${fmtTime(e._date)}</div>`)}${tableCell('Event',`<div class="cell-main">${mark(eventTitle(e))}</div>${e.season_phase?`<div class="cell-sub">${esc(e.season_phase)}</div>`:''}`)}${tableCell('Type',`<span class="badge ${e._isGame?'badge-info':'badge-neutral'}">${esc(e._type)}</span>`)}${tableCell('Opponent',mark(e._opponent||'—'))}${tableCell('Location',mark(e._location||'—'))}${tableCell('Readiness',av?`<div class="right"><b>${av.pct}%</b><div class="cell-sub">${av.yes} Yes · ${av.none} NR</div></div>`:`<span class="muted">${esc(eventAvailabilityStateText(e))}</span>`,'num')}</tr>`;}).join('');
   $('#viewRoot').innerHTML=`${pageHead('Schedule','What is happening and when?')}<div class="toolbar"><span class="toolbar-label">Show</span><select id="scheduleRange">${rangeOptions(f.range,true)}</select><select id="scheduleType">${typeOptions(f.type)}</select><select id="scheduleOpponent">${oppOpts}</select><select id="scheduleLocation">${locOpts}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-list-ul"></i>${plural(evs.length,'event')}</span><button class="btn btn-secondary btn-sm" id="resetScheduleFilters"><i class="bi bi-arrow-counterclockwise"></i>Reset</button></div><div class="table-wrap"><table class="data-table responsive"><thead><tr>${sortTh('Date','date',state.sorts.schedule)}${sortTh('Event','event',state.sorts.schedule)}${sortTh('Type','type',state.sorts.schedule)}${sortTh('Opponent','opponent',state.sorts.schedule)}${sortTh('Location','location',state.sorts.schedule)}${sortTh('Readiness','readiness',state.sorts.schedule)}</tr></thead><tbody>${rows||`<tr>${tableCell('',emptyState('bi-calendar-x','No events match','Adjust your filters or search.'),'')}</tr>`}</tbody></table></div>`;
   $('#scheduleRange').onchange=e=>{f.range=e.target.value;saveSession();renderSchedule();};$('#scheduleType').onchange=e=>{f.type=e.target.value;saveSession();renderSchedule();};$('#scheduleOpponent').onchange=e=>{f.opponent=e.target.value;saveSession();renderSchedule();};$('#scheduleLocation').onchange=e=>{f.location=e.target.value;saveSession();renderSchedule();};$('#resetScheduleFilters').onclick=()=>{state.filters.schedule={range:'upcoming',type:'all',opponent:'all',location:'all'};saveSession();renderSchedule();};$$('[data-sort-key]').forEach(th=>th.onclick=()=>{const k=th.dataset.sortKey,s=state.sorts.schedule;if(s.key===k)s.dir=s.dir==='asc'?'desc':'asc';else{s.key=k;s.dir=k==='readiness'?'desc':'asc';}saveSession();renderSchedule();});bindCommonActions();
 }
@@ -445,7 +577,9 @@ function renderStats(){
 }
 
 function reportSourceColumns(source){return ({summary:['Metric','Value'],season:['Metric','Value'],roster:['Name','Category','Role','Position'],events:['Date','Time','Event','Type','Opponent','Location','Team Score','Opponent Score','Result','Readiness %'],availability:['Player','Overall %','Rating','Games %','Practices %','Yes','No','Maybe','No Response','Tracked'],stats:['Opponent','Games','Wins','Losses','Ties','Goals For','Goals Against','Goal Diff','Win %']})[source]||[];}
+function reportNeedsAvailability(source=state.report.source){return ['availability','season'].includes(source);}
 function reportRows(source,range){
+  if(reportNeedsAvailability(source)&&!availabilityReady())return [];
   const events=rangeEvents(range);
   if(source==='summary'){const r=recordFor(events);return [['Team',state.data.team?.name||''],['Players',activePlayers().length],['Events',events.length],['Games',events.filter(e=>e._type==='Game').length],['Practices',events.filter(e=>e._type==='Practice').length],['Wins',r.wins],['Losses',r.losses],['Ties',r.ties],['Goals For',r.gf],['Goals Against',r.ga]];}
   if(source==='season'){const r=recordFor(events),te=events.filter(eventTracksAvailability),a=availabilityCounts(te);return [['Team',state.data.team?.name||''],['Timeframe',currentRangeLabel(range)],['Events',events.length],['Tracked Availability Events',te.length],['Team Availability %',pct(a.yes,a.total)],['Yes Responses',a.yes],['No Responses',a.no],['Maybe Responses',a.maybe],['No Response',a.none],['Wins',r.wins],['Losses',r.losses],['Ties',r.ties],['Goals For',r.gf],['Goals Against',r.ga],['Goal Differential',r.diff]];}
@@ -459,6 +593,14 @@ function reportTableData(){const source=state.report.source,allCols=reportSource
 function renderReportPreview(){
   const host=$('#reportPreview');
   if(!host)return;
+  if(reportNeedsAvailability()&&!availabilityReady()){
+    const message=state.lifecycle.availability==='error'
+      ? `<div class="data-state error"><i class="bi bi-exclamation-triangle"></i><div><b>Availability data is unavailable</b><br>${esc(state.lifecycle.resourceErrors.availabilities||'Retry availability before previewing this report.')}</div></div>`
+      : loadingState('Loading availability for this report');
+    host.innerHTML=message;
+    const count=$('#reportCount');if(count)count.textContent='Waiting for data';
+    return;
+  }
   const d=reportTableData();
   if(!d.headers.length){
     host.innerHTML=emptyState('bi-layout-text-window','Choose at least one column','Select columns to preview and export.');
@@ -488,24 +630,94 @@ function renderReportPreview(){
   host.innerHTML=`<div class="table-wrap"><table class="data-table"><thead><tr>${d.headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${body||`<tr>${tableCell('',emptyState('bi-file-earmark','No rows match','Adjust your report timeframe or search.'),'')}</tr>`}</tbody></table></div>`;
   $('#reportCount').textContent=`${d.rows.length} row${d.rows.length===1?'':'s'}`;
 }
-function applyReportTemplate(key){const t=REPORT_TEMPLATES[key];state.report.template=key;state.report.source=t.source;state.report.columns=[...t.columns];state.report.group='none';saveSession();renderReports();}
+function applyReportTemplate(key){
+  const t=REPORT_TEMPLATES[key];
+  state.report.template=key;
+  state.report.source=t.source;
+  state.report.columns=[...t.columns];
+  state.report.group='none';
+  saveSession();
+  render();
+  ensureDataForView();
+}
 function renderReports(){
   const f=state.filters.reports,rp=state.report;const templates=Object.entries(REPORT_TEMPLATES).map(([k,t])=>`<button class="report-template ${rp.template===k?'active':''}" data-report-template="${k}"><i class="bi ${t.icon}"></i><b>${esc(t.name)}</b><span>${esc(t.desc)}</span></button>`).join('')+`<button class="report-template ${rp.template==='custom'?'active':''}" data-report-template="custom"><i class="bi bi-sliders2-square"></i><b>Custom Report</b><span>Choose a dataset, columns, and optional grouping</span></button>`;
   const sources=[['summary','Team Summary'],['season','Season Summary'],['events','Events'],['roster','Roster'],['availability','Availability'],['stats','Stats']].map(([v,l])=>`<option value="${v}" ${rp.source===v?'selected':''}>${l}</option>`).join('');const cols=reportSourceColumns(rp.source);if(!rp.columns.length||rp.columns.some(c=>!cols.includes(c)))rp.columns=[...cols];const picker=cols.map(c=>`<label class="column-option"><input type="checkbox" value="${esc(c)}" ${rp.columns.includes(c)?'checked':''}>${esc(c)}</label>`).join('');const groups=defaultGroupOptions(rp.source).map(g=>`<option value="${esc(g)}" ${rp.group===g?'selected':''}>${g==='none'?'No grouping':`Group by ${g}`}</option>`).join('');
-  $('#viewRoot').innerHTML=`${pageHead('Reports','Summarize and export the information you need.',`<button class="btn btn-secondary" id="exportExcel"><i class="bi bi-file-earmark-excel"></i>Excel</button><button class="btn btn-secondary" id="exportPdf"><i class="bi bi-file-earmark-pdf"></i>PDF</button>`)}<div class="card"><div class="card-head"><div><h3>Report Templates</h3><p>Templates use the same reporting engine as custom reports.</p></div></div><div class="card-body"><div class="report-templates">${templates}</div></div></div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Report Builder</h3><p>Configure the active template or build your own.</p></div><span id="reportCount" class="filter-chip">0 rows</span></div><div class="card-body"><div class="toolbar" style="padding:0;border:0;margin:0 0 14px"><span class="toolbar-label">Timeframe</span><select id="reportRange">${rangeOptions(f.range)}</select><span class="toolbar-label">Data</span><select id="reportSource">${sources}</select><span class="toolbar-label">Group</span><select id="reportGroup">${groups}</select></div><div class="section-title">Columns</div><div class="column-picker" id="reportColumns">${picker}</div></div></div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Preview</h3><p>Search at the top of the app filters this preview too.</p></div></div><div class="card-body" style="padding:0" id="reportPreview"></div></div>`;
-  renderReportPreview();$$('[data-report-template]').forEach(b=>b.onclick=()=>{const k=b.dataset.reportTemplate;if(k==='custom'){state.report.template='custom';state.report.source='events';state.report.columns=[...reportSourceColumns('events')];state.report.group='none';saveSession();renderReports();}else applyReportTemplate(k);});$('#reportRange').onchange=e=>{f.range=e.target.value;saveSession();renderReportPreview();};$('#reportSource').onchange=e=>{rp.template='custom';rp.source=e.target.value;rp.columns=[...reportSourceColumns(rp.source)];rp.group='none';saveSession();renderReports();};$('#reportGroup').onchange=e=>{rp.group=e.target.value;saveSession();renderReportPreview();};$$('#reportColumns input').forEach(cb=>cb.onchange=()=>{rp.template='custom';rp.columns=$$('#reportColumns input:checked').map(x=>x.value);saveSession();renderReportPreview();});$('#exportExcel').onclick=exportExcel;$('#exportPdf').onclick=exportPdf;bindCommonActions();
+  $('#viewRoot').innerHTML=`${pageHead('Reports','Summarize and export the information you need.',`<button class="btn btn-secondary" id="exportExcel" ${reportNeedsAvailability()&&!availabilityReady()?'disabled':''}><i class="bi bi-file-earmark-excel"></i>Excel</button><button class="btn btn-secondary" id="exportPdf" ${reportNeedsAvailability()&&!availabilityReady()?'disabled':''}><i class="bi bi-file-earmark-pdf"></i>PDF</button>`)}<div class="card"><div class="card-head"><div><h3>Report Templates</h3><p>Templates use the same reporting engine as custom reports.</p></div></div><div class="card-body"><div class="report-templates">${templates}</div></div></div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Report Builder</h3><p>Configure the active template or build your own.</p></div><span id="reportCount" class="filter-chip">0 rows</span></div><div class="card-body"><div class="toolbar" style="padding:0;border:0;margin:0 0 14px"><span class="toolbar-label">Timeframe</span><select id="reportRange">${rangeOptions(f.range)}</select><span class="toolbar-label">Data</span><select id="reportSource">${sources}</select><span class="toolbar-label">Group</span><select id="reportGroup">${groups}</select></div><div class="section-title">Columns</div><div class="column-picker" id="reportColumns">${picker}</div></div></div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Preview</h3><p>Search at the top of the app filters this preview too.</p></div></div><div class="card-body" style="padding:0" id="reportPreview"></div></div>`;
+  renderReportPreview();
+  $$('[data-report-template]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.reportTemplate;
+    if(k==='custom'){
+      state.report.template='custom';state.report.source='events';state.report.columns=[...reportSourceColumns('events')];state.report.group='none';saveSession();render();ensureDataForView();
+    }else applyReportTemplate(k);
+  });
+  $('#reportRange').onchange=e=>{f.range=e.target.value;saveSession();renderReportPreview();};
+  $('#reportSource').onchange=e=>{rp.template='custom';rp.source=e.target.value;rp.columns=[...reportSourceColumns(rp.source)];rp.group='none';saveSession();render();ensureDataForView();};
+  $('#reportGroup').onchange=e=>{rp.group=e.target.value;saveSession();renderReportPreview();};
+  $$('#reportColumns input').forEach(cb=>cb.onchange=()=>{rp.template='custom';rp.columns=$$('#reportColumns input:checked').map(x=>x.value);saveSession();renderReportPreview();});
+  $('#exportExcel').onclick=exportExcel;$('#exportPdf').onclick=exportPdf;bindCommonActions();
 }
-function openEventDetail(id){
-  const e=state.derived.events.find(x=>sameId(x.id,id));if(!e)return;const av=eventTracksAvailability(e)?eventAvailability(e):null;const players=activePlayers();const groups={yes:[],maybe:[],no:[],none:[]};if(av)for(const p of players){const s=availabilityStatus(e.id,p.id);if(groups[s])groups[s].push(p);}const positions=av?uniq(groups.yes.map(memberPosition).filter(x=>x&&x!=='—')).sort():[];const posHtml=positions.length?positions.map(pos=>{const names=groups.yes.filter(p=>memberPosition(p)===pos).map(memberName);return `<div class="stat-box"><b>${names.length}</b><span>${esc(pos)}</span></div>`;}).join(''):'<div class="small-note">No position data is available for confirmed players.</div>';
-  let h2h='';if(e._isGame&&e._opponent){const meetings=scoredGames(state.derived.events).filter(g=>g._opponent===e._opponent).sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);if(meetings.length){const rr=recordFor(meetings);h2h=`<div class="card"><div class="card-head"><div><h3>Recent vs ${esc(e._opponent)}</h3><p>${rr.wins}-${rr.losses}-${rr.ties} across ${meetings.length} meeting${meetings.length===1?'':'s'}</p></div></div><div class="card-body"><div class="form-dots">${meetings.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join('')}</div></div></div>`;}}
-  const statusCols=av?['yes','maybe','no','none'].map(s=>`<div class="status-col"><div class="status-col-head"><span>${statusBadge(s)}</span><strong>${groups[s].length}</strong></div>${groups[s].length?groups[s].map(p=>`<div class="status-person" data-open-player="${esc(p.id)}"><b>${esc(memberName(p))}</b><span>${esc(memberPosition(p))}</span></div>`).join(''):`<div class="empty" style="padding:18px 8px">None</div>`}</div>`).join(''):'';
+function selectionIs(type,id){return state.selection?.type===type&&sameId(state.selection?.id,id);}
+function availabilityDetailState(title){
+  if(state.lifecycle.availability==='error')return `<div class="card" style="margin-top:14px"><div class="data-state error" style="margin:0;border:0;border-radius:14px"><i class="bi bi-exclamation-triangle"></i><div><b>Availability could not be loaded</b><br>${esc(state.lifecycle.resourceErrors.availabilities||'TeamSnap availability request failed.')}</div><button class="btn btn-sm btn-secondary" data-detail-retry>Retry</button></div></div>`;
+  return `<div class="card" style="margin-top:14px">${loadingState(`Loading ${title} availability`)}</div>`;
+}
+function bindDetailRetry(){const b=$('[data-detail-retry]');if(b)b.onclick=()=>ensureAvailability({force:true,quiet:false});}
+function restoreSelection(){
+  const sel=state.selection;
+  if(!sel?.type||sel.id==null)return;
+  if(sel.type==='event'){
+    if(state.derived.events.some(e=>sameId(e.id,sel.id)))openEventDetail(sel.id,{fromRestore:true});
+    else{state.selection={type:null,id:null};saveSession();}
+  }else if(sel.type==='player'){
+    if(state.derived.membersById.has(String(sel.id)))openPlayerDetail(sel.id,{fromRestore:true});
+    else{state.selection={type:null,id:null};saveSession();}
+  }
+}
+function openEventDetail(id,{fromRestore=false}={}){
+  const e=state.derived.events.find(x=>sameId(x.id,id));if(!e)return;
+  state.selection={type:'event',id:String(id)};saveSession();
+  const configured=eventConfiguredForAvailability(e);
+  const av=configured&&availabilityReady()?eventAvailability(e):null;
+  const players=activePlayers(),groups={yes:[],maybe:[],no:[],none:[]};
+  if(av)for(const p of players){const status=availabilityStatus(e.id,p.id);if(groups[status])groups[status].push(p);}
+  const positions=av?uniq(groups.yes.map(memberPosition).filter(x=>x&&x!=='—')).sort():[];
+  const posHtml=positions.length?positions.map(pos=>`<div class="stat-box"><b>${groups.yes.filter(p=>memberPosition(p)===pos).length}</b><span>${esc(pos)}</span></div>`).join(''):'<div class="small-note">No position data is available for confirmed players.</div>';
+  let h2h='';
+  if(e._isGame&&e._opponent){
+    const meetings=scoredGames(state.derived.events).filter(g=>g._opponent===e._opponent).sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);
+    if(meetings.length){const rr=recordFor(meetings);h2h=`<div class="card"><div class="card-head"><div><h3>Recent vs ${esc(e._opponent)}</h3><p>${rr.wins}-${rr.losses}-${rr.ties} across ${meetings.length} meeting${meetings.length===1?'':'s'}</p></div></div><div class="card-body"><div class="form-dots">${meetings.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join('')}</div></div></div>`;}
+  }
+  const statusCols=av?['yes','maybe','no','none'].map(status=>`<div class="status-col"><div class="status-col-head"><span>${statusBadge(status)}</span><strong>${groups[status].length}</strong></div>${groups[status].length?groups[status].map(p=>`<div class="status-person" data-open-player="${esc(p.id)}"><b>${esc(memberName(p))}</b><span>${esc(memberPosition(p))}</span></div>`).join(''):`<div class="empty" style="padding:18px 8px">None</div>`}</div>`).join(''):'';
   const score=e._teamScore!==null&&e._oppScore!==null?`${e._teamScore} – ${e._oppScore}`:(e._result||'—');
-  const html=`<div class="grid grid-4">${metricCard('Date',fmtShortDate(e._date),fmtTime(e._date),'bi-calendar-event')}${metricCard('Type',e._type,e._isGame?eventOpponent(e):'Team event','bi-tag')}${metricCard('Location',esc(e._location||'TBD'),e._location?'TeamSnap location':'Missing location','bi-geo-alt')}${metricCard(e._isGame?'Score / Result':'Availability',e._isGame?score:(av?`${av.pct}%`:'—'),e._isGame?(e._result?`${e._result} result`:'No final result'):av?`${av.yes} Yes of ${av.total}`:'Not tracked','bi-clipboard-data')}</div>${av?`<div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Event Readiness</h3><p>${av.yes} Yes · ${av.maybe} Maybe · ${av.no} No · ${av.none} No Response</p></div><strong>${av.pct}%</strong></div><div class="card-body"><div class="readiness"><div class="bar"><span style="width:${av.pct}%;background:${readinessColor(av.pct)}"></span></div><span>${av.yes}/${av.total} Yes</span></div></div></div><div class="section-title" style="margin-top:16px">Player Availability</div><div class="status-columns">${statusCols}</div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Confirmed Position Mix</h3><p>Based on roster position data TeamSnap returned</p></div></div><div class="card-body"><div class="stat-split">${posHtml}</div></div></div>`:`<div class="card" style="margin-top:14px">${emptyState('bi-calendar2-x','Availability is not tracked','This event does not expose TeamSnap availability tracking, so no player is penalized for missing records.')}</div>`}${h2h}`;
-  openDrawer(eventTitle(e),html,true);bindCommonActions();
+  let availabilityHtml='';
+  if(configured&&!availabilityReady())availabilityHtml=availabilityDetailState('event');
+  else if(av)availabilityHtml=`<div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Event Readiness</h3><p>${av.yes} Yes · ${av.maybe} Maybe · ${av.no} No · ${av.none} No Response</p></div><strong>${av.pct}%</strong></div><div class="card-body"><div class="readiness"><div class="bar"><span style="width:${av.pct}%;background:${readinessColor(av.pct)}"></span></div><span>${av.yes}/${av.total} Yes</span></div></div></div><div class="section-title" style="margin-top:16px">Player Availability</div><div class="status-columns">${statusCols}</div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Confirmed Position Mix</h3><p>Based on roster position data TeamSnap returned</p></div></div><div class="card-body"><div class="stat-split">${posHtml}</div></div></div>`;
+  else availabilityHtml=`<div class="card" style="margin-top:14px">${emptyState('bi-calendar2-x','Availability is not tracked','This event does not expose TeamSnap availability tracking, so no player is penalized for missing records.')}</div>`;
+  const availabilityMetric=e._isGame?metricCard('Score / Result',score,e._result?`${e._result} result`:'No final result','bi-clipboard-data'):metricCard('Availability',av?`${av.pct}%`:'—',av?`${av.yes} Yes of ${av.total}`:configured?'Loading from TeamSnap':'Not tracked','bi-clipboard-data');
+  const html=`<div class="grid grid-4">${metricCard('Date',fmtShortDate(e._date),fmtTime(e._date),'bi-calendar-event')}${metricCard('Type',e._type,e._isGame?eventOpponent(e):'Team event','bi-tag')}${metricCard('Location',esc(e._location||'TBD'),e._location?'TeamSnap location':'Missing location','bi-geo-alt')}${availabilityMetric}</div>${availabilityHtml}${h2h}`;
+  openDrawer(eventTitle(e),html,true);bindCommonActions();bindDetailRetry();
+  if(configured&&!availabilityReady()&&!availabilityLoading()&&state.lifecycle.availability!=='error')ensureAvailability({quiet:true});
 }
-function openPlayerDetail(id){
-  const p=state.derived.membersById.get(String(id));if(!p)return;const isPlayer=isPlayerMember(p),events=trackedEvents('season');if(!isPlayer){openDrawer(memberName(p),`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div></div><div class="card" style="margin-top:16px"><div class="card-body"><div class="small-note">Availability analytics are calculated for player roster members only.</div></div></div>`);return;}
-  const all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice')),trend=playerTrend(p,events);const upcoming=events.filter(e=>toDate(e._date)>=startDay(now())).slice(0,10);const hist=[...events].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,20);const teamRows=activePlayers().map(x=>({x,m:playerAvailability(x,events)})).sort((a,b)=>b.m.pct-a.m.pct),rank=teamRows.findIndex(x=>sameId(x.x.id,p.id))+1;const upcomingRows=upcoming.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}</tr>`).join('');const histRows=hist.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Type',esc(e._type))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}${tableCell('Opponent',esc(e._opponent||'—'))}${tableCell('Location',esc(e._location||'—'))}</tr>`).join('');
+function openPlayerDetail(id,{fromRestore=false}={}){
+  const p=state.derived.membersById.get(String(id));if(!p)return;
+  state.selection={type:'player',id:String(id)};saveSession();
+  const isPlayer=isPlayerMember(p);
+  if(!isPlayer){
+    openDrawer(memberName(p),`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div></div><div class="card" style="margin-top:16px"><div class="card-body"><div class="small-note">Availability analytics are calculated for player roster members only.</div></div></div>`);
+    return;
+  }
+  if(!availabilityReady()){
+    const html=`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div></div>${availabilityDetailState('player')}`;
+    openDrawer(memberName(p),html,true);bindDetailRetry();
+    if(!availabilityLoading()&&state.lifecycle.availability!=='error')ensureAvailability({quiet:true});
+    return;
+  }
+  const events=trackedEvents('season'),all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice')),trend=playerTrend(p,events);
+  const upcoming=events.filter(e=>toDate(e._date)>=startDay(now())).slice(0,10),hist=[...events].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,20);
+  const teamRows=activePlayers().map(x=>({x,m:playerAvailability(x,events)})).sort((a,b)=>b.m.pct-a.m.pct),rank=teamRows.findIndex(x=>sameId(x.x.id,p.id))+1;
+  const upcomingRows=upcoming.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}</tr>`).join('');
+  const histRows=hist.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Type',esc(e._type))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}${tableCell('Opponent',esc(e._opponent||'—'))}${tableCell('Location',esc(e._location||'—'))}</tr>`).join('');
   const html=`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div><div class="profile-actions">${scoreBadge(all.pct)}</div></div><div class="grid grid-4" style="margin-top:16px">${metricCard('Overall',`${all.pct}%`,`${all.yes} Yes of ${all.total}`,'bi-check-circle')}${metricCard('Games',games.total?`${games.pct}%`:'—',games.total?`${games.yes}/${games.total} Yes`:'No tracked games','bi-trophy')}${metricCard('Practices',prac.total?`${prac.pct}%`:'—',prac.total?`${prac.yes}/${prac.total} Yes`:'No tracked practices','bi-cone-striped')}${metricCard('Team Rank',rank?`#${rank}`:'—',`${activePlayers().length} players ranked`,'bi-award')}</div><div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Response Breakdown</h3><p>Every status other than Yes counts against the percentage</p></div></div><div class="card-body"><div class="stat-split"><div class="stat-box"><b>${all.yes}</b><span>Yes</span></div><div class="stat-box"><b>${all.no}</b><span>No</span></div><div class="stat-box"><b>${all.maybe}</b><span>Maybe</span></div><div class="stat-box"><b>${all.none}</b><span>No Response</span></div></div></div></div><div class="card"><div class="card-head"><div><h3>Trend</h3><p>Earlier half compared with recent half</p></div></div><div class="card-body">${trend?`<div class="kpi-inline"><div><b>${trend.old}%</b><span>Earlier</span></div><div><b>${trend.recent}%</b><span>Recent</span></div><div><b style="color:${trend.delta<0?'var(--danger)':trend.delta>0?'var(--success)':'var(--text)'}">${trend.delta>0?'+':''}${trend.delta}</b><span>Change</span></div></div>`:emptyState('bi-graph-up','Not enough history','At least six tracked events are needed for this comparison.')}</div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Upcoming Responses</h3><p>Current TeamSnap availability for future tracked events</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Status</th></tr></thead><tbody>${upcomingRows||`<tr>${tableCell('',emptyState('bi-calendar-check','Nothing upcoming','No upcoming tracked events were returned.'),'')}</tr>`}</tbody></table></div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Availability History</h3><p>Most recent tracked events from TeamSnap</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Type</th><th>Status</th><th>Opponent</th><th>Location</th></tr></thead><tbody>${histRows||`<tr>${tableCell('',emptyState('bi-clock-history','No history','No tracked availability history is available.'),'')}</tr>`}</tbody></table></div></div></div>`;
   openDrawer(memberName(p),html,true);bindCommonActions();
 }
@@ -513,9 +725,11 @@ function openPlayerDetail(id){
 function reportTitle(){return `${REPORT_TEMPLATES[state.report.template]?.name||'Custom Report'} — ${state.data.team?.name||'Team'}`;}
 function cleanFileName(s){return String(s).replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').toLowerCase();}
 function exportExcel(){
+  if(reportNeedsAvailability()&&!availabilityReady()){toast('Report data is still loading','Availability must finish loading before this report can be exported.','info');ensureAvailability({quiet:true});return;}
   if(!window.XLSX){toast('Excel export unavailable','The Excel library did not load. Check your internet connection and try again.','error');return;}const d=reportTableData();if(!d.headers.length||!d.rows.length){toast('Nothing to export','The report has no visible columns or rows.','error');return;}const aoa=[[reportTitle()],[`Timeframe: ${currentRangeLabel(state.filters.reports.range)}`],[`Generated: ${new Date().toLocaleString()}`],[],d.headers,...d.rows];const ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=d.headers.map((h,i)=>({wch:Math.min(42,Math.max(String(h).length+2,...d.rows.map(r=>String(r[i]??'').length+2)))}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Report');const meta=XLSX.utils.aoa_to_sheet([['Team',state.data.team?.name||''],['Report',reportTitle()],['Timeframe',currentRangeLabel(state.filters.reports.range)],['Generated',new Date().toISOString()],['App Version',VERSION]]);XLSX.utils.book_append_sheet(wb,meta,'Info');XLSX.writeFile(wb,`${cleanFileName(reportTitle())}.xlsx`);toast('Excel exported',`${d.rows.length} rows`,'success');
 }
 function exportPdf(){
+  if(reportNeedsAvailability()&&!availabilityReady()){toast('Report data is still loading','Availability must finish loading before this report can be exported.','info');ensureAvailability({quiet:true});return;}
   if(!window.jspdf?.jsPDF){toast('PDF export unavailable','The PDF library did not load. Check your internet connection and try again.','error');return;}const d=reportTableData();if(!d.headers.length||!d.rows.length){toast('Nothing to export','The report has no visible columns or rows.','error');return;}const {jsPDF}=window.jspdf;const doc=new jsPDF({orientation:d.headers.length>6?'landscape':'portrait',unit:'pt',format:'letter'});doc.setFontSize(15);doc.text(reportTitle(),40,42);doc.setFontSize(9);doc.setTextColor(90);doc.text(`${currentRangeLabel(state.filters.reports.range)} · Generated ${new Date().toLocaleString()}`,40,58);doc.autoTable({head:[d.headers],body:d.rows,startY:72,margin:{left:36,right:36,bottom:36},styles:{fontSize:7,cellPadding:4,overflow:'linebreak'},headStyles:{fontStyle:'bold'},didDrawPage:data=>{doc.setFontSize(7);doc.setTextColor(120);doc.text(`TeamSnap Manager Console ${VERSION}`,36,doc.internal.pageSize.height-18);doc.text(`Page ${doc.internal.getNumberOfPages()}`,doc.internal.pageSize.width-70,doc.internal.pageSize.height-18);}});doc.save(`${cleanFileName(reportTitle())}.pdf`);toast('PDF exported',`${d.rows.length} rows`,'success');
 }
 
@@ -527,20 +741,89 @@ function bindCommonActions(){
   $$('[data-open-event]').forEach(x=>x.onclick=e=>{e.stopPropagation();openEventDetail(x.dataset.openEvent);});$$('[data-open-player]').forEach(x=>x.onclick=e=>{e.stopPropagation();openPlayerDetail(x.dataset.openPlayer);});$$('[data-go-view]').forEach(x=>x.onclick=()=>setView(x.dataset.goView));$$('.clickable-attention').forEach(x=>x.onclick=()=>{if(x.dataset.eventId)openEventDetail(x.dataset.eventId);else if(x.dataset.playerId)openPlayerDetail(x.dataset.playerId);});
 }
 
-async function disconnect(show=true){state.token=null;state.user=null;state.teams=[];state.teamId=null;state.data={team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]};state.derived={events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()};sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem('tsmc.oauth.state');sessionStorage.removeItem('tsmc.oauth.redirect');if(show)toast('Disconnected','The TeamSnap session was cleared from this browser.','success');showLogin();}
-function parseOAuthHash(){
-  if(!location.hash)return false;const p=new URLSearchParams(location.hash.slice(1));if(!p.has('access_token')&&!p.has('error'))return false;if(p.get('error')){const msg=p.get('error_description')||p.get('error');history.replaceState(null,'',location.pathname+location.search);showLogin(msg);return true;}const expected=sessionStorage.getItem('tsmc.oauth.state'),returned=p.get('state');if(expected&&returned&&expected!==returned){history.replaceState(null,'',location.pathname+location.search);showLogin('OAuth state validation failed. Please connect again.');return true;}state.token=p.get('access_token');sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
+async function disconnect(show=true){
+  abortTeamRequests();stopRefreshTimer();
+  state.token=null;state.user=null;state.teams=[];state.teamId=null;state.lastLoaded=null;
+  state.selection={type:null,id:null};
+  state.lifecycle={core:'idle',availability:'idle',resourceErrors:{},teamLoadSeq:state.lifecycle.teamLoadSeq+1,availabilityLoadSeq:state.lifecycle.availabilityLoadSeq+1,lastAvailabilityLoaded:null};
+  state.data={team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]};
+  state.derived={events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()};
+  sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem('tsmc.oauth.state');sessionStorage.removeItem('tsmc.oauth.redirect');
+  closeDrawer({preserveSelection:true});
+  if(show)toast('Disconnected','The TeamSnap session was cleared from this browser.','success');
+  showLogin();
 }
-function connectOAuth(e){e.preventDefault();const clientId=$('#clientId').value.trim(),redirect=$('#redirectUri').value.trim();if(!clientId||!redirect)return;state.clientId=clientId;const nonce=window.crypto?.randomUUID?window.crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now();sessionStorage.setItem('tsmc.oauth.state',nonce);sessionStorage.setItem('tsmc.oauth.redirect',redirect);saveSession();const u=new URL(AUTH);u.searchParams.set('response_type','token');u.searchParams.set('client_id',clientId);u.searchParams.set('redirect_uri',redirect);u.searchParams.set('scope','read');u.searchParams.set('state',nonce);location.assign(u.toString());}
+function parseOAuthHash(){
+  if(!location.hash)return false;
+  const p=new URLSearchParams(location.hash.slice(1));if(!p.has('access_token')&&!p.has('error'))return false;
+  if(p.get('error')){const msg=p.get('error_description')||p.get('error');state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin(msg);return true;}
+  const expected=sessionStorage.getItem('tsmc.oauth.state'),returned=p.get('state');
+  if(expected&&returned&&expected!==returned){state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin('OAuth state validation failed. Please connect again.');return true;}
+  state.token=p.get('access_token');sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
+}
+function connectOAuth(e){
+  e.preventDefault();const clientId=$('#clientId').value.trim(),redirect=$('#redirectUri').value.trim();if(!clientId||!redirect)return;
+  state.clientId=clientId;state.redirectUri=redirect;localStorage.setItem(CONFIG_KEY,JSON.stringify({clientId,redirectUri:redirect}));const nonce=window.crypto?.randomUUID?window.crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now();
+  sessionStorage.setItem('tsmc.oauth.state',nonce);sessionStorage.setItem('tsmc.oauth.redirect',redirect);saveSession();
+  const u=new URL(AUTH);u.searchParams.set('response_type','token');u.searchParams.set('client_id',clientId);u.searchParams.set('redirect_uri',redirect);u.searchParams.set('scope','read');u.searchParams.set('state',nonce);location.assign(u.toString());
+}
+function normalizeRestoredView(){
+  const validViews=['home','schedule','roster','availability','stats','reports'];
+  if(!validViews.includes(state.view))state.view='home';
+  $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));
+  $('#globalSearch').value=state.search||'';$('#clearSearch').classList.toggle('hidden',!state.search);
+}
+function showStartupError(message){
+  showApp();
+  $('#viewRoot').innerHTML=`${pageHead('Connection problem','TeamSnap authentication succeeded, but team data could not start.')}<div class="data-state error"><i class="bi bi-cloud-slash"></i><div><b>Could not start the team session</b><br>${esc(message)}</div><button class="btn btn-sm btn-secondary" id="retryStartup">Retry</button></div>`;
+  const b=$('#retryStartup');if(b)b.onclick=bootstrapAuthenticatedSession;
+}
+async function bootstrapAuthenticatedSession(){
+  if(!state.token){showLogin();return false;}
+  showApp();setLoading(true);
+  try{
+    await loadIdentityAndTeams();
+    normalizeRestoredView();
+    const loaded=await loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()});
+    if(!loaded&&state.token)return false;
+    render();ensureDataForView();restoreSelection();startRefreshTimer();return true;
+  }catch(e){
+    if(isAbortError(e))return false;
+    console.error(e);
+    if(e instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);await disconnect(false);showLogin('TeamSnap authorization expired. Please connect again.');return false;}
+    showStartupError(e.message||'TeamSnap could not be loaded.');toast('TeamSnap startup failed',e.message||'Unknown error','error',7000);return false;
+  }finally{setLoading(false);}
+}
+async function manualRefresh(){
+  if(!state.token||!state.teamId)return;
+  setLoading(true);
+  try{
+    const ok=await loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()||state.selection?.type==='player'||state.selection?.type==='event'});
+    if(ok)toast('Data refreshed','Latest TeamSnap data loaded.','success');
+  }finally{setLoading(false);}
+}
 async function start(){
   loadSession();parseOAuthHash();
-  $('#connectForm').addEventListener('submit',connectOAuth);$$('[data-close-drawer]').forEach(x=>x.addEventListener('click',closeDrawer));$$('[data-close-modal]').forEach(x=>x.addEventListener('click',()=>closeModal(x.dataset.closeModal)));$('#saveRulesBtn').onclick=saveRulesFromModal;$('#resetRulesBtn').onclick=resetRules;$('#settingsBtn').onclick=openRules;$('#accountBtn').onclick=()=>{$('#accountContent').innerHTML=accountHtml();openModal('accountModal');};$('#disconnectBtn').onclick=()=>{closeModal('accountModal');disconnect();};$('#mobileTeamBtn').onclick=()=>{fillTeamSwitchers();openModal('teamModal');};$('#mobileTeamApply').onclick=()=>{const id=$('#mobileTeamSelect').value;closeModal('teamModal');if(!sameId(id,state.teamId))loadTeam(id);};
-  $('#teamSwitcher').onchange=e=>{if(!sameId(e.target.value,state.teamId))loadTeam(e.target.value);};$('#refreshBtn').onclick=async()=>{setLoading(true);await loadTeam(state.teamId,{quiet:true});setLoading(false);toast('Data refreshed','Latest TeamSnap data loaded.','success');};
+  $('#connectForm').addEventListener('submit',connectOAuth);
+  $$('[data-close-drawer]').forEach(x=>x.addEventListener('click',()=>closeDrawer()));
+  $$('[data-close-modal]').forEach(x=>x.addEventListener('click',()=>closeModal(x.dataset.closeModal)));
+  $('#saveRulesBtn').onclick=saveRulesFromModal;$('#resetRulesBtn').onclick=resetRules;$('#settingsBtn').onclick=openRules;
+  $('#accountBtn').onclick=()=>{$('#accountContent').innerHTML=accountHtml();openModal('accountModal');};
+  $('#disconnectBtn').onclick=()=>{closeModal('accountModal');disconnect();};
+  $('#mobileTeamBtn').onclick=()=>{fillTeamSwitchers();openModal('teamModal');};
+  $('#mobileTeamApply').onclick=()=>{const id=$('#mobileTeamSelect').value;closeModal('teamModal');if(!sameId(id,state.teamId))loadTeam(id);};
+  $('#teamSwitcher').onchange=e=>{if(!sameId(e.target.value,state.teamId))loadTeam(e.target.value);};
+  $('#refreshBtn').onclick=manualRefresh;
   $$('#mainNav .nav-btn').forEach(b=>b.onclick=()=>setView(b.dataset.view));
-  $('#globalSearch').addEventListener('input',e=>{state.search=e.target.value;$('#clearSearch').classList.toggle('hidden',!state.search);saveSession();render();});$('#clearSearch').onclick=()=>{state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');saveSession();render();};
+  $('#globalSearch').addEventListener('input',e=>{state.search=e.target.value;$('#clearSearch').classList.toggle('hidden',!state.search);saveSession();render();});
+  $('#clearSearch').onclick=()=>{state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');saveSession();render();};
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$$('.modal.open').forEach(m=>closeModal(m.id));}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#globalSearch').focus();}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.token&&state.teamId){const last=state.lifecycle.lastAvailabilityLoaded;const stale=!last||Date.now()-new Date(last).getTime()>=5*60*1000;if(stale&&viewNeedsAvailability())refreshAvailabilityQuiet();}});
+  window.addEventListener('online',()=>{if(state.token&&state.teamId&&state.lifecycle.core==='error')loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()});});
+  window.addEventListener('pagehide',stopRefreshTimer);
   window.addEventListener('error',e=>{console.error(e.error||e.message);});
-  if(!state.token){showLogin();return;}showApp();setLoading(true);try{await loadIdentityAndTeams();await loadTeam(state.teamId,{quiet:true});const validViews=['home','schedule','roster','availability','stats','reports'];if(!validViews.includes(state.view))state.view='home';$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));$('#globalSearch').value=state.search||'';$('#clearSearch').classList.toggle('hidden',!state.search);render();}catch(e){console.error(e);showLogin(e.message);toast('Connection failed',e.message,'error',7000);}finally{setLoading(false);}setInterval(()=>refreshAvailabilityQuiet(),5*60*1000);
+  if(!state.token){showLogin();return;}
+  await bootstrapAuthenticatedSession();
 }
 
 document.addEventListener('DOMContentLoaded',start);
