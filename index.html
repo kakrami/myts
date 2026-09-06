@@ -723,6 +723,198 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 @media(max-width:600px){
   .insight-grid{grid-template-columns:1fr 1fr}
 }
+
+/* Team management console */
+.manager-console{overflow:visible}
+.manager-toolbar{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 12px;
+  border-bottom:1px solid var(--line);
+  background:#fbfdff;
+}
+.manager-brand{min-width:170px}
+.manager-brand b{display:block;font-size:14px}
+.manager-brand span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.manager-global{
+  display:grid;
+  grid-template-columns:minmax(150px,220px) minmax(130px,170px) minmax(200px,320px) auto;
+  gap:7px;
+  align-items:end;
+  flex:1;
+  justify-content:end;
+}
+.manager-global .field{min-width:0}
+.manager-global select,.manager-global input{height:38px}
+.manager-nav{
+  display:flex;
+  gap:3px;
+  overflow-x:auto;
+  padding:6px 8px;
+  border-bottom:1px solid var(--line);
+  background:#fff;
+  scrollbar-width:thin;
+}
+.manager-nav-btn{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:7px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.manager-nav-btn:hover{background:#f4f7fa;color:var(--text)}
+.manager-nav-btn.active{background:var(--accent-bg);color:var(--accent)}
+.manager-body{padding-top:10px}
+.manager-hero{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.manager-hero h2{font-size:18px;margin:0}
+.manager-hero p{font-size:11px;color:var(--muted);margin:3px 0 0;line-height:1.45}
+.manager-actions{display:flex;gap:6px;flex-wrap:wrap}
+.manager-kpis{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(120px,1fr));
+  gap:8px;
+  margin:8px 0 12px;
+}
+.manager-kpi{
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fbfdff;
+  padding:9px 10px;
+}
+.manager-kpi .label{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:850}
+.manager-kpi .value{font-size:20px;font-weight:850;margin-top:3px}
+.manager-kpi .sub{font-size:9px;color:var(--muted);margin-top:2px}
+.manager-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(260px,.7fr);
+  gap:10px;
+}
+.manager-section{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  overflow:hidden;
+}
+.manager-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:9px 10px;
+  border-bottom:1px solid #edf1f5;
+}
+.manager-section-head b{font-size:11px}
+.manager-section-body{padding:9px 10px}
+.upcoming-list{display:grid;gap:7px}
+.upcoming-item{
+  display:grid;
+  grid-template-columns:100px minmax(0,1fr) auto;
+  gap:9px;
+  align-items:center;
+  border:1px solid #edf1f5;
+  border-radius:9px;
+  padding:8px;
+  background:#fbfdff;
+}
+.upcoming-when b{display:block;font-size:11px}
+.upcoming-when span{font-size:9px;color:var(--muted)}
+.upcoming-main b{display:block;font-size:11px}
+.upcoming-main span{display:block;font-size:9px;color:var(--muted);margin-top:2px}
+.availability-mini{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.availability-mini span{
+  padding:3px 5px;
+  border-radius:6px;
+  font-size:9px;
+  font-weight:800;
+  background:#f1f5f9;
+}
+.attention-list{display:grid;gap:6px}
+.attention-item{
+  border-left:3px solid #f59e0b;
+  background:#fffbeb;
+  padding:7px 8px;
+  border-radius:6px;
+  font-size:10px;
+  line-height:1.35;
+}
+.attention-item.good{border-left-color:#22c55e;background:#f0fdf4}
+.console-tablewrap{overflow:auto;max-height:62vh;border:1px solid var(--line);border-radius:10px}
+.console-tablewrap table{margin:0}
+.console-tablewrap th{position:sticky;top:0;z-index:2}
+.manager-sort{cursor:pointer;user-select:none}
+.gameday-picker{display:flex;gap:7px;align-items:end;flex-wrap:wrap;margin-bottom:10px}
+.gameday-picker .field{min-width:260px;flex:1}
+.status-columns{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.status-column{
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  min-width:0;
+}
+.status-column h3{font-size:10px;margin:0;padding:7px 8px;background:#f8fafc;border-bottom:1px solid var(--line)}
+.status-column .names{padding:7px 8px;display:grid;gap:4px}
+.status-column .name-row{font-size:10px;padding:4px 5px;border-radius:5px;background:#fbfdff}
+.performance-block{margin-top:12px}
+.form-strip{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.form-pill{width:27px;height:27px;border-radius:7px;display:grid;place-items:center;font-size:10px;font-weight:900;background:#e2e8f0}
+.form-pill.win{background:#dcfce7;color:#166534}
+.form-pill.loss{background:#fee2e2;color:#991b1b}
+.form-pill.tie{background:#fef3c7;color:#92400e}
+.h2h-card{
+  display:grid;
+  grid-template-columns:minmax(150px,1.4fr) repeat(6,minmax(55px,.5fr));
+  gap:5px;
+  align-items:center;
+  padding:7px 8px;
+  border-bottom:1px solid #edf1f5;
+  font-size:10px;
+}
+.h2h-card.header{font-size:9px;color:var(--muted);font-weight:850;background:#f8fafc}
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:4px}
+#eventPanel.console-secondary,#dashboardPanel.console-secondary{display:none}
+body.reports-mode #eventPanel.console-secondary,
+body.reports-mode #dashboardPanel.console-secondary{display:block}
+@media(max-width:1000px){
+  .manager-toolbar{align-items:stretch;flex-direction:column}
+  .manager-global{grid-template-columns:1fr 1fr 2fr auto}
+  .manager-kpis{grid-template-columns:repeat(3,1fr)}
+  .manager-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .manager-global{grid-template-columns:1fr 1fr}
+  .manager-search-field{grid-column:1/-1}
+  #refreshManagerBtn{width:100%}
+  .manager-kpis{grid-template-columns:1fr 1fr}
+  .manager-hero{flex-direction:column}
+  .manager-actions{width:100%}
+  .manager-actions .btn{flex:1}
+  .upcoming-item{grid-template-columns:75px minmax(0,1fr)}
+  .availability-mini{grid-column:1/-1;justify-content:flex-start}
+  .status-columns{grid-template-columns:1fr 1fr}
+  .h2h-card{grid-template-columns:minmax(120px,1.3fr) repeat(3,minmax(45px,.5fr))}
+  .h2h-card > :nth-child(5),.h2h-card > :nth-child(6),.h2h-card > :nth-child(7){display:none}
+}
+@media(max-width:430px){
+  .manager-global{grid-template-columns:1fr}
+  .manager-search-field{grid-column:auto}
+  .manager-kpis{grid-template-columns:1fr 1fr}
+  .status-columns{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -730,8 +922,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 <div class="app">
   <div class="topbar">
     <div class="title">
-      <h1>TeamSnap Report Builder</h1>
-      <p>Fetch TeamSnap data, define the scope you care about, and build useful reports from it.</p>
+      <h1>TeamSnap Manager Console</h1>
+      <p>Upcoming events, live availability, game-day readiness, performance, assignments, roster, and optional reporting.</p>
     </div>
     <div class="security">
       Single-file app · Client Secret never stored · session survives refresh
@@ -839,22 +1031,19 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       </div>
     </section>
 
-    <section id="eventPanel" class="panel hidden">
-      <div class="panelhead stepintro">
-        <div>
-          <h2>Data Scope</h2>
-          <p>Choose the team and filters used by reports. Select events only when you want availability data fetched for them.</p>
+    <section id="consolePanel" class="panel hidden manager-console">
+      <div class="manager-toolbar">
+        <div class="manager-brand">
+          <b id="managerTeamName">Team Manager</b>
+          <span id="managerFreshness">Choose a team to begin.</span>
         </div>
-        <button id="refreshTeamsBtn" class="btn small" type="button">Refresh</button>
-      </div>
-      <div class="panelbody">
-        <div class="primaryrow">
+        <div class="manager-global">
           <div class="field">
             <label>Team</label>
             <select id="teamSelect"><option value="">Select a team...</option></select>
           </div>
           <div class="field">
-            <label>Quick Date Range</label>
+            <label>Timeframe</label>
             <select id="quickView">
               <option value="">All Events</option>
               <option value="thisMonth">This Month</option>
@@ -865,6 +1054,47 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
               <option value="lastSeason">Last Season</option>
             </select>
           </div>
+          <div class="field manager-search-field">
+            <label>Search</label>
+            <input id="managerSearch" type="search" placeholder="Player, opponent, event, location..." autocomplete="off">
+          </div>
+          <button id="refreshManagerBtn" class="btn" type="button">Refresh</button>
+        </div>
+      </div>
+
+      <nav id="managerNav" class="manager-nav" aria-label="Team management">
+        <button class="manager-nav-btn active" data-console-page="home" type="button">Home</button>
+        <button class="manager-nav-btn" data-console-page="upcoming" type="button">Upcoming</button>
+        <button class="manager-nav-btn" data-console-page="gameday" type="button">Game Day</button>
+        <button class="manager-nav-btn" data-console-page="schedule" type="button">Schedule</button>
+        <button class="manager-nav-btn" data-console-page="roster" type="button">Roster</button>
+        <button class="manager-nav-btn" data-console-page="performance" type="button">Performance</button>
+        <button class="manager-nav-btn" data-console-page="availability" type="button">Availability</button>
+        <button class="manager-nav-btn" data-console-page="assignments" type="button">Assignments</button>
+        <button class="manager-nav-btn" data-console-page="reports" type="button">Reports</button>
+      </nav>
+
+      <div class="panelbody manager-body">
+        <div id="managerStatus" class="status" aria-live="polite"></div>
+        <div id="managerContent">
+          <div class="report-prompt">
+            <b>Choose a team</b>
+            <p>Your manager console will load upcoming events, roster information, live availability, performance, and management alerts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="eventPanel" class="panel hidden console-secondary">
+      <div class="panelhead stepintro">
+        <div>
+          <h2>Report Data Scope</h2>
+          <p>Optional report controls. Manager pages above do not require you to build a report first.</p>
+        </div>
+        <button id="refreshTeamsBtn" class="btn small" type="button">Refresh</button>
+      </div>
+      <div class="panelbody">
+        <div class="primaryrow">
           <button id="toggleEventFilters" class="btn" type="button" aria-expanded="false" aria-controls="advancedEventFilters">More Filters</button>
         </div>
 
@@ -981,7 +1211,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       </div>
     </section>
 
-    <section id="dashboardPanel" class="panel hidden">
+    <section id="dashboardPanel" class="panel hidden console-secondary">
       <div class="panelhead stepintro">
         <div>
           <h2>Reports</h2>
@@ -1159,7 +1389,14 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     customSource: 'events',
     customColumns: [],
     customGroupBy: '',
-    customAggregate: 'count'
+    customAggregate: 'count',
+    consolePage: 'home',
+    liveAvailabilityByEvent: new Map(),
+    liveAvailabilityUpdatedAt: 0,
+    liveAvailabilityLoading: false,
+    liveAvailabilityTimer: null,
+    managerSortKey: '',
+    managerSortDir: 1
   };
 
   const SESSION_STATE_KEY = 'myts.session.state.v1';
@@ -1207,7 +1444,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         exclusionPickerOpen:$('exclusionPicker') ? !$('exclusionPicker').classList.contains('hidden') : false,
         customSource:state.customSource,
         customColumns:state.customColumns,
-        customGroupBy:state.customGroupBy
+        customGroupBy:state.customGroupBy,
+        consolePage:state.consolePage
       };
       sessionStorage.setItem(SESSION_STATE_KEY,JSON.stringify(snapshot));
       if(state.token) sessionStorage.setItem(SESSION_TOKEN_KEY,state.token);
@@ -1493,6 +1731,509 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     return m === 6 ? 'Postseason' : 'Regular Season';
   }
 
+  function todayISO(){
+    const d=new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function numberOrNull(value){
+    if(value===null || value===undefined || value==='') return null;
+    const n=Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function scoreInfo(event){
+    let scoreFor=numberOrNull(first(event,['score_for','team_score','our_score','points_for','team_score_value'],null));
+    let scoreAgainst=numberOrNull(first(event,['score_against','opponent_score','their_score','points_against','opponent_score_value'],null));
+
+    const homeScore=numberOrNull(first(event,['home_score','home_team_score'],null));
+    const awayScore=numberOrNull(first(event,['away_score','away_team_score'],null));
+    const isHome=boolish(first(event,['is_home','home'],null));
+    const homeAway=String(first(event,['home_or_away','home_away'],'')).toLowerCase();
+
+    if((scoreFor===null || scoreAgainst===null) && homeScore!==null && awayScore!==null){
+      const home = isHome===true || homeAway==='home';
+      const away = isHome===false || homeAway==='away';
+      if(home){scoreFor=homeScore;scoreAgainst=awayScore;}
+      else if(away){scoreFor=awayScore;scoreAgainst=homeScore;}
+      else{scoreFor=homeScore;scoreAgainst=awayScore;}
+    }
+
+    if(scoreFor===null || scoreAgainst===null) return null;
+    return {
+      for:scoreFor,
+      against:scoreAgainst,
+      result:scoreFor>scoreAgainst?'W':scoreFor<scoreAgainst?'L':'T',
+      diff:scoreFor-scoreAgainst
+    };
+  }
+
+  function upcomingEvents(limit=20){
+    const today=todayISO();
+    return state.events
+      .filter(e=>e._date && e._date>=today)
+      .sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`))
+      .slice(0,limit);
+  }
+
+  function scoredGames(){
+    return state.events
+      .filter(e=>e._type==='Game' && !!scoreInfo(e))
+      .sort((a,b)=>`${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`));
+  }
+
+  function recordFromGames(games){
+    const r={games:0,w:0,l:0,t:0,for:0,against:0,diff:0,winPct:0};
+    games.forEach(e=>{
+      const s=scoreInfo(e); if(!s) return;
+      r.games++; r.for+=s.for; r.against+=s.against;
+      if(s.result==='W') r.w++;
+      else if(s.result==='L') r.l++;
+      else r.t++;
+    });
+    r.diff=r.for-r.against;
+    r.winPct=r.games ? ((r.w + r.t*.5)/r.games)*100 : 0;
+    return r;
+  }
+
+  function availabilityCountsForEvent(eventId){
+    const key=String(eventId);
+    const loaded=state.liveAvailabilityByEvent.has(key);
+    const rows=state.liveAvailabilityByEvent.get(key) || [];
+    const playerMembers=state.members.filter(m=>!isNonPlayer(m));
+    const counts={yes:0,no:0,maybe:0,none:0,total:playerMembers.length,loaded};
+
+    if(!loaded) return counts;
+
+    const byMember=new Map(rows.map(r=>[String(r.member_id || ''),normalizeAvailability(r)]));
+    playerMembers.forEach(m=>{
+      const status=byMember.get(String(m.id)) || 'No Response';
+      if(status==='Yes') counts.yes++;
+      else if(status==='No') counts.no++;
+      else if(status==='Maybe') counts.maybe++;
+      else counts.none++;
+    });
+    return counts;
+  }
+
+  async function ensureLiveEventAvailability(eventId){
+    const key=String(eventId || '');
+    if(!key || state.liveAvailabilityByEvent.has(key)) return;
+    const rows=await apiSearch('availabilities',{event_id:key}).catch(()=>[]);
+    state.liveAvailabilityByEvent.set(key,rows);
+    state.liveAvailabilityUpdatedAt=Date.now();
+  }
+
+  async function refreshLiveAvailability({silent=false}={}){
+    if(!state.team || state.liveAvailabilityLoading) return;
+    state.liveAvailabilityLoading=true;
+    const events=upcomingEvents(5);
+    if(!silent) status('managerStatus',`Refreshing availability for ${events.length} upcoming event(s)...`);
+    try{
+      await mapLimit(events,4,async event=>{
+        const rows=await apiSearch('availabilities',{event_id:event._id}).catch(()=>[]);
+        state.liveAvailabilityByEvent.set(event._id,rows);
+      });
+      state.liveAvailabilityUpdatedAt=Date.now();
+      if(!silent) status('managerStatus','Upcoming availability refreshed.','good');
+      renderManagerPage();
+    }finally{
+      state.liveAvailabilityLoading=false;
+    }
+  }
+
+  function startLiveAvailability(){
+    if(state.liveAvailabilityTimer) clearInterval(state.liveAvailabilityTimer);
+    if(!state.team) return;
+    refreshLiveAvailability({silent:true});
+    state.liveAvailabilityTimer=setInterval(()=>refreshLiveAvailability({silent:true}),60000);
+  }
+
+  function stopLiveAvailability(){
+    if(state.liveAvailabilityTimer) clearInterval(state.liveAvailabilityTimer);
+    state.liveAvailabilityTimer=null;
+  }
+
+  function managerSearchQuery(){
+    return $('managerSearch')?.value.trim() || '';
+  }
+
+  function managerMatch(values){
+    const q=managerSearchQuery().toLowerCase();
+    return !q || values.some(v=>String(v ?? '').toLowerCase().includes(q));
+  }
+
+  function managerSortRows(rows){
+    const key=state.managerSortKey;
+    if(!key) return rows;
+    const dir=state.managerSortDir;
+    return rows.slice().sort((a,b)=>{
+      const av=a[key] ?? '', bv=b[key] ?? '';
+      if(typeof av==='number' && typeof bv==='number') return (av-bv)*dir;
+      return String(av).localeCompare(String(bv),undefined,{numeric:true,sensitivity:'base'})*dir;
+    });
+  }
+
+  function managerSortHeader(label,key){
+    const arrow=state.managerSortKey===key ? (state.managerSortDir===1?' ▲':' ▼') : '';
+    return `<th class="manager-sort" data-manager-sort="${esc(key)}" tabindex="0">${esc(label)}${arrow}</th>`;
+  }
+
+  function bindManagerSort(){
+    document.querySelectorAll('#managerContent [data-manager-sort]').forEach(th=>{
+      const activate=()=>{
+        const key=th.dataset.managerSort;
+        if(state.managerSortKey===key) state.managerSortDir*=-1;
+        else{state.managerSortKey=key;state.managerSortDir=1;}
+        renderManagerPage();
+      };
+      th.addEventListener('click',activate);
+      th.addEventListener('keydown',e=>{
+        if(e.key==='Enter' || e.key===' '){e.preventDefault();activate();}
+      });
+    });
+  }
+
+  function managerHero(title,subtitle,actions=''){
+    return `<div class="manager-hero"><div><h2>${esc(title)}</h2><p>${esc(subtitle)}</p></div>${actions?`<div class="manager-actions">${actions}</div>`:''}</div>`;
+  }
+
+  function availabilityMini(c){
+    if(!c.loaded) return '<div class="availability-mini"><span>Availability not loaded</span></div>';
+    return `<div class="availability-mini">
+      <span>${c.yes} Yes</span><span>${c.maybe} Maybe</span><span>${c.no} No</span><span>${c.none} No Response</span>
+    </div>`;
+  }
+
+  function eventAttention(events){
+    const items=[];
+    const upcoming=events.filter(e=>e._date>=todayISO()).slice(0,10);
+    const missingLoc=upcoming.filter(e=>!e._location).length;
+    const missingOpp=upcoming.filter(e=>e._type==='Game' && !e._opponent).length;
+    const noResponse=upcoming.reduce((n,e)=>{
+      const c=availabilityCountsForEvent(e._id);
+      return n+(c.loaded?c.none:0);
+    },0);
+    if(noResponse) items.push(`${noResponse} availability responses are still missing across the next ${upcoming.length} events.`);
+    if(missingLoc) items.push(`${missingLoc} upcoming event${missingLoc===1?' is':'s are'} missing a location.`);
+    if(missingOpp) items.push(`${missingOpp} upcoming game${missingOpp===1?' is':'s are'} missing an opponent.`);
+    if(!items.length) items.push('No obvious schedule or availability issues in the upcoming event window.');
+    return items;
+  }
+
+  function renderUpcomingItems(events){
+    const q=managerSearchQuery();
+    if(!events.length) return '<div class="empty-state"><b>No upcoming events</b>No events match the current team/timeframe.</div>';
+    return `<div class="upcoming-list">${events.map(e=>{
+      const c=availabilityCountsForEvent(e._id);
+      const date=shortDate(e._date);
+      return `<button class="upcoming-item" type="button" data-gameday-event="${esc(e._id)}">
+        <div class="upcoming-when"><b>${highlight(date,q)}</b><span>${highlight(e._time,q)}</span></div>
+        <div class="upcoming-main"><b>${highlight(e._name,q)}</b><span>${[e._opponent,e._location].filter(Boolean).map(v=>highlight(v,q)).join(' · ')}</span></div>
+        ${availabilityMini(c)}
+      </button>`;
+    }).join('')}</div>`;
+  }
+
+  function bindGameDayLinks(){
+    document.querySelectorAll('#managerContent [data-gameday-event]').forEach(btn=>btn.addEventListener('click',()=>{
+      state.gameDayEventId=btn.dataset.gamedayEvent;
+      openConsolePage('gameday');
+    }));
+  }
+
+  function renderHomePage(){
+    const upcoming=upcomingEvents(5).filter(e=>managerMatch([e._name,e._opponent,e._location,e._date,e._type]));
+    const nextGame=upcomingEvents(20).find(e=>e._type==='Game');
+    const games=scoredGames();
+    const record=recordFromGames(games);
+    const players=state.members.filter(m=>!isNonPlayer(m)).length;
+    const attention=eventAttention(upcomingEvents(10));
+
+    $('managerContent').innerHTML=
+      managerHero('Manager Home','What is coming up, who is available, what needs attention, and how the team is performing.')+
+      `<div class="manager-kpis">
+        <div class="manager-kpi"><div class="label">Players</div><div class="value">${players}</div><div class="sub">Current roster</div></div>
+        <div class="manager-kpi"><div class="label">Next 30 Days</div><div class="value">${state.events.filter(e=>e._date>=todayISO() && e._date<=(()=>{const d=new Date();d.setDate(d.getDate()+30);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`})()).length}</div><div class="sub">Scheduled events</div></div>
+        <div class="manager-kpi"><div class="label">Next Game</div><div class="value" style="font-size:13px">${nextGame?esc(shortDate(nextGame._date)):'—'}</div><div class="sub">${nextGame?esc(nextGame._opponent || nextGame._name):'No upcoming game'}</div></div>
+        <div class="manager-kpi"><div class="label">Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div><div class="sub">${record.games?`${record.for} for · ${record.against} against`:'Scores not available'}</div></div>
+        <div class="manager-kpi"><div class="label">Availability</div><div class="value" style="font-size:13px">${state.liveAvailabilityUpdatedAt?'<span class="live-dot"></span>Live':'Loading…'}</div><div class="sub">${state.liveAvailabilityUpdatedAt?'Refreshes every 60 sec':'Fetching upcoming responses'}</div></div>
+      </div>
+      <div class="manager-grid">
+        <section class="manager-section">
+          <div class="manager-section-head"><b>Upcoming</b><button class="btn small" data-open-console="upcoming" type="button">View All</button></div>
+          <div class="manager-section-body">${renderUpcomingItems(upcoming)}</div>
+        </section>
+        <section class="manager-section">
+          <div class="manager-section-head"><b>Needs Attention</b></div>
+          <div class="manager-section-body"><div class="attention-list">${attention.map((x,i)=>`<div class="attention-item ${attention.length===1 && x.startsWith('No obvious')?'good':''}">${esc(x)}</div>`).join('')}</div></div>
+        </section>
+      </div>`;
+
+    bindGameDayLinks();
+    document.querySelectorAll('#managerContent [data-open-console]').forEach(btn=>btn.addEventListener('click',()=>openConsolePage(btn.dataset.openConsole)));
+  }
+
+  function renderUpcomingPage(){
+    const events=upcomingEvents(50).filter(e=>managerMatch([e._name,e._opponent,e._location,e._date,e._type,e._phase]));
+    $('managerContent').innerHTML=
+      managerHero('Upcoming','Live team availability for upcoming games, practices, and events.',
+        '<button id="refreshUpcomingBtn" class="btn primary" type="button">Refresh Availability</button>')+
+      renderUpcomingItems(events);
+    $('refreshUpcomingBtn')?.addEventListener('click',()=>refreshLiveAvailability());
+    bindGameDayLinks();
+  }
+
+  function renderGameDayPage(){
+    const games=upcomingEvents(30).filter(e=>e._type==='Game');
+    const selected=games.find(e=>e._id===state.gameDayEventId) || games[0] || upcomingEvents(30)[0];
+    if(!selected){
+      $('managerContent').innerHTML=managerHero('Game Day','One place for the next game’s schedule, availability, and readiness.')+
+        '<div class="empty-state"><b>No upcoming game found</b>Add an upcoming game in TeamSnap or change the timeframe.</div>';
+      return;
+    }
+    state.gameDayEventId=selected._id;
+    const c=availabilityCountsForEvent(selected._id);
+    if(!c.loaded){
+      $('managerContent').innerHTML=
+        managerHero('Game Day',`${selected._opponent || selected._name} · ${shortDate(selected._date)} ${selected._time || ''} · ${selected._location || 'Location not set'}`)+
+        '<div class="report-prompt"><b>Loading live availability…</b><p>Fetching the current responses for this event.</p></div>';
+      ensureLiveEventAvailability(selected._id).then(()=>{
+        if(state.consolePage==='gameday' && state.gameDayEventId===selected._id) renderGameDayPage();
+      });
+      return;
+    }
+    const rows=state.liveAvailabilityByEvent.get(selected._id) || [];
+    const byMember=new Map(rows.map(r=>[String(r.member_id),r]));
+    const groups={Yes:[],Maybe:[],No:[],'No Response':[]};
+    state.members.filter(m=>!isNonPlayer(m)).forEach(m=>{
+      const a=byMember.get(String(m.id));
+      const s=a?normalizeAvailability(a):'No Response';
+      (groups[s] || groups['No Response']).push(memberName(m));
+    });
+    const select=`<select id="gameDaySelect">${games.map(e=>`<option value="${esc(e._id)}" ${e._id===selected._id?'selected':''}>${esc(shortDate(e._date))} · ${esc(e._opponent || e._name)}</option>`).join('')}</select>`;
+
+    $('managerContent').innerHTML=
+      managerHero('Game Day',`${selected._opponent || selected._name} · ${shortDate(selected._date)} ${selected._time || ''} · ${selected._location || 'Location not set'}`,
+        '<button id="refreshGameDayBtn" class="btn primary" type="button">Refresh Availability</button>')+
+      `<div class="gameday-picker"><div class="field"><label>Upcoming Game</label>${select}</div></div>
+       <div class="manager-kpis">
+        <div class="manager-kpi"><div class="label">Yes</div><div class="value">${c.yes}</div><div class="sub">Expected</div></div>
+        <div class="manager-kpi"><div class="label">Maybe</div><div class="value">${c.maybe}</div><div class="sub">Uncertain</div></div>
+        <div class="manager-kpi"><div class="label">No</div><div class="value">${c.no}</div><div class="sub">Unavailable</div></div>
+        <div class="manager-kpi"><div class="label">No Response</div><div class="value">${c.none}</div><div class="sub">Needs follow-up</div></div>
+        <div class="manager-kpi"><div class="label">Ready</div><div class="value">${c.total?pct(c.yes,c.total).toFixed(0):0}%</div><div class="sub">Yes / roster</div></div>
+       </div>
+       <div class="status-columns">
+        ${['Yes','Maybe','No','No Response'].map(s=>`<section class="status-column"><h3>${s} (${groups[s].length})</h3><div class="names">${groups[s].length?groups[s].map(n=>`<div class="name-row">${highlight(n,managerSearchQuery())}</div>`).join(''):'<div class="name-row">None</div>'}</div></section>`).join('')}
+       </div>`;
+    $('gameDaySelect')?.addEventListener('change',e=>{state.gameDayEventId=e.target.value;renderManagerPage();});
+    $('refreshGameDayBtn')?.addEventListener('click',()=>refreshLiveAvailability());
+  }
+
+  function renderScheduleConsole(){
+    const q=managerSearchQuery();
+    let rows=state.visibleEvents
+      .filter(e=>managerMatch([e._date,e._time,e._name,e._type,e._phase,e._opponent,e._location]))
+      .map(e=>({date:e._date,time:e._time,event:e._name,type:e._type,opponent:e._opponent,location:e._location,phase:e._phase}));
+    rows=managerSortRows(rows);
+    $('managerContent').innerHTML=
+      managerHero('Schedule','Games, practices, opponents, locations, and schedule details for the current timeframe.')+
+      `<div class="console-tablewrap"><table><thead><tr>${managerSortHeader('Date','date')}${managerSortHeader('Time','time')}${managerSortHeader('Event','event')}${managerSortHeader('Type','type')}${managerSortHeader('Opponent','opponent')}${managerSortHeader('Location','location')}${managerSortHeader('Phase','phase')}</tr></thead><tbody>
+      ${rows.map(r=>`<tr><td>${highlight(r.date,q)}</td><td>${highlight(r.time,q)}</td><td class="name">${highlight(r.event,q)}</td><td>${highlight(r.type,q)}</td><td>${highlight(r.opponent,q)}</td><td>${highlight(r.location,q)}</td><td>${highlight(r.phase,q)}</td></tr>`).join('')}
+      </tbody></table></div>`;
+    bindManagerSort();
+  }
+
+  function renderRosterConsole(){
+    const q=managerSearchQuery();
+    let rows=state.members.map(m=>({
+      name:memberName(m),
+      category:isNonPlayer(m)?'Staff / Non-player':'Player',
+      role:rosterRole(m),
+      position:String(first(m,['position','position_name'],'')).trim()
+    })).filter(r=>managerMatch(Object.values(r)));
+    rows=managerSortRows(rows);
+    $('managerContent').innerHTML=
+      managerHero('Roster','Search the current team roster and review player/staff roles.')+
+      `<div class="console-tablewrap"><table><thead><tr>${managerSortHeader('Name','name')}${managerSortHeader('Category','category')}${managerSortHeader('Role','role')}${managerSortHeader('Position','position')}</tr></thead><tbody>
+      ${rows.map(r=>`<tr><td class="name">${highlight(r.name,q)}</td><td>${highlight(r.category,q)}</td><td>${highlight(r.role,q)}</td><td>${highlight(r.position,q)}</td></tr>`).join('')}
+      </tbody></table></div>`;
+    bindManagerSort();
+  }
+
+  function headToHeadRows(){
+    const map=new Map();
+    scoredGames().forEach(e=>{
+      const opponent=e._opponent || '(Unknown opponent)';
+      if(!map.has(opponent)) map.set(opponent,[]);
+      map.get(opponent).push(e);
+    });
+    return [...map.entries()].map(([opponent,games])=>({opponent,...recordFromGames(games),last:games[games.length-1]?._date || ''}));
+  }
+
+  function renderPerformancePage(){
+    const games=scoredGames();
+    const record=recordFromGames(games);
+    const recent=games.slice(-5).reverse();
+    const q=managerSearchQuery();
+    let h2h=headToHeadRows().filter(r=>managerMatch([r.opponent,r.games,r.w,r.l,r.t,r.for,r.against,r.last]));
+    h2h=managerSortRows(h2h);
+    const avgFor=record.games?record.for/record.games:0;
+    const avgAgainst=record.games?record.against/record.games:0;
+    const biggestWin=games.map(e=>({e,s:scoreInfo(e)})).filter(x=>x.s.result==='W').sort((a,b)=>b.s.diff-a.s.diff)[0];
+    const biggestLoss=games.map(e=>({e,s:scoreInfo(e)})).filter(x=>x.s.result==='L').sort((a,b)=>a.s.diff-b.s.diff)[0];
+
+    let availabilityCorrelation='';
+    if(state.availabilityLoaded){
+      const scoredSelected=state.trackedEvents.filter(e=>scoreInfo(e));
+      if(scoredSelected.length){
+        const buckets={W:{yes:0,total:0,games:0},L:{yes:0,total:0,games:0},T:{yes:0,total:0,games:0}};
+        scoredSelected.forEach(e=>{
+          const s=scoreInfo(e); const rows=state.analysisRows.filter(r=>r.eventId===e._id && !r.nonPlayer);
+          const c=counted(rows,rows.length); const b=buckets[s.result]; b.yes+=c.yes;b.total+=c.total;b.games++;
+        });
+        availabilityCorrelation=`<div class="performance-block manager-section"><div class="manager-section-head"><b>Availability vs Results</b></div><div class="manager-section-body"><div class="insight-grid">${['W','T','L'].map(k=>`<div class="insight"><div class="label">${k==='W'?'Wins':k==='L'?'Losses':'Ties'}</div><div class="value">${buckets[k].total?pct(buckets[k].yes,buckets[k].total).toFixed(1):'—'}${buckets[k].total?'%':''}</div><div class="sub">${buckets[k].games} scored selected games</div></div>`).join('')}</div></div></div>`;
+      }
+    }
+
+    $('managerContent').innerHTML=
+      managerHero('Performance','Season record, recent form, scoring trends, and head-to-head history derived from scored TeamSnap games.')+
+      `<div class="manager-kpis">
+        <div class="manager-kpi"><div class="label">Record</div><div class="value">${record.games?`${record.w}-${record.l}-${record.t}`:'—'}</div><div class="sub">${record.games} scored games</div></div>
+        <div class="manager-kpi"><div class="label">Win %</div><div class="value">${record.games?record.winPct.toFixed(1)+'%':'—'}</div><div class="sub">Ties count as half-win</div></div>
+        <div class="manager-kpi"><div class="label">Goals For</div><div class="value">${record.games?record.for:'—'}</div><div class="sub">${record.games?avgFor.toFixed(2)+' / game':'Scores not exposed'}</div></div>
+        <div class="manager-kpi"><div class="label">Goals Against</div><div class="value">${record.games?record.against:'—'}</div><div class="sub">${record.games?avgAgainst.toFixed(2)+' / game':'Scores not exposed'}</div></div>
+        <div class="manager-kpi"><div class="label">Differential</div><div class="value">${record.games?(record.diff>0?'+':'')+record.diff:'—'}</div><div class="sub">For minus against</div></div>
+      </div>
+      ${!record.games?`<div class="warningbox">No completed game scores were found in the event fields returned by TeamSnap. Performance views will populate automatically when score data is exposed for this team.</div>`:''}
+      <div class="manager-grid">
+        <section class="manager-section">
+          <div class="manager-section-head"><b>Recent Form</b></div>
+          <div class="manager-section-body">
+            <div class="form-strip">${recent.length?recent.map(e=>{const s=scoreInfo(e);return `<span class="form-pill ${s.result==='W'?'win':s.result==='L'?'loss':'tie'}" title="${esc(e._opponent)} ${s.for}-${s.against}">${s.result}</span>`}).join(''):'No scored games'}</div>
+            ${biggestWin?`<div class="card-sub" style="margin-top:9px">Biggest win: ${esc(biggestWin.e._opponent || biggestWin.e._name)} ${biggestWin.s.for}-${biggestWin.s.against}</div>`:''}
+            ${biggestLoss?`<div class="card-sub" style="margin-top:4px">Biggest loss: ${esc(biggestLoss.e._opponent || biggestLoss.e._name)} ${biggestLoss.s.for}-${biggestLoss.s.against}</div>`:''}
+          </div>
+        </section>
+        <section class="manager-section">
+          <div class="manager-section-head"><b>Scoring</b></div>
+          <div class="manager-section-body">
+            <div class="attention-list">
+              <div class="attention-item good">Average scored: ${record.games?avgFor.toFixed(2):'—'} per game</div>
+              <div class="attention-item">Average allowed: ${record.games?avgAgainst.toFixed(2):'—'} per game</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="performance-block manager-section">
+        <div class="manager-section-head"><b>Head-to-Head</b></div>
+        <div class="manager-section-body" style="padding:0">
+          <div class="h2h-card header"><span>Opponent</span><span>GP</span><span>W</span><span>L</span><span>T</span><span>GF-GA</span><span>Diff</span></div>
+          ${h2h.length?h2h.map(r=>`<div class="h2h-card"><b>${highlight(r.opponent,q)}</b><span>${r.games}</span><span>${r.w}</span><span>${r.l}</span><span>${r.t}</span><span>${r.for}-${r.against}</span><span>${r.diff>0?'+':''}${r.diff}</span></div>`).join(''):'<div class="empty-state"><b>No head-to-head results yet</b>Scored games will appear here automatically.</div>'}
+        </div>
+      </div>
+      ${availabilityCorrelation}`;
+  }
+
+  function renderAvailabilityConsole(){
+    const events=upcomingEvents(20).filter(e=>managerMatch([e._name,e._opponent,e._location,e._date]));
+    $('managerContent').innerHTML=
+      managerHero('Availability','Live upcoming availability plus access to deeper historical availability reporting.',
+        '<button id="openAvailabilityReportsBtn" class="btn" type="button">Detailed Reports</button><button id="refreshAvailConsoleBtn" class="btn primary" type="button">Refresh Live</button>')+
+      renderUpcomingItems(events);
+    $('refreshAvailConsoleBtn')?.addEventListener('click',()=>refreshLiveAvailability());
+    $('openAvailabilityReportsBtn')?.addEventListener('click',()=>openConsolePage('reports','availability'));
+    bindGameDayLinks();
+  }
+
+  async function renderAssignmentsConsole(){
+    $('managerContent').innerHTML=managerHero('Assignments','Upcoming assignments, volunteer tasks, and coverage from TeamSnap.')+
+      '<div class="report-prompt"><b>Loading assignments…</b><p>Fetching the team assignment resource only when needed.</p></div>';
+    try{await ensureAssignmentsLoaded();}catch(err){
+      $('managerContent').innerHTML=managerHero('Assignments','Upcoming assignments, volunteer tasks, and coverage from TeamSnap.')+
+        `<div class="warningbox">Assignments could not be loaded: ${esc(err.message)}</div>`;
+      return;
+    }
+    if(state.consolePage!=='assignments') return;
+    const q=managerSearchQuery();
+    let rows=assignmentRows().filter(r=>managerMatch(Object.values(r)));
+    rows=managerSortRows(rows);
+    $('managerContent').innerHTML=
+      managerHero('Assignments','Upcoming assignments, volunteer tasks, and coverage from TeamSnap.')+
+      `<div class="console-tablewrap"><table><thead><tr>${managerSortHeader('Date','date')}${managerSortHeader('Event','event')}${managerSortHeader('Assignment','assignment')}${managerSortHeader('Assigned To','member')}${managerSortHeader('Status','status')}</tr></thead><tbody>
+      ${rows.map(r=>`<tr><td>${highlight(r.date,q)}</td><td>${highlight(r.event,q)}</td><td class="name">${highlight(r.assignment,q)}</td><td>${highlight(r.member || 'Unassigned',q)}</td><td>${highlight(r.status,q)}</td></tr>`).join('')}
+      </tbody></table></div>`;
+    bindManagerSort();
+  }
+
+  function renderReportsConsole(mode=''){
+    $('managerContent').innerHTML=
+      managerHero('Reports','Optional analytics and custom report building. The manager console does not require you to start here.',
+        '<button id="openReportBuilderBtn" class="btn primary" type="button">Open Report Builder</button>')+
+      `<div class="report-library">
+        <button class="report-card" data-report-shortcut="teamSummary"><b>Team Summary</b><p>Roster and schedule snapshot.</p></button>
+        <button class="report-card" data-report-shortcut="schedule"><b>Schedule Analysis</b><p>Monthly workload and event mix.</p></button>
+        <button class="report-card" data-report-shortcut="players"><b>Player Availability</b><p>Historical availability, status mix, and ratings.</p></button>
+        <button class="report-card" data-report-shortcut="noResponse"><b>No Response</b><p>Players with missing availability responses.</p></button>
+        <button class="report-card" data-report-shortcut="readiness"><b>Event Readiness</b><p>Expected players and unresolved responses.</p></button>
+        <button class="report-card" data-report-shortcut="custom"><b>Custom Report</b><p>Choose source, columns, grouping, sorting, and export.</p></button>
+      </div>`;
+    $('openReportBuilderBtn')?.addEventListener('click',()=>showLegacyReports(mode));
+    document.querySelectorAll('#managerContent [data-report-shortcut]').forEach(btn=>btn.addEventListener('click',()=>{
+      state.tab=btn.dataset.reportShortcut;
+      showLegacyReports(state.tab);
+    }));
+  }
+
+  function showLegacyReports(tab=''){
+    if(tab) state.tab=tab;
+    document.body.classList.add('reports-mode');
+    $('eventPanel').classList.remove('hidden');
+    $('dashboardPanel').classList.remove('hidden');
+    renderWorkspaceReport();
+    requestAnimationFrame(()=>$('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'}));
+  }
+
+  function hideLegacyReports(){
+    document.body.classList.remove('reports-mode');
+    $('eventPanel').classList.add('hidden');
+    $('dashboardPanel').classList.add('hidden');
+  }
+
+  function renderManagerPage(){
+    if(!state.team) return;
+    hideLegacyReports();
+    $('managerTeamName').textContent=String(first(state.team,['name','team_name'],'Team'));
+    $('managerFreshness').textContent=state.liveAvailabilityUpdatedAt
+      ? `Availability updated ${Math.max(0,Math.floor((Date.now()-state.liveAvailabilityUpdatedAt)/1000))} sec ago`
+      : 'Loading upcoming availability…';
+
+    document.querySelectorAll('#managerNav [data-console-page]').forEach(btn=>btn.classList.toggle('active',btn.dataset.consolePage===state.consolePage));
+
+    if(state.consolePage==='home') return renderHomePage();
+    if(state.consolePage==='upcoming') return renderUpcomingPage();
+    if(state.consolePage==='gameday') return renderGameDayPage();
+    if(state.consolePage==='schedule') return renderScheduleConsole();
+    if(state.consolePage==='roster') return renderRosterConsole();
+    if(state.consolePage==='performance') return renderPerformancePage();
+    if(state.consolePage==='availability') return renderAvailabilityConsole();
+    if(state.consolePage==='assignments') return renderAssignmentsConsole();
+    if(state.consolePage==='reports') return renderReportsConsole();
+    state.consolePage='home';
+    renderHomePage();
+  }
+
+  function openConsolePage(page,mode=''){
+    state.consolePage=page;
+    state.managerSortKey='';
+    state.managerSortDir=1;
+    if(mode) state.reportLaunchMode=mode;
+    renderManagerPage();
+    persistSession();
+    requestAnimationFrame(()=>$('consolePanel').scrollIntoView({behavior:'smooth',block:'start'}));
+  }
+
   function eventType(event){
     const raw = String(first(event,['event_type','type','game_type'],'')).toLowerCase();
     const name = String(first(event,['name','event_name'],'')).toLowerCase();
@@ -1576,7 +2317,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         _phase:seasonPhase(date,season),
         _opponent:opponent,
         _location:location,
-        _tracking:trackingFlag(e)
+        _tracking:trackingFlag(e),
+        _score:scoreInfo(e)
       };
     }).sort((a,b) => `${a._date} ${a._time}`.localeCompare(`${b._date} ${b._time}`));
   }
@@ -1673,7 +2415,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       $('connectPanel').classList.add('step-complete');
 
       status('authStatus',`Connected as ${displayName}`,'good');
-      $('eventPanel').classList.remove('hidden');
+      $('consolePanel').classList.remove('hidden');
       await loadTeams();
     }catch(err){
       state.token = '';
@@ -1710,7 +2452,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         state.restoreSnapshot=null;
         status('eventStatus',`Loaded ${state.teams.length} team(s). Choose a team.`,'good');
         requestAnimationFrame(()=>{
-          $('eventPanel').scrollIntoView({behavior:'smooth',block:'start'});
+          $('consolePanel').scrollIntoView({behavior:'smooth',block:'start'});
           $('teamSelect').focus({preventScroll:true});
         });
       }
@@ -1733,6 +2475,9 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     state.assignments=[];
     state.assignmentsLoaded=false;
     state.assignmentsLoading=false;
+    state.liveAvailabilityByEvent.clear();
+    state.liveAvailabilityUpdatedAt=0;
+    stopLiveAvailability();
 
     setBusy(true);
     status('eventStatus',restore ? 'Restoring event list and roster...' : 'Loading event list and roster...');
@@ -1764,20 +2509,24 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       $('rosterCount').textContent = fmtInt(state.members.length);
       $('opponentCount').textContent = fmtInt(uniq(state.events.map(e=>e._opponent)).filter(Boolean).length);
       $('locationCount').textContent = fmtInt(uniq(state.events.map(e=>e._location)).filter(Boolean).length);
-      $('dashboardPanel').classList.remove('hidden');
+      $('consolePanel').classList.remove('hidden');
 
       if(restore && snapshot && !snapshot.availabilityLoaded){
         state.tab=['overview','teamSummary','events','schedule','roster','opponents','locations','dataQuality','players','monthly','season','noResponse','readiness','records','assignments','custom'].includes(snapshot.tab) ? snapshot.tab : 'overview';
         $('analysisPlayer').value=snapshot.analysisPlayer || '';
         state.sortKey=snapshot.sortKey || '';
         state.sortDir=snapshot.sortDir===-1 ? -1 : 1;
-        renderWorkspaceReport();
+        state.consolePage=snapshot.consolePage || 'home';
+        renderManagerPage();
+        startLiveAvailability();
       }else if(!restore){
         state.tab='overview';
         state.sortKey='';
         state.sortDir=1;
         $('analysisPlayer').value='';
-        renderWorkspaceReport();
+        state.consolePage='home';
+        renderManagerPage();
+        startLiveAvailability();
       }
 
       if(restore && snapshot?.availabilityLoaded && state.selectedEventIds.size){
@@ -2052,6 +2801,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     updateEventFilterButton();
     renderEvents();
     updateSelectionUI();
+    if(state.team && ['home','schedule'].includes(state.consolePage)) renderManagerPage();
     persistSession();
   }
 
@@ -2297,7 +3047,11 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
       persistSession();
 
-      if(shouldScroll){
+      if(state.restoring || options.restoreSnapshot){
+        $('consolePanel').classList.remove('hidden');
+        renderManagerPage();
+        startLiveAvailability();
+      }else if(shouldScroll){
         requestAnimationFrame(()=>{
           $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
           $('analysisPlayer').focus({preventScroll:true});
@@ -3570,6 +4324,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     state.clientSecret='';
     state.oauthState='';
     state.availabilityLoaded=false;
+    state.liveAvailabilityByEvent.clear();
+    stopLiveAvailability();
     clearSessionPersistence();
     state.me=null;
     state.teams=[];
@@ -3582,6 +4338,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     $('connectedState').classList.add('hidden');
     $('connectSetup').classList.remove('hidden');
     $('connectPanel').classList.remove('step-complete');
+    $('consolePanel').classList.add('hidden');
     $('eventPanel').classList.add('hidden');
     $('dashboardPanel').classList.add('hidden');
     $('disconnectBtn').disabled=true;
@@ -3607,6 +4364,15 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
 
   $('clientId').addEventListener('input',persistSession);
+
+  // Manager console
+  document.querySelectorAll('#managerNav [data-console-page]').forEach(btn=>btn.addEventListener('click',()=>openConsolePage(btn.dataset.consolePage)));
+  $('managerSearch').addEventListener('input',()=>renderManagerPage());
+  $('refreshManagerBtn').addEventListener('click',async()=>{
+    if(!$('teamSelect').value) return;
+    await loadTeamData($('teamSelect').value,false);
+    await refreshLiveAvailability();
+  });
 
   // Event selection
   $('refreshTeamsBtn').addEventListener('click',()=>loadTeams().catch(err=>status('eventStatus',err.message,'bad')));
