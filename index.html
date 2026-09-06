@@ -472,6 +472,99 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
   .tabs{grid-template-columns:1fr 1fr}
   .tabs .tab:first-child{grid-column:1/-1;font-weight:800}
 }
+
+/* Search, highlighting, and multi-select */
+mark.search-hit{
+  background:#fef08a;
+  color:inherit;
+  padding:0 1px;
+  border-radius:2px;
+}
+.multiselect{position:relative}
+.multi-trigger{
+  width:100%;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  color:var(--text);
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  text-align:left;
+}
+.multi-trigger.active{border-color:#93c5fd;background:#eff6ff}
+.multi-trigger .multi-label{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.multi-menu{
+  position:absolute;
+  z-index:30;
+  top:calc(100% + 5px);
+  left:0;
+  right:0;
+  min-width:250px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 14px 34px rgba(15,23,42,.16);
+  padding:8px;
+}
+.multi-menu input[type="search"]{
+  width:100%;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:0 9px;
+}
+.multi-actions{
+  display:flex;
+  gap:6px;
+  margin-top:7px;
+}
+.multi-actions .btn{flex:1}
+.multi-options{
+  max-height:230px;
+  overflow:auto;
+  margin-top:7px;
+  border-top:1px solid #edf1f5;
+  padding-top:5px;
+}
+.multi-option{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:36px;
+  padding:5px 6px;
+  border-radius:7px;
+  font-size:11px;
+  cursor:pointer;
+}
+.multi-option:hover{background:#f8fafc}
+.multi-option input{width:16px;height:16px;margin:0;flex:0 0 auto}
+.multi-empty{padding:12px 6px;color:var(--muted);font-size:11px;text-align:center}
+th.sortable{user-select:none}
+th.sortable:hover{background:#eef4fa}
+th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+@media(max-width:700px){
+  .multi-menu{
+    position:fixed;
+    left:10px;
+    right:10px;
+    top:auto;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    min-width:0;
+    max-height:65vh;
+    border-radius:14px;
+    z-index:50;
+  }
+  .multi-options{max-height:42vh}
+}
 </style>
 </head>
 <body>
@@ -657,11 +750,35 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
             </div>
             <div class="field">
               <label>Opponent</label>
-              <select id="opponentFilter"><option value="">All opponents</option></select>
+              <div id="opponentMulti" class="multiselect">
+                <button id="opponentFilterBtn" class="multi-trigger" type="button" aria-expanded="false" aria-controls="opponentFilterMenu">
+                  <span id="opponentFilterLabel" class="multi-label">All opponents</span><span>▾</span>
+                </button>
+                <div id="opponentFilterMenu" class="multi-menu hidden">
+                  <input id="opponentFilterSearch" type="search" placeholder="Search opponents..." autocomplete="off">
+                  <div class="multi-actions">
+                    <button id="opponentSelectShown" class="btn small" type="button">Select Shown</button>
+                    <button id="opponentClear" class="btn small" type="button">Clear</button>
+                  </div>
+                  <div id="opponentFilterOptions" class="multi-options"></div>
+                </div>
+              </div>
             </div>
             <div class="field">
               <label>Location</label>
-              <select id="locationFilter"><option value="">All locations</option></select>
+              <div id="locationMulti" class="multiselect">
+                <button id="locationFilterBtn" class="multi-trigger" type="button" aria-expanded="false" aria-controls="locationFilterMenu">
+                  <span id="locationFilterLabel" class="multi-label">All locations</span><span>▾</span>
+                </button>
+                <div id="locationFilterMenu" class="multi-menu hidden">
+                  <input id="locationFilterSearch" type="search" placeholder="Search locations..." autocomplete="off">
+                  <div class="multi-actions">
+                    <button id="locationSelectShown" class="btn small" type="button">Select Shown</button>
+                    <button id="locationClear" class="btn small" type="button">Clear</button>
+                  </div>
+                  <div id="locationFilterOptions" class="multi-options"></div>
+                </div>
+              </div>
             </div>
             <div class="field wide">
               <label>Search</label>
@@ -689,16 +806,16 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         <div class="tablewrap mobile-scroll desktop-only" style="margin-top:10px;max-height:52vh">
           <table id="eventTable">
             <thead>
-              <tr>
+              <tr id="eventTableHead">
                 <th class="checkcell"></th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Event</th>
-                <th>Type</th>
-                <th>Phase</th>
-                <th>Opponent</th>
-                <th>Location</th>
-                <th>Availability</th>
+                <th class="sortable" data-event-sort="_date" tabindex="0">Date</th>
+                <th class="sortable" data-event-sort="_time" tabindex="0">Time</th>
+                <th class="sortable" data-event-sort="_name" tabindex="0">Event</th>
+                <th class="sortable" data-event-sort="_type" tabindex="0">Type</th>
+                <th class="sortable" data-event-sort="_phase" tabindex="0">Phase</th>
+                <th class="sortable" data-event-sort="_opponent" tabindex="0">Opponent</th>
+                <th class="sortable" data-event-sort="_location" tabindex="0">Location</th>
+                <th class="sortable" data-event-sort="_tracking" tabindex="0">Availability</th>
               </tr>
             </thead>
             <tbody id="eventBody">
@@ -862,6 +979,10 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     trackedEvents: [],
     analysisRows: [],
     playerExclusions: new Set(),
+    selectedOpponents: new Set(),
+    selectedLocations: new Set(),
+    eventSortKey: '_date',
+    eventSortDir: 1,
     tab: 'players',
     sortKey: '',
     sortDir: 1
@@ -1310,6 +1431,99 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     }
   }
 
+  function highlight(textValue, query){
+    const raw = String(textValue ?? '');
+    const q = String(query ?? '').trim();
+    if(!q) return esc(raw);
+
+    const words = [...new Set(q.split(/\s+/).filter(Boolean))]
+      .sort((a,b)=>b.length-a.length)
+      .map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+
+    if(!words.length) return esc(raw);
+    const rx = new RegExp(`(${words.join('|')})`,'ig');
+    return esc(raw).replace(rx,'<mark class="search-hit">$1</mark>');
+  }
+
+  function multiConfig(kind){
+    if(kind === 'opponent'){
+      return {
+        selected:state.selectedOpponents,
+        values:()=>uniq(state.events.map(e=>e._opponent)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})),
+        search:'opponentFilterSearch',
+        menu:'opponentFilterMenu',
+        button:'opponentFilterBtn',
+        label:'opponentFilterLabel',
+        options:'opponentFilterOptions',
+        allText:'All opponents'
+      };
+    }
+    return {
+      selected:state.selectedLocations,
+      values:()=>uniq(state.events.map(e=>e._location)).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})),
+      search:'locationFilterSearch',
+      menu:'locationFilterMenu',
+      button:'locationFilterBtn',
+      label:'locationFilterLabel',
+      options:'locationFilterOptions',
+      allText:'All locations'
+    };
+  }
+
+  function visibleMultiValues(kind){
+    const cfg=multiConfig(kind);
+    const q=$(cfg.search).value.trim().toLowerCase();
+    return cfg.values().filter(v=>!q || v.toLowerCase().includes(q));
+  }
+
+  function renderMultiSelect(kind){
+    const cfg=multiConfig(kind);
+    const q=$(cfg.search).value.trim();
+    const values=visibleMultiValues(kind);
+
+    $(cfg.options).innerHTML = values.length
+      ? values.map(v=>`<label class="multi-option">
+          <input type="checkbox" data-value="${esc(v)}" ${cfg.selected.has(v)?'checked':''}>
+          <span>${highlight(v,q)}</span>
+        </label>`).join('')
+      : '<div class="multi-empty">No matches</div>';
+
+    $(cfg.options).querySelectorAll('input[data-value]').forEach(cb=>{
+      cb.addEventListener('change',()=>{
+        if(cb.checked) cfg.selected.add(cb.dataset.value);
+        else cfg.selected.delete(cb.dataset.value);
+        updateMultiLabel(kind);
+        applyEventFilters();
+      });
+    });
+
+    updateMultiLabel(kind);
+  }
+
+  function updateMultiLabel(kind){
+    const cfg=multiConfig(kind);
+    const count=cfg.selected.size;
+    const label=count===0 ? cfg.allText : count===1 ? [...cfg.selected][0] : `${count} selected`;
+    $(cfg.label).textContent=label;
+    $(cfg.button).classList.toggle('active',count>0);
+  }
+
+  function setMultiOpen(kind,open){
+    const cfg=multiConfig(kind);
+    $(cfg.menu).classList.toggle('hidden',!open);
+    $(cfg.button).setAttribute('aria-expanded',String(open));
+    if(open){
+      renderMultiSelect(kind);
+      requestAnimationFrame(()=>$(cfg.search).focus());
+    }
+  }
+
+  function closeMultiSelects(except=''){
+    ['opponent','location'].forEach(kind=>{
+      if(kind!==except) setMultiOpen(kind,false);
+    });
+  }
+
   function eventFilterCount(){
     return [
       $('dateFrom').value,
@@ -1317,8 +1531,8 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       $('eventMonth').value,
       $('eventType').value,
       $('eventPhase').value,
-      $('opponentFilter').value,
-      $('locationFilter').value,
+      state.selectedOpponents.size ? 'opponents' : '',
+      state.selectedLocations.size ? 'locations' : '',
       $('eventSearch').value.trim()
     ].filter(Boolean).length;
   }
@@ -1372,8 +1586,12 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 
   function populateEventFilters(){
     fillSelect('eventMonth',uniq(state.events.map(e=>e._month)).sort(),'All months',monthLabel);
-    fillSelect('opponentFilter',uniq(state.events.map(e=>e._opponent)).sort(),'All opponents');
-    fillSelect('locationFilter',uniq(state.events.map(e=>e._location)).sort(),'All locations');
+    state.selectedOpponents.clear();
+    state.selectedLocations.clear();
+    $('opponentFilterSearch').value='';
+    $('locationFilterSearch').value='';
+    renderMultiSelect('opponent');
+    renderMultiSelect('location');
   }
 
   function clearEventFilters(reapply=true){
@@ -1382,8 +1600,12 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     $('eventMonth').value = '';
     $('eventType').value = '';
     $('eventPhase').value = '';
-    $('opponentFilter').value = '';
-    $('locationFilter').value = '';
+    state.selectedOpponents.clear();
+    state.selectedLocations.clear();
+    $('opponentFilterSearch').value = '';
+    $('locationFilterSearch').value = '';
+    renderMultiSelect('opponent');
+    renderMultiSelect('location');
     $('eventSearch').value = '';
     if($('quickView')) $('quickView').value = '';
     if(reapply) applyEventFilters();
@@ -1446,8 +1668,6 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     const month = $('eventMonth').value;
     const type = $('eventType').value;
     const phase = $('eventPhase').value;
-    const opponent = $('opponentFilter').value;
-    const location = $('locationFilter').value;
     const search = $('eventSearch').value.trim().toLowerCase();
 
     state.visibleEvents = state.events.filter(e =>
@@ -1456,9 +1676,9 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       (!month || e._month === month) &&
       (!type || e._type === type) &&
       (!phase || e._phase === phase) &&
-      (!opponent || e._opponent === opponent) &&
-      (!location || e._location === location) &&
-      (!search || `${e._name} ${e._opponent} ${e._location}`.toLowerCase().includes(search))
+      (!state.selectedOpponents.size || state.selectedOpponents.has(e._opponent)) &&
+      (!state.selectedLocations.size || state.selectedLocations.has(e._location)) &&
+      (!search || `${e._name} ${e._opponent} ${e._location} ${e._type} ${e._phase}`.toLowerCase().includes(search))
     );
 
     $('visibleEvents').textContent = fmtInt(state.visibleEvents.length);
@@ -1473,31 +1693,76 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     return 'Unknown';
   }
 
+  function eventSortValue(e,key){
+    if(key==='_tracking') return e._tracking===true ? 2 : e._tracking===false ? 0 : 1;
+    return e[key] ?? '';
+  }
+
+  function sortedVisibleEvents(){
+    const key=state.eventSortKey;
+    const dir=state.eventSortDir;
+    return state.visibleEvents.slice().sort((a,b)=>{
+      const av=eventSortValue(a,key), bv=eventSortValue(b,key);
+      if(typeof av==='number' && typeof bv==='number') return (av-bv)*dir;
+      return String(av).localeCompare(String(bv),undefined,{numeric:true,sensitivity:'base'})*dir;
+    });
+  }
+
+  function eventSortHeaderLabel(key,label){
+    const arrow=state.eventSortKey===key ? (state.eventSortDir===1?' ▲':' ▼') : '';
+    return `${label}${arrow}`;
+  }
+
+  function bindEventSort(){
+    document.querySelectorAll('#eventTableHead th[data-event-sort]').forEach(th=>{
+      const key=th.dataset.eventSort;
+      const base={
+        _date:'Date',_time:'Time',_name:'Event',_type:'Type',_phase:'Phase',
+        _opponent:'Opponent',_location:'Location',_tracking:'Availability'
+      }[key] || th.textContent.replace(/[▲▼]/g,'').trim();
+
+      th.textContent=eventSortHeaderLabel(key,base);
+
+      const activate=()=>{
+        if(state.eventSortKey===key) state.eventSortDir*=-1;
+        else{state.eventSortKey=key;state.eventSortDir=1;}
+        renderEvents();
+      };
+      th.onclick=activate;
+      th.onkeydown=e=>{
+        if(e.key==='Enter' || e.key===' '){e.preventDefault();activate();}
+      };
+    });
+  }
+
   function renderEvents(){
     const body = $('eventBody');
     const cards = $('eventCards');
+    const rows = sortedVisibleEvents();
+    const q = $('eventSearch').value.trim();
 
-    if(!state.visibleEvents.length){
+    if(!rows.length){
       body.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:28px">No events match the filters.</td></tr>';
       cards.innerHTML = '<div class="empty-state"><b>No events found</b>Adjust the date range or filters.</div>';
+      bindEventSort();
       return;
     }
 
-    body.innerHTML = state.visibleEvents.map(e => `
+    body.innerHTML = rows.map(e => `
       <tr>
         <td class="checkcell"><input class="eventcheck" type="checkbox" aria-label="Select ${esc(e._name)}" data-id="${esc(e._id)}" ${state.selectedEventIds.has(e._id)?'checked':''}></td>
-        <td>${esc(e._date)}</td>
-        <td>${esc(e._time)}</td>
-        <td class="name">${esc(e._name)}</td>
-        <td><span class="badge ${e._type.toLowerCase()}">${esc(e._type)}</span></td>
-        <td><span class="badge ${e._phase==='Postseason'?'post':'regular'}">${esc(e._phase)}</span></td>
-        <td>${esc(e._opponent)}</td>
-        <td>${esc(e._location)}</td>
+        <td>${highlight(e._date,q)}</td>
+        <td>${highlight(e._time,q)}</td>
+        <td class="name">${highlight(e._name,q)}</td>
+        <td><span class="badge ${e._type.toLowerCase()}">${highlight(e._type,q)}</span></td>
+        <td><span class="badge ${e._phase==='Postseason'?'post':'regular'}">${highlight(e._phase,q)}</span></td>
+        <td>${highlight(e._opponent,q)}</td>
+        <td>${highlight(e._location,q)}</td>
         <td>${esc(trackLabel(e._tracking))}</td>
       </tr>
     `).join('');
 
-    cards.innerHTML = state.visibleEvents.map(e => {
+    cards.innerHTML = rows.map(e => {
       const selected = state.selectedEventIds.has(e._id);
       const when = [shortDate(e._date), e._time].filter(Boolean).join(' · ');
       const opponent = e._opponent ? `Opponent: ${e._opponent}` : '';
@@ -1505,17 +1770,17 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       return `<label class="event-card ${selected?'selected':''}" data-id="${esc(e._id)}">
         <div class="card-top">
           <div>
-            <div class="card-title">${esc(e._name)}</div>
-            <div class="card-sub">${esc(when)}</div>
+            <div class="card-title">${highlight(e._name,q)}</div>
+            <div class="card-sub">${highlight(when,q)}</div>
           </div>
           <input class="eventcheck card-check" type="checkbox" aria-label="Select ${esc(e._name)}" data-id="${esc(e._id)}" ${selected?'checked':''}>
         </div>
         <div class="card-meta">
-          <span class="badge ${e._type.toLowerCase()}">${esc(e._type)}</span>
-          <span class="badge ${e._phase==='Postseason'?'post':'regular'}">${esc(e._phase)}</span>
+          <span class="badge ${e._type.toLowerCase()}">${highlight(e._type,q)}</span>
+          <span class="badge ${e._phase==='Postseason'?'post':'regular'}">${highlight(e._phase,q)}</span>
           ${e._tracking===false?'<span class="badge none">Availability off</span>':''}
         </div>
-        ${(opponent||location)?`<div class="card-sub" style="margin-top:8px">${[opponent,location].filter(Boolean).map(esc).join(' · ')}</div>`:''}
+        ${(opponent||location)?`<div class="card-sub" style="margin-top:8px">${[opponent,location].filter(Boolean).map(v=>highlight(v,q)).join(' · ')}</div>`:''}
       </label>`;
     }).join('');
 
@@ -1527,6 +1792,8 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         updateSelectionUI();
       });
     });
+
+    bindEventSort();
   }
 
   function updateSelectionUI(){
@@ -1845,6 +2112,11 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         availabilityPct:yesPct,
         rating:r.label,
         ratingClass:r.css,
+        statusMixPct:pct(g.c.yes,g.c.total),
+        countedNoPct:pct(g.c.countedNo,g.c.total),
+        noCount:g.c.no,
+        maybeCount:g.c.maybe,
+        noResponseCount:g.c.none,
         c:g.c
       };
     });
@@ -1872,12 +2144,12 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         ${sortable('Tracked Events','tracked')}
         ${sortable('Availability','availabilityPct')}
         ${sortable('Rating','rating')}
-        <th>Status Mix</th>
-        <th>Breakdown</th>
+        ${sortable('Status Mix','statusMixPct')}
+        ${sortable('Breakdown','countedNoPct')}
       </tr>`;
 
       body = rows.map(r => `<tr>
-        <td class="name">${esc(r.player)}</td>
+        <td class="name">${highlight(r.player,$('analysisPlayer').value)}</td>
         <td>${esc(r.team)}</td>
         <td>${esc(r.season)}</td>
         <td>${esc(r.phase)}</td>
@@ -1895,13 +2167,13 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         ${sortable('Tracked Events','tracked')}
         ${sortable('Availability','availabilityPct')}
         ${sortable('Rating','rating')}
-        <th>Status Mix</th>
-        <th>Breakdown</th>
+        ${sortable('Status Mix','statusMixPct')}
+        ${sortable('Breakdown','countedNoPct')}
       </tr>`;
 
       body = rows.map(r => `<tr>
         <td>${esc(r.monthLabel)}</td>
-        <td class="name">${esc(r.player)}</td>
+        <td class="name">${highlight(r.player,$('analysisPlayer').value)}</td>
         <td>${esc(r.team)}</td>
         <td class="num">${fmtInt(r.tracked)}</td>
         <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
@@ -1918,14 +2190,14 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
         ${sortable('Tracked Events','tracked')}
         ${sortable('Availability','availabilityPct')}
         ${sortable('Rating','rating')}
-        <th>Status Mix</th>
-        <th>Breakdown</th>
+        ${sortable('Status Mix','statusMixPct')}
+        ${sortable('Breakdown','countedNoPct')}
       </tr>`;
 
       body = rows.map(r => `<tr>
         <td>${esc(r.season)}</td>
         <td>${esc(r.phase)}</td>
-        <td class="name">${esc(r.player)}</td>
+        <td class="name">${highlight(r.player,$('analysisPlayer').value)}</td>
         <td>${esc(r.team)}</td>
         <td class="num">${fmtInt(r.tracked)}</td>
         <td class="num"><span class="availability ${r.availabilityPct>=80?'pctgood':r.availabilityPct<65?'pctbad':''}">${r.availabilityPct.toFixed(1)}%</span></td>
@@ -1947,7 +2219,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       return `<article class="player-card">
         <div class="card-top">
           <div>
-            <div class="card-title">${esc(r.player)}</div>
+            <div class="card-title">${highlight(r.player,$('analysisPlayer').value)}</div>
             <div class="card-sub">${context.filter(Boolean).map(esc).join(' · ')}</div>
           </div>
           <span class="rating ${r.ratingClass}">${esc(r.rating)}</span>
@@ -1990,11 +2262,13 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
       ${sortable('Event','event')}
       ${sortable('Type','type')}
       ${sortable('Status','status')}
-      <th>Opponent</th><th>Location</th><th>Note</th>
+      ${sortable('Opponent','opponent')}
+      ${sortable('Location','location')}
+      ${sortable('Note','note')}
     </tr>`;
     const body = rows.map(r=>`<tr>
       <td>${esc(r.date)}</td>
-      <td class="name">${esc(r.player)}</td>
+      <td class="name">${highlight(r.player,$('analysisPlayer').value)}</td>
       <td>${esc(r.event)}</td>
       <td><span class="badge ${r.type.toLowerCase()}">${esc(r.type)}</span></td>
       <td><span class="badge ${r.status==='Yes'?'yes':r.status==='Maybe'?'maybe':r.status==='No Response'?'none':'no'}">${esc(r.status)}</span></td>
@@ -2006,7 +2280,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     $('analysisCards').innerHTML = rows.map(r => `<article class="record-card">
       <div class="card-top">
         <div>
-          <div class="card-title">${esc(r.player)}</div>
+          <div class="card-title">${highlight(r.player,$('analysisPlayer').value)}</div>
           <div class="card-sub">${esc(shortDate(r.date))} · ${esc(r.event)}</div>
         </div>
         <span class="badge ${r.status==='Yes'?'yes':r.status==='Maybe'?'maybe':r.status==='No Response'?'none':'no'}">${esc(r.status)}</span>
@@ -2098,7 +2372,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     $('exclusionList').innerHTML = players.map(p=>`
       <label class="exclusion-item">
         <input type="checkbox" data-key="${esc(p.key)}" ${state.playerExclusions.has(p.key)?'checked':''}>
-        <b>${esc(p.name)}</b>
+        <b>${highlight(p.name,search)}</b>
       </label>
     `).join('');
     $('exclusionCount').textContent = `${state.playerExclusions.size} excluded`;
@@ -2294,7 +2568,35 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
     $('quickView').value='';
     applyEventFilters();
   }));
-  ['eventType','eventPhase','opponentFilter','locationFilter'].forEach(id=>$(id).addEventListener('change',applyEventFilters));
+  ['eventType','eventPhase'].forEach(id=>$(id).addEventListener('change',applyEventFilters));
+  ['opponent','location'].forEach(kind=>{
+    const cfg=multiConfig(kind);
+
+    $(cfg.button).addEventListener('click',e=>{
+      e.stopPropagation();
+      const open=$(cfg.menu).classList.contains('hidden');
+      closeMultiSelects(kind);
+      setMultiOpen(kind,open);
+    });
+
+    $(cfg.menu).addEventListener('click',e=>e.stopPropagation());
+    $(cfg.search).addEventListener('input',()=>renderMultiSelect(kind));
+
+    $(`${kind}SelectShown`).addEventListener('click',()=>{
+      visibleMultiValues(kind).forEach(v=>cfg.selected.add(v));
+      renderMultiSelect(kind);
+      applyEventFilters();
+    });
+
+    $(`${kind}Clear`).addEventListener('click',()=>{
+      cfg.selected.clear();
+      renderMultiSelect(kind);
+      applyEventFilters();
+    });
+  });
+
+  document.addEventListener('click',()=>closeMultiSelects());
+
   $('eventSearch').addEventListener('input',applyEventFilters);
   $('quickView').addEventListener('change',e=>{
     if(e.target.value) applyPreset(e.target.value);
