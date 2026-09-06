@@ -576,7 +576,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       <p>Connect, choose the events you care about, and review player availability.</p>
     </div>
     <div class="security">
-      Single-file app · credentials stay in browser memory
+      Single-file app · Client Secret never stored · session survives refresh
     </div>
   </div>
 
@@ -667,7 +667,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
             </div>
 
             <div class="note">
-              Your Client Secret is only held in this page's memory long enough to finish authorization. It is not saved in localStorage, cookies, or GitHub.
+              Your Client Secret is only held in memory long enough to finish authorization and is never stored. The access token and current page state are kept only in this tab's sessionStorage so a refresh can restore your work; closing the tab clears them.
             </div>
           </aside>
         </div>
@@ -985,8 +985,147 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     eventSortDir: 1,
     tab: 'players',
     sortKey: '',
-    sortDir: 1
+    sortDir: 1,
+    restoreSnapshot: null,
+    restoring: false,
+    availabilityLoaded: false
   };
+
+  const SESSION_STATE_KEY = 'myts.session.state.v1';
+  const SESSION_TOKEN_KEY = 'myts.session.token.v1';
+
+  function getSessionSnapshot(){
+    try{
+      const raw=sessionStorage.getItem(SESSION_STATE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch{
+      return null;
+    }
+  }
+
+  function persistSession(){
+    try{
+      const snapshot={
+        clientId:$('clientId')?.value.trim() || state.clientId || '',
+        teamId:String(state.team?.id || $('teamSelect')?.value || ''),
+        quickView:$('quickView')?.value || '',
+        dateFrom:$('dateFrom')?.value || '',
+        dateTo:$('dateTo')?.value || '',
+        eventMonth:$('eventMonth')?.value || '',
+        eventType:$('eventType')?.value || '',
+        eventPhase:$('eventPhase')?.value || '',
+        selectedOpponents:[...state.selectedOpponents],
+        selectedLocations:[...state.selectedLocations],
+        eventSearch:$('eventSearch')?.value || '',
+        selectedEventIds:[...state.selectedEventIds],
+        eventSortKey:state.eventSortKey,
+        eventSortDir:state.eventSortDir,
+        availabilityLoaded:state.availabilityLoaded && !$('dashboardPanel')?.classList.contains('hidden'),
+        analysisType:$('analysisType')?.value || '',
+        analysisMonth:$('analysisMonth')?.value || '',
+        analysisPhase:$('analysisPhase')?.value || '',
+        analysisStatus:$('analysisStatus')?.value || '',
+        analysisPlayer:$('analysisPlayer')?.value || '',
+        excludeNonPlayers:$('excludeNonPlayers')?.checked ?? true,
+        playerExclusions:[...state.playerExclusions],
+        tab:state.tab,
+        sortKey:state.sortKey,
+        sortDir:state.sortDir,
+        advancedEventFiltersOpen:$('advancedEventFilters') ? !$('advancedEventFilters').classList.contains('hidden') : false,
+        advancedAnalysisFiltersOpen:$('advancedAnalysisFilters') ? !$('advancedAnalysisFilters').classList.contains('hidden') : false,
+        exclusionPickerOpen:$('exclusionPicker') ? !$('exclusionPicker').classList.contains('hidden') : false
+      };
+      sessionStorage.setItem(SESSION_STATE_KEY,JSON.stringify(snapshot));
+      if(state.token) sessionStorage.setItem(SESSION_TOKEN_KEY,state.token);
+    }catch{
+      // Storage can be unavailable in hardened/private browser contexts.
+    }
+  }
+
+  function clearSessionPersistence(){
+    try{
+      sessionStorage.removeItem(SESSION_STATE_KEY);
+      sessionStorage.removeItem(SESSION_TOKEN_KEY);
+    }catch{}
+  }
+
+  function applyRestoredEventState(snapshot){
+    if(!snapshot) return;
+
+    $('quickView').value=snapshot.quickView || '';
+    $('dateFrom').value=snapshot.dateFrom || '';
+    $('dateTo').value=snapshot.dateTo || '';
+    $('eventMonth').value=snapshot.eventMonth || '';
+    $('eventType').value=snapshot.eventType || '';
+    $('eventPhase').value=snapshot.eventPhase || '';
+    $('eventSearch').value=snapshot.eventSearch || '';
+
+    state.selectedOpponents=new Set((snapshot.selectedOpponents || []).filter(v=>state.events.some(e=>e._opponent===v)));
+    state.selectedLocations=new Set((snapshot.selectedLocations || []).filter(v=>state.events.some(e=>e._location===v)));
+    state.selectedEventIds=new Set((snapshot.selectedEventIds || []).filter(id=>state.events.some(e=>e._id===id)));
+    state.eventSortKey=snapshot.eventSortKey || '_date';
+    state.eventSortDir=snapshot.eventSortDir===-1 ? -1 : 1;
+
+    renderMultiSelect('opponent');
+    renderMultiSelect('location');
+
+    const eventFiltersOpen=!!snapshot.advancedEventFiltersOpen;
+    $('advancedEventFilters').classList.toggle('hidden',!eventFiltersOpen);
+    updateEventFilterButton();
+    applyEventFilters();
+  }
+
+  function applyRestoredAnalysisState(snapshot){
+    if(!snapshot) return;
+
+    if([...$('analysisType').options].some(o=>o.value===snapshot.analysisType)) $('analysisType').value=snapshot.analysisType || '';
+    if([...$('analysisMonth').options].some(o=>o.value===snapshot.analysisMonth)) $('analysisMonth').value=snapshot.analysisMonth || '';
+    if([...$('analysisPhase').options].some(o=>o.value===snapshot.analysisPhase)) $('analysisPhase').value=snapshot.analysisPhase || '';
+    if([...$('analysisStatus').options].some(o=>o.value===snapshot.analysisStatus)) $('analysisStatus').value=snapshot.analysisStatus || '';
+
+    $('analysisPlayer').value=snapshot.analysisPlayer || '';
+    $('excludeNonPlayers').checked=snapshot.excludeNonPlayers !== false;
+    state.playerExclusions=new Set(snapshot.playerExclusions || []);
+    state.tab=['players','monthly','season','records'].includes(snapshot.tab) ? snapshot.tab : 'players';
+    state.sortKey=snapshot.sortKey || '';
+    state.sortDir=snapshot.sortDir===-1 ? -1 : 1;
+
+    document.querySelectorAll('.tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===state.tab));
+
+    const analysisOpen=!!snapshot.advancedAnalysisFiltersOpen;
+    $('advancedAnalysisFilters').classList.toggle('hidden',!analysisOpen);
+    updateAnalysisFilterButton();
+
+    const exclusionsOpen=!!snapshot.exclusionPickerOpen;
+    $('exclusionPicker').classList.toggle('hidden',!exclusionsOpen);
+    $('toggleExclusionsBtn').setAttribute('aria-expanded',String(exclusionsOpen));
+    $('toggleExclusionsBtn').textContent=exclusionsOpen ? 'Hide Players' : 'Choose Players';
+
+    renderExclusionPicker();
+    applyAnalysisFilters();
+  }
+
+  async function restoreSessionAfterRefresh(){
+    const snapshot=getSessionSnapshot();
+    let token='';
+    try{token=sessionStorage.getItem(SESSION_TOKEN_KEY) || '';}catch{}
+
+    if(snapshot?.clientId) $('clientId').value=snapshot.clientId;
+    if(!token) return;
+
+    state.restoreSnapshot=snapshot;
+    state.restoring=true;
+    status('authStatus','Restoring your TeamSnap session...','warn');
+
+    try{
+      await connectWithToken(token);
+    }catch(err){
+      clearSessionPersistence();
+      state.restoreSnapshot=null;
+      state.restoring=false;
+      status('authStatus',`Saved session could not be restored: ${err.message}`,'bad');
+    }
+  }
 
   function setBusy(on){
     $('progress').classList.toggle('active', !!on);
@@ -1347,6 +1486,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       const rows = collectionItems(payload);
       if(!rows.length) throw new Error('TeamSnap /me returned no user record.');
       state.me = rows[0];
+      try{sessionStorage.setItem(SESSION_TOKEN_KEY,state.token);}catch{}
       $('disconnectBtn').disabled = false;
 
       const displayName = `${first(state.me,['first_name'],'')} ${first(state.me,['last_name'],'')}`.trim() || 'TeamSnap user';
@@ -1377,32 +1517,46 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       $('teamSelect').innerHTML = '<option value="">Select a team...</option>' +
         state.teams.map(t => `<option value="${esc(String(t.id))}">${esc(String(first(t,['name','team_name'],`Team ${t.id}`)))}</option>`).join('');
 
-      if(state.teams.length === 1){
+      const savedTeamId=String(state.restoreSnapshot?.teamId || '');
+      const savedTeamExists=savedTeamId && state.teams.some(t=>String(t.id)===savedTeamId);
+
+      if(state.restoring && savedTeamExists){
+        $('teamSelect').value=savedTeamId;
+        status('eventStatus','Restoring your team and event selections...','warn');
+        await loadTeamData(savedTeamId,true);
+      }else if(state.teams.length === 1){
         $('teamSelect').value = String(state.teams[0].id);
         status('eventStatus','One team found. Loading its events...','good');
-        await loadTeamData(state.teams[0].id);
+        await loadTeamData(state.teams[0].id,false);
       }else{
+        state.restoring=false;
+        state.restoreSnapshot=null;
         status('eventStatus',`Loaded ${state.teams.length} team(s). Choose a team.`,'good');
         requestAnimationFrame(()=>{
           $('eventPanel').scrollIntoView({behavior:'smooth',block:'start'});
           $('teamSelect').focus({preventScroll:true});
         });
       }
+      persistSession();
     }finally{
       setBusy(false);
     }
   }
 
-  async function loadTeamData(teamId){
+  async function loadTeamData(teamId,restore=false){
     if(!teamId) return;
+    const snapshot=restore ? state.restoreSnapshot : null;
+
     state.team = state.teams.find(t => String(t.id) === String(teamId)) || null;
     state.selectedEventIds.clear();
     state.availabilityByEvent.clear();
     state.trackedEvents = [];
+    state.analysisRows=[];
+    state.availabilityLoaded=false;
     $('dashboardPanel').classList.add('hidden');
 
     setBusy(true);
-    status('eventStatus','Loading event list and roster...');
+    status('eventStatus',restore ? 'Restoring event list and roster...' : 'Loading event list and roster...');
     try{
       const [events,members,locations,opponents] = await Promise.all([
         apiSearch('events',{team_id:teamId}),
@@ -1418,13 +1572,29 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       populateEventFilters();
       clearEventFilters(false);
 
-      // Default to the most useful view without creating hidden filter state.
-      $('quickView').value='season';
-      applyPreset('season');
+      if(restore && snapshot){
+        applyRestoredEventState(snapshot);
+      }else{
+        // Default to the most useful view without creating hidden filter state.
+        $('quickView').value='season';
+        applyPreset('season');
+      }
+
       $('loadedEvents').textContent = fmtInt(state.events.length);
       $('teamSeason').textContent = currentSeasonName() || (state.events[0]?._season || 'Unknown');
-      status('eventStatus',`Loaded ${state.events.length} events and ${state.members.length} roster members.`,'good');
+
+      if(restore && snapshot?.availabilityLoaded && state.selectedEventIds.size){
+        status('eventStatus','Restoring Player Availability report...','warn');
+        await loadAvailability({restoreSnapshot:snapshot,scroll:false});
+      }else{
+        state.restoring=false;
+        state.restoreSnapshot=null;
+        status('eventStatus',`Loaded ${state.events.length} events and ${state.members.length} roster members.`,'good');
+        persistSession();
+      }
     }catch(err){
+      state.restoring=false;
+      state.restoreSnapshot=null;
       status('eventStatus',err.message,'bad');
     }finally{
       setBusy(false);
@@ -1685,6 +1855,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     updateEventFilterButton();
     renderEvents();
     updateSelectionUI();
+    persistSession();
   }
 
   function trackLabel(flag){
@@ -1727,6 +1898,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         if(state.eventSortKey===key) state.eventSortDir*=-1;
         else{state.eventSortKey=key;state.eventSortDir=1;}
         renderEvents();
+        persistSession();
       };
       th.onclick=activate;
       th.onkeydown=e=>{
@@ -1810,6 +1982,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     const visibleIds = state.visibleEvents.map(e=>e._id);
     const allVisibleSelected = visibleIds.length > 0 && visibleIds.every(id=>state.selectedEventIds.has(id));
     $('selectVisibleBtn').textContent = allVisibleSelected ? 'Deselect Shown' : 'Select All Shown';
+    persistSession();
   }
 
   function selectVisible(){
@@ -1843,13 +2016,17 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     return results;
   }
 
-  async function loadAvailability(){
+  async function loadAvailability(options={}){
+    const restoreSnapshot=options.restoreSnapshot || null;
+    const shouldScroll=options.scroll !== false;
     const events = selectedEvents();
     if(!events.length) return;
 
     setBusy(true);
     state.availabilityByEvent.clear();
-    status('eventStatus',`Loading availability for ${events.length} selected event(s)...`);
+    status('eventStatus',restoreSnapshot
+      ? `Restoring availability for ${events.length} selected event(s)...`
+      : `Loading availability for ${events.length} selected event(s)...`);
 
     let completed = 0;
     try{
@@ -1860,7 +2037,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         });
         state.availabilityByEvent.set(event._id,rows);
         completed++;
-        status('eventStatus',`Availability: ${completed}/${events.length} events loaded...`);
+        status('eventStatus',`${restoreSnapshot?'Restoring':'Availability'}: ${completed}/${events.length} events loaded...`);
       });
 
       const tracked = [];
@@ -1887,11 +2064,22 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       if(!state.analysisRows.length){
         throw new Error('Availability was returned for the selected events, but no player availability rows could be matched to the team roster.');
       }
-      populateAnalysisFilters();
-      state.playerExclusions.clear();
-      renderExclusionPicker();
-      applyAnalysisFilters();
 
+      populateAnalysisFilters();
+
+      if(restoreSnapshot){
+        applyRestoredAnalysisState(restoreSnapshot);
+      }else{
+        state.playerExclusions.clear();
+        state.tab='players';
+        state.sortKey='';
+        state.sortDir=1;
+        document.querySelectorAll('.tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab==='players'));
+        renderExclusionPicker();
+        applyAnalysisFilters();
+      }
+
+      state.availabilityLoaded=true;
       $('dashboardPanel').classList.remove('hidden');
       $('analysisSubtitle').textContent =
         `${first(state.team,['name','team_name'],'Team')} · ${tracked.length} tracked of ${events.length} selected events`;
@@ -1904,12 +2092,23 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         $('availabilityWarning').classList.add('hidden');
       }
 
-      status('eventStatus',`Loaded availability for ${tracked.length} tracked event(s).`,'good');
-      requestAnimationFrame(()=>{
-        $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
-        $('analysisPlayer').focus({preventScroll:true});
-      });
+      state.restoring=false;
+      state.restoreSnapshot=null;
+      status('eventStatus',restoreSnapshot
+        ? `Restored Player Availability for ${tracked.length} tracked event(s).`
+        : `Loaded availability for ${tracked.length} tracked event(s).`,'good');
+
+      persistSession();
+
+      if(shouldScroll){
+        requestAnimationFrame(()=>{
+          $('dashboardPanel').scrollIntoView({behavior:'smooth',block:'start'});
+          $('analysisPlayer').focus({preventScroll:true});
+        });
+      }
     }catch(err){
+      state.restoring=false;
+      state.restoreSnapshot=null;
       status('eventStatus',err.message,'bad');
     }finally{
       setBusy(false);
@@ -2343,6 +2542,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     }else{
       renderRecords(visible);
     }
+    persistSession();
   }
 
   function bindSort(){
@@ -2352,6 +2552,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
         if(state.sortKey===key) state.sortDir*=-1;
         else{state.sortKey=key;state.sortDir=1;}
         applyAnalysisFilters();
+        persistSession();
       });
     });
   }
@@ -2527,6 +2728,8 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     state.token='';
     state.clientSecret='';
     state.oauthState='';
+    state.availabilityLoaded=false;
+    clearSessionPersistence();
     state.me=null;
     state.teams=[];
     state.team=null;
@@ -2561,9 +2764,12 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     }
   });
 
+
+  $('clientId').addEventListener('input',persistSession);
+
   // Event selection
   $('refreshTeamsBtn').addEventListener('click',()=>loadTeams().catch(err=>status('eventStatus',err.message,'bad')));
-  $('teamSelect').addEventListener('change',e=>loadTeamData(e.target.value));
+  $('teamSelect').addEventListener('change',e=>{persistSession();loadTeamData(e.target.value,false);});
   ['dateFrom','dateTo','eventMonth'].forEach(id=>$(id).addEventListener('change',()=>{
     $('quickView').value='';
     applyEventFilters();
@@ -2610,6 +2816,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   $('toggleEventFilters').addEventListener('click',()=>{
     $('advancedEventFilters').classList.toggle('hidden');
     updateEventFilterButton();
+    persistSession();
   });
   $('clearEventFiltersBtn').addEventListener('click',()=>{
     $('quickView').value='';
@@ -2627,6 +2834,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   $('toggleAnalysisFilters').addEventListener('click',()=>{
     $('advancedAnalysisFilters').classList.toggle('hidden');
     updateAnalysisFilterButton();
+    persistSession();
   });
 
   ['analysisType','analysisMonth','analysisPhase','analysisStatus','excludeNonPlayers'].forEach(id=>$(id).addEventListener('change',()=>{
@@ -2643,6 +2851,7 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     $('toggleExclusionsBtn').setAttribute('aria-expanded',String(open));
     $('toggleExclusionsBtn').textContent = open ? 'Hide Players' : 'Choose Players';
     renderExclusionPicker();
+    persistSession();
   });
   $('exclusionSearch').addEventListener('input',renderExclusionPicker);
   $('clearExclusionsBtn').addEventListener('click',()=>{
@@ -2650,6 +2859,9 @@ th.sortable:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   });
   $('exportAvailabilityBtn').addEventListener('click',exportAvailability);
   $('backEventsBtn').addEventListener('click',()=>$('eventPanel').scrollIntoView({behavior:'smooth',block:'start'}));
+
+  // Restore this tab's previous state after a normal page refresh.
+  restoreSessionAfterRefresh();
 })();
 </script>
 </body>
