@@ -139,7 +139,7 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='1.4.2';
+const VERSION='1.5.0';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v1';
@@ -177,7 +177,7 @@ const REPORT_TEMPLATES={
   stats:{name:'Stats',icon:'bi-bar-chart',desc:'Results and opponent performance',source:'stats',columns:['Opponent','Games','Wins','Losses','Ties','Goals For','Goals Against','Goal Diff']}
 };
 const state={
-  token:null,clientId:null,user:null,teams:[],teamId:null,view:'home',search:'',
+  token:null,clientId:null,user:null,teams:[],teamId:null,seasonYear:null,view:'home',search:'',
   data:{team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]},
   filters:{schedule:{range:'upcoming',type:'all',opponent:'all',location:'all'},fixtures:{status:'all',opponent:'all'},availability:{range:'season',eventType:'all',missingScope:'next30'},stats:{range:'season'},reports:{range:'season'}},
   sorts:{schedule:{key:'date',dir:'asc'},fixtures:{key:'date',dir:'asc'},roster:{key:'name',dir:'asc'},availability:{key:'pct',dir:'desc'}},
@@ -217,13 +217,14 @@ function mark(text,q=state.search){const safe=esc(text);if(!q?.trim())return saf
 function matchesSearch(values){const q=state.search.trim().toLowerCase();if(!q)return true;return values.some(v=>String(v??'').toLowerCase().includes(q));}
 function toast(title,detail='',type='info',ms=4300){const wrap=$('#toastWrap');const el=document.createElement('div');el.className=`toast ${type==='error'?'error':type==='success'?'success':''}`;el.innerHTML=`<i class="bi ${type==='error'?'bi-exclamation-triangle':type==='success'?'bi-check-circle':'bi-info-circle'}"></i><div><b>${esc(title)}</b>${detail?`<span>${esc(detail)}</span>`:''}</div>`;wrap.appendChild(el);setTimeout(()=>el.remove(),ms);}
 function setLoading(on){const p=$('#progress');p.classList.toggle('active',on);p.classList.toggle('progress-indeterminate',on);if(!on){p.style.width='100%';setTimeout(()=>{p.style.width='0';},220);}else p.style.width='';}
-function saveSession(){const clean={token:state.token,clientId:state.clientId,user:state.user,teams:state.teams,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
+function saveSession(){const clean={seasonModel:2,token:state.token,clientId:state.clientId,user:state.user,teams:state.teams,teamId:state.teamId,seasonYear:state.seasonYear,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
 function loadSession(){
-  try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(saved){const selection=saved.selection&&typeof saved.selection==='object'?saved.selection:{type:null,id:null};Object.assign(state,saved,{selection});}}catch{}
+  try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(saved){const selection=saved.selection&&typeof saved.selection==='object'?saved.selection:{type:null,id:null};Object.assign(state,saved,{selection});if(saved.seasonModel!==2)state.seasonYear=currentCanonicalSeasonStartYear();}}catch{}
   if(!state.filters?.fixtures)state.filters={...(state.filters||{}),fixtures:{status:'all',opponent:'all'}};
   if(!state.sorts?.fixtures)state.sorts={...(state.sorts||{}),fixtures:{key:'date',dir:'asc'}};
   try{state.rules={...DEFAULT_RULES,...JSON.parse(localStorage.getItem(RULES_KEY)||'{}')};}catch{state.rules={...DEFAULT_RULES};}
   try{const config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}');if(!state.clientId&&config.clientId)state.clientId=config.clientId;if(config.redirectUri)state.redirectUri=config.redirectUri;}catch{}
+  state.seasonYear=Number.isInteger(Number(state.seasonYear))?Number(state.seasonYear):currentCanonicalSeasonStartYear();
 }
 function saveRules(){localStorage.setItem(RULES_KEY,JSON.stringify(state.rules));}
 function showLogin(error=''){ $('#loginScreen').classList.remove('hidden');$('#appShell').classList.add('hidden');if(state.clientId)$('#clientId').value=state.clientId;if(state.redirectUri)$('#redirectUri').value=state.redirectUri;const e=$('#errorLogin');if(error){e.textContent=error;e.classList.remove('hidden');}else e.classList.add('hidden');}
@@ -240,13 +241,9 @@ function loadingState(label='Loading data'){return `<div class="loading-block"><
 function cacheUserId(){return String(state.user?.id??'');}
 function cacheCatalogKey(userId=cacheUserId()){return userId?`user:${userId}:catalog`:'';}
 function cacheResourceKey(teamId,resource,userId=cacheUserId()){return userId?`user:${userId}:team:${teamId}:${resource}`:'';}
-function teamIsHistorical(team){
-  const bounds=canonicalSeasonBounds(team);
-  if(bounds)return bounds.endExclusive<=startDay(now());
-  return teamIsArchived(team);
-}
-function cacheTtl(team,resource){return teamIsHistorical(team)?Infinity:(CACHE_TTL[resource]??60*60*1000);}
-function cacheRecordFresh(record,team,resource){if(!record)return false;if(teamIsHistorical(team))return true;return Date.now()-Number(record.fetchedAt||0)<cacheTtl(team,resource);}
+function teamIsHistorical(team,seasonYear=selectedSeasonYear()){return selectedSeasonIsHistorical(seasonYear);}
+function cacheTtl(team,resource,seasonYear=selectedSeasonYear()){return teamIsHistorical(team,seasonYear)?Infinity:(CACHE_TTL[resource]??60*60*1000);}
+function cacheRecordFresh(record,team,resource,seasonYear=selectedSeasonYear()){if(!record)return false;if(teamIsHistorical(team,seasonYear))return true;return Date.now()-Number(record.fetchedAt||0)<cacheTtl(team,resource,seasonYear);}
 function openCacheDb(){
   if(state.runtime.cacheDbPromise)return state.runtime.cacheDbPromise;
   if(!('indexedDB' in window))return Promise.resolve(null);
@@ -277,10 +274,11 @@ async function cacheUserStats(userId=cacheUserId()){
   return new Promise(resolve=>{try{const tx=db.transaction(CACHE_STORE,'readonly'),req=tx.objectStore(CACHE_STORE).openCursor();req.onsuccess=()=>{const cur=req.result;if(!cur)return;if(String(cur.key).startsWith(prefix)){records++;const m=String(cur.key).match(/:team:([^:]+):/);if(m)teams.add(m[1]);}cur.continue();};tx.oncomplete=()=>resolve({records,teams:teams.size});tx.onerror=()=>resolve({records,teams:teams.size});}catch{resolve({records:0,teams:0});}});
 }
 async function readCachedTeamResource(team,resource){const rec=await cacheGet(cacheResourceKey(team.id,resource));return rec&&Array.isArray(rec.data)?rec:null;}
-async function writeCachedTeamResource(team,resource,data){
+async function writeCachedTeamResource(team,resource,data,{seasonYear=selectedSeasonYear()}={}){
   const key=cacheResourceKey(team.id,resource);if(!key)return false;const fetchedAt=Date.now();
-  const ok=await cachePut({key,userId:cacheUserId(),teamId:String(team.id),resource,data:Array.isArray(data)?data:[],fetchedAt,historical:teamIsHistorical(team),version:1});
-  if(ok){state.lifecycle.cacheMeta[resource]={fetchedAt,historical:teamIsHistorical(team)};state.lifecycle.resourceLoaded[resource]=true;}
+  const historical=teamIsHistorical(team,seasonYear);
+  const ok=await cachePut({key,userId:cacheUserId(),teamId:String(team.id),resource,data:Array.isArray(data)?data:[],fetchedAt,historical,version:2});
+  if(ok){state.lifecycle.cacheMeta[resource]={fetchedAt,historical};state.lifecycle.resourceLoaded[resource]=true;}
   return ok;
 }
 async function hydrateTeamFromCache(team){
@@ -298,15 +296,15 @@ async function hydrateTeamFromCache(team){
   buildDerived();
   return records;
 }
-function cachedResourceFresh(team,resource){const meta=state.lifecycle.cacheMeta?.[resource];return !!meta&&(teamIsHistorical(team)||Date.now()-Number(meta.fetchedAt||0)<cacheTtl(team,resource));}
+function cachedResourceFresh(team,resource,seasonYear=selectedSeasonYear()){const meta=state.lifecycle.cacheMeta?.[resource];return !!meta&&(teamIsHistorical(team,seasonYear)||Date.now()-Number(meta.fetchedAt||0)<cacheTtl(team,resource,seasonYear));}
 function coreResourceRequest(team,resource,signal){
   const params={team_id:team.id};if(resource==='events')params.sort_start_date='asc';
   return fetchCollection(`${resource}/search`,params,{signal});
 }
-async function cachedOrFetchTeamResource(team,resource,{signal,force=false}={}){
+async function cachedOrFetchTeamResource(team,resource,{signal,force=false,seasonYear=selectedSeasonYear()}={}){
   const cached=await readCachedTeamResource(team,resource);
-  if(cached&&(teamIsHistorical(team)||(!force&&cacheRecordFresh(cached,team,resource))))return {data:cached.data,fromCache:true,fetchedAt:cached.fetchedAt};
-  const data=await coreResourceRequest(team,resource,signal);await writeCachedTeamResource(team,resource,data);return {data,fromCache:false,fetchedAt:Date.now()};
+  if(cached&&(teamIsHistorical(team,seasonYear)||(!force&&cacheRecordFresh(cached,team,resource,seasonYear))))return {data:cached.data,fromCache:true,fetchedAt:cached.fetchedAt};
+  const data=await coreResourceRequest(team,resource,signal);await writeCachedTeamResource(team,resource,data,{seasonYear});return {data,fromCache:false,fetchedAt:Date.now()};
 }
 
 function collectionObjects(payload){return (payload?.collection?.items||[]).map(item=>{const o={};for(const d of item.data||[])o[d.name]=d.value;for(const l of item.links||[])if(l.rel&&!o[`_link_${l.rel}`])o[`_link_${l.rel}`]=l.href;o._href=item.href||item.links?.find(l=>l.rel==='self')?.href||null;return o;});}
@@ -357,14 +355,15 @@ function rawTeamSeasonText(t){
 }
 function currentCanonicalSeasonStartYear(d=now()){
   const y=d.getFullYear(),m=d.getMonth();
-  // The app's season is always July 1 through May 31 of the following year.
-  // June is outside the season and is associated with the season about to start.
+  // Canonical app seasons are July 1 through May 31. June belongs to the
+  // season that is about to start on July 1.
   return m>=5?y:y-1;
 }
-function seasonStartYearFromDate(value,{endDate=false}={}){
+function seasonYearForDate(value){
   const d=toDate(value);if(!d)return null;
   const y=d.getFullYear(),m=d.getMonth();
-  return endDate?(m<=5?y-1:y):(m>=5?y:y-1);
+  if(m===5)return null; // June is intentionally outside every season.
+  return m>=6?y:y-1;
 }
 function seasonStartYearFromText(text){
   const raw=String(text||'').trim();if(!raw)return null;
@@ -373,13 +372,19 @@ function seasonStartYearFromText(text){
   if(/\bspring\b/i.test(raw))return years[0]-1;
   return years[0];
 }
-function inferTeamSeasonStartYear(t){
-  if(Number.isInteger(Number(t?._appSeasonStartYear)))return Number(t._appSeasonStartYear);
-  const fromStart=seasonStartYearFromDate(t?.season_start_date||t?.start_date||t?.starts_at);if(fromStart!==null)return fromStart;
-  const fromEnd=seasonStartYearFromDate(t?.season_end_date||t?.end_date||t?.ends_at,{endDate:true});if(fromEnd!==null)return fromEnd;
+function explicitTeamSeasonStartYear(t){
+  const fromStart=seasonYearForDate(t?.season_start_date||t?.start_date||t?.starts_at);if(fromStart!==null)return fromStart;
+  const end=toDate(t?.season_end_date||t?.end_date||t?.ends_at);
+  if(end){const m=end.getMonth();if(m===5)return end.getFullYear()-1;const y=seasonYearForDate(end);if(y!==null)return y;}
   const fromText=seasonStartYearFromText(rawTeamSeasonText(t));if(fromText!==null)return fromText;
-  const fromCreated=seasonStartYearFromDate(t?.created_at||t?.created_date||t?.created);if(fromCreated!==null)return fromCreated;
   return null;
+}
+function catalogSeasonStartHint(t){
+  const explicit=explicitTeamSeasonStartYear(t);if(explicit!==null)return explicit;
+  const created=toDate(t?.created_at||t?.created_date||t?.created);
+  if(!created)return null;
+  const y=seasonYearForDate(created);
+  return y!==null?y:created.getFullYear();
 }
 function stripRawSeasonFromName(team){
   let base=String(teamBaseName(team)||'').trim();
@@ -391,58 +396,26 @@ function stripRawSeasonFromName(team){
   return base.replace(/\s*[\-–—|:]\s*$/g,'').replace(/\s+/g,' ').trim()||teamBaseName(team);
 }
 function rawTeamFamilyKey(team){return stripRawSeasonFromName(team).toLowerCase().replace(/\s+/g,' ').replace(/[\s\-–—|:]+$/g,'').trim();}
-function teamSeasonSortHint(t){
-  const inferred=inferTeamSeasonStartYear(t);if(inferred!==null)return new Date(inferred,6,1).getTime();
-  const d=toDate(t?.season_end_date||t?.end_date||t?.ends_at||t?.season_start_date||t?.start_date||t?.starts_at||t?.created_at||t?.created_date||t?.created);
+function teamFamilyKey(team){return rawTeamFamilyKey(team);}
+function teamIsArchived(t){return bool(t?.is_archived)||bool(t?.archived)||bool(t?.is_retired)||bool(t?.retired)||String(t?.status||'').toLowerCase().match(/archiv|retir|past/)!==null;}
+function teamRecordSortTime(t){
+  const d=toDate(t?.updated_at||t?.modified_at||t?.season_end_date||t?.end_date||t?.season_start_date||t?.start_date||t?.created_at||t?.created_date||t?.created);
   return d?d.getTime():Number(t?.id)||0;
 }
-function assignCanonicalSeasonYears(teams){
-  const groups=new Map();
-  for(const team of teams||[]){
-    const inferred=inferTeamSeasonStartYear(team);
-    if(inferred!==null)team._appSeasonStartYear=inferred;
-    const key=rawTeamFamilyKey(team)||`team:${team?.id??''}`;
-    if(!groups.has(key))groups.set(key,[]);
-    groups.get(key).push(team);
-  }
-  for(const group of groups.values()){
-    const used=new Set(group.map(t=>Number(t._appSeasonStartYear)).filter(Number.isInteger));
-    const unresolved=group.filter(t=>!Number.isInteger(Number(t._appSeasonStartYear))).sort((a,b)=>{
-      const archived=(teamIsArchived(a)?1:0)-(teamIsArchived(b)?1:0);if(archived)return archived;
-      return teamSeasonSortHint(b)-teamSeasonSortHint(a)||compare(b.id,a.id);
-    });
-    let cursor=Math.max(currentCanonicalSeasonStartYear(),...(used.size?[...used]:[currentCanonicalSeasonStartYear()]));
-    for(const team of unresolved){
-      let year;
-      if(!teamIsArchived(team)&&!used.has(currentCanonicalSeasonStartYear()))year=currentCanonicalSeasonStartYear();
-      else{while(used.has(cursor))cursor--;year=cursor;}
-      team._appSeasonStartYear=year;used.add(year);cursor=year-1;
-    }
-  }
-  return teams;
-}
-function teamSeasonStartYear(t){const y=inferTeamSeasonStartYear(t);return y!==null?y:currentCanonicalSeasonStartYear();}
-function canonicalSeasonBounds(team){
-  if(!team)return null;const y=teamSeasonStartYear(team);
-  return {start:new Date(y,6,1),endInclusive:new Date(y+1,4,31,23,59,59,999),endExclusive:new Date(y+1,5,1)};
-}
-function canonicalSeasonLabel(year){return `July 1, ${year} – May 31, ${year+1}`;}
-function teamSeasonLabel(t){return canonicalSeasonLabel(teamSeasonStartYear(t));}
-function teamIsArchived(t){return bool(t?.is_archived)||bool(t?.archived)||bool(t?.is_retired)||bool(t?.retired)||String(t?.status||'').toLowerCase().match(/archiv|retir|past/)!==null;}
-function teamDisplayName(t){return `${stripRawSeasonFromName(t)} — ${teamSeasonLabel(t)}`;}
-function teamSeasonSortTime(t){return new Date(teamSeasonStartYear(t),6,1).getTime();}
 function mergeTeams(...groups){
   const byId=new Map();
   for(const group of groups)for(const team of group||[]){
     if(team?.id===undefined||team?.id===null)continue;
     const key=String(team.id),existing=byId.get(key)||{};
-    byId.set(key,{...existing,...team});
+    // Do not persist synthetic season ownership on TeamSnap team records. A
+    // TeamSnap team is a data source; app seasons are independent date windows.
+    const merged={...existing,...team};delete merged._appSeasonStartYear;byId.set(key,merged);
   }
-  const teams=[...byId.values()];assignCanonicalSeasonYears(teams);
-  return teams.sort((a,b)=>{
+  return [...byId.values()].sort((a,b)=>{
     const an=stripRawSeasonFromName(a),bn=stripRawSeasonFromName(b),nameCmp=an.localeCompare(bn,undefined,{numeric:true,sensitivity:'base'});
     if(nameCmp)return nameCmp;
-    return teamSeasonSortTime(b)-teamSeasonSortTime(a)||compare(b.id,a.id);
+    const archiveCmp=(teamIsArchived(a)?1:0)-(teamIsArchived(b)?1:0);if(archiveCmp)return archiveCmp;
+    return teamRecordSortTime(b)-teamRecordSortTime(a)||compare(b.id,a.id);
   });
 }
 function discoverTeamRelationUrls(mePayload,me){
@@ -463,11 +436,66 @@ function discoverTeamRelationUrls(mePayload,me){
   }
   return [...urls];
 }
+function teamSelectorBaseName(team){return stripRawSeasonFromName(team);}
+function teamSelectorGroups(){
+  const groups=new Map();
+  for(const team of state.teams){
+    const key=teamFamilyKey(team)||`team:${team.id}`;
+    if(!groups.has(key))groups.set(key,{key,label:teamSelectorBaseName(team),teams:[]});
+    groups.get(key).teams.push(team);
+  }
+  for(const group of groups.values())group.teams.sort((a,b)=>{
+    const archiveCmp=(teamIsArchived(a)?1:0)-(teamIsArchived(b)?1:0);if(archiveCmp)return archiveCmp;
+    return teamRecordSortTime(b)-teamRecordSortTime(a)||compare(b.id,a.id);
+  });
+  return [...groups.values()].sort((a,b)=>a.label.localeCompare(b.label,undefined,{numeric:true,sensitivity:'base'}));
+}
+function selectedTeamRecord(){return state.teams.find(t=>sameId(t.id,state.teamId))||state.data.team||null;}
+function selectedTeamGroup(){
+  const team=selectedTeamRecord();if(!team)return teamSelectorGroups()[0]||null;
+  const key=teamFamilyKey(team)||`team:${team.id}`;
+  return teamSelectorGroups().find(g=>g.key===key)||null;
+}
+function canonicalSeasonBounds(input=state.seasonYear){
+  let y=Number(input);
+  if(!Number.isInteger(y))y=currentCanonicalSeasonStartYear();
+  return {start:new Date(y,6,1),endInclusive:new Date(y+1,4,31,23,59,59,999),endExclusive:new Date(y+1,5,1)};
+}
+function canonicalSeasonLabel(year){return `July 1, ${year} – May 31, ${year+1}`;}
+function selectedSeasonYear(){return Number.isInteger(Number(state.seasonYear))?Number(state.seasonYear):currentCanonicalSeasonStartYear();}
+function selectedSeasonLabelText(){return canonicalSeasonLabel(selectedSeasonYear());}
+function selectedSeasonIsHistorical(year=selectedSeasonYear()){return canonicalSeasonBounds(year).endExclusive<=startDay(now());}
+function teamSeasonLabel(t){const y=explicitTeamSeasonStartYear(t);return y===null?'':canonicalSeasonLabel(y);}
+function teamDisplayName(t,year=selectedSeasonYear()){return `${stripRawSeasonFromName(t)} — ${canonicalSeasonLabel(year)}`;}
+function groupSeasonYears(group){
+  const current=currentCanonicalSeasonStartYear();
+  const candidates=[current];
+  for(const team of group?.teams||[]){const hint=catalogSeasonStartHint(team);if(Number.isInteger(hint))candidates.push(hint);}
+  // Once a team is loaded, event dates are stronger evidence than TeamSnap team
+  // metadata and can extend the season list farther back without extra requests.
+  const active=selectedTeamGroup();
+  if(active&&group&&active.key===group.key){for(const e of state.data.events||[]){const y=seasonYearForDate(e.start_date||e.start_at||e.starts_at||e.date);if(Number.isInteger(y))candidates.push(y);}}
+  const earliest=Math.min(...candidates.filter(Number.isInteger));
+  const latest=Math.max(current,...candidates.filter(Number.isInteger).filter(y=>y<=current));
+  const years=[];for(let y=latest;y>=earliest;y--)years.push(y);
+  return years.length?years:[current];
+}
+function sourceTeamForSeason(group,year){
+  if(!group?.teams?.length)return null;
+  // Explicit TeamSnap season metadata is authoritative only for choosing which
+  // TeamSnap record to query. It never defines the app's season window.
+  const explicit=group.teams.find(t=>explicitTeamSeasonStartYear(t)===year);if(explicit)return explicit;
+  const createdMatch=group.teams.find(t=>teamIsArchived(t)&&catalogSeasonStartHint(t)===year);if(createdMatch)return createdMatch;
+  const active=group.teams.filter(t=>!teamIsArchived(t)).sort((a,b)=>teamRecordSortTime(b)-teamRecordSortTime(a));
+  if(active.length)return active[0]; // Persistent/live TeamSnap team can span many app seasons.
+  return [...group.teams].sort((a,b)=>Math.abs((catalogSeasonStartHint(a)??year)-year)-Math.abs((catalogSeasonStartHint(b)??year)-year)||teamRecordSortTime(b)-teamRecordSortTime(a))[0];
+}
 async function loadIdentityAndTeams(){
-  // A normal page refresh can restore the already authenticated identity/team
-  // catalog from sessionStorage without repeating /me and team discovery.
-  if(state.user?.id&&Array.isArray(state.teams)&&state.teams.length){
-    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
+  // Session data can be reused only when it contains at least one active source.
+  // An archived-only catalog is not trusted as a complete current catalog.
+  if(state.user?.id&&Array.isArray(state.teams)&&state.teams.length&&state.teams.some(t=>!teamIsArchived(t))){
+    state.teams=mergeTeams(state.teams);
+    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams.find(t=>!teamIsArchived(t))?.id||state.teams[0].id;
     fillTeamSwitchers();return;
   }
 
@@ -477,14 +505,15 @@ async function loadIdentityAndTeams(){
   if(me.id===undefined||me.id===null||me.id==='')throw new Error('TeamSnap login succeeded, but the authenticated user ID was missing from /me.');
 
   const catalogKey=cacheCatalogKey(me.id),cachedCatalog=await cacheGet(catalogKey);
-  if(cachedCatalog&&Array.isArray(cachedCatalog.data)&&cachedCatalog.data.length&&Date.now()-Number(cachedCatalog.fetchedAt||0)<CACHE_TTL.catalog){
-    state.teams=mergeTeams(cachedCatalog.data);
-    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
+  const cachedTeams=Array.isArray(cachedCatalog?.data)?mergeTeams(cachedCatalog.data):[];
+  const cachedFresh=cachedTeams.length&&Date.now()-Number(cachedCatalog.fetchedAt||0)<CACHE_TTL.catalog;
+  const cachedHasActive=cachedTeams.some(t=>!teamIsArchived(t));
+  if(cachedFresh&&cachedHasActive){
+    state.teams=cachedTeams;
+    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams.find(t=>!teamIsArchived(t))?.id||state.teams[0].id;
     fillTeamSwitchers();saveSession();return;
   }
 
-  // Refresh the catalog only when it is missing/stale. Merge any saved catalog
-  // so historical seasons remain visible even if TeamSnap omits them transiently.
   let searchTeams=[];let searchError=null;
   try{searchTeams=await fetchCollection('teams/search',{user_id:me.id});}catch(err){searchError=err;}
   const relationUrls=discoverTeamRelationUrls(mePayload,me);
@@ -492,42 +521,45 @@ async function loadIdentityAndTeams(){
   const relationTeams=[];let relationError=null;
   for(const r of relationResults){if(r.status==='fulfilled')relationTeams.push(...r.value);else if(!relationError)relationError=r.reason;}
 
-  const teams=mergeTeams(cachedCatalog?.data||[],searchTeams,relationTeams);
-  if(!teams.length){if(searchError)throw searchError;if(relationError)throw relationError;throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams or seasons were returned.`);}
+  const teams=mergeTeams(cachedTeams,searchTeams,relationTeams);
+  if(!teams.length){if(searchError)throw searchError;if(relationError)throw relationError;throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams were returned.`);}
 
   state.teams=teams;
-  await cachePut({key:catalogKey,userId:String(me.id),resource:'catalog',data:teams,fetchedAt:Date.now(),version:1});
-  if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
+  await cachePut({key:catalogKey,userId:String(me.id),resource:'catalog',data:teams,fetchedAt:Date.now(),version:2});
+  if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams.find(t=>!teamIsArchived(t))?.id||state.teams[0].id;
   fillTeamSwitchers();saveSession();
 }
-function teamSelectorBaseName(team){return stripRawSeasonFromName(team);}
-function teamSelectorGroups(){
-  const groups=new Map();
-  for(const team of state.teams){
-    const key=teamFamilyKey(team)||`team:${team.id}`;
-    if(!groups.has(key))groups.set(key,{key,label:teamSelectorBaseName(team),teams:[]});
-    groups.get(key).teams.push(team);
-  }
-  for(const group of groups.values())group.teams.sort((a,b)=>teamSeasonSortTime(b)-teamSeasonSortTime(a)||compare(b.id,a.id));
-  return [...groups.values()].sort((a,b)=>a.label.localeCompare(b.label,undefined,{numeric:true,sensitivity:'base'}));
-}
-function selectedTeamRecord(){return state.teams.find(t=>sameId(t.id,state.teamId))||state.data.team||null;}
-function seasonOptionLabel(team){return teamSeasonLabel(team);}
 function fillTeamSwitchers(){
-  assignCanonicalSeasonYears(state.teams);
   const team=selectedTeamRecord();
   const family=team?(teamFamilyKey(team)||`team:${team.id}`):'';
   const groups=teamSelectorGroups();
   $('#teamSwitcher').innerHTML=groups.map(g=>`<option value="${esc(g.key)}" ${g.key===family?'selected':''}>${esc(g.label)}</option>`).join('');
   const activeGroup=groups.find(g=>g.key===family)||groups[0];
-  const seasons=activeGroup?.teams||[];
-  $('#seasonSwitcher').innerHTML=seasons.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(seasonOptionLabel(t))}</option>`).join('');
+  const years=groupSeasonYears(activeGroup);
+  if(!years.includes(selectedSeasonYear()))state.seasonYear=years[0]??currentCanonicalSeasonStartYear();
+  $('#seasonSwitcher').innerHTML=years.map(y=>`<option value="${y}" ${y===selectedSeasonYear()?'selected':''}>${esc(canonicalSeasonLabel(y))}</option>`).join('');
 }
 function chooseTeamForFamily(familyKey){
   const group=teamSelectorGroups().find(g=>g.key===familyKey);
   if(!group?.teams?.length)return null;
-  const current=selectedTeamRecord(),seasonYear=current?teamSeasonStartYear(current):null;
-  return group.teams.find(t=>seasonYear!==null&&teamSeasonStartYear(t)===seasonYear)||group.teams.find(t=>teamSeasonStartYear(t)===currentCanonicalSeasonStartYear())||group.teams[0];
+  const years=groupSeasonYears(group);if(!years.includes(selectedSeasonYear()))state.seasonYear=years[0]??currentCanonicalSeasonStartYear();
+  return sourceTeamForSeason(group,selectedSeasonYear());
+}
+function alignSourceTeamToSelection(){
+  const group=selectedTeamGroup();const source=sourceTeamForSeason(group,selectedSeasonYear());
+  if(source)state.teamId=source.id;
+  return source;
+}
+async function selectSeasonYear(year){
+  const parsed=Number(year);if(!Number.isInteger(parsed))return;
+  state.seasonYear=parsed;state.selection={type:null,id:null};closeDrawer({preserveSelection:true});
+  const group=selectedTeamGroup(),source=sourceTeamForSeason(group,parsed);fillTeamSwitchers();saveSession();
+  if(!source){render();return;}
+  if(!sameId(source.id,state.teamId)){await loadTeam(source.id);return;}
+  render();ensureDataForView();
+  // Selecting a completed season is a local filter operation. Selecting the
+  // current season may check TeamSnap only when the shared source cache is stale.
+  if(!selectedSeasonIsHistorical()&&['events','members','locations','opponents'].some(r=>!cachedResourceFresh(source,r))){loadTeam(source.id,{quiet:true,preserveSelection:false});}
 }
 function resetTeamData(team){
   state.data={team,events:[],members:[],locations:[],opponents:[],availabilities:[]};
@@ -568,7 +600,7 @@ async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailab
     if(!currentLoad(seq,teamId))return false;
 
     const cachedCore=['events','members','locations','opponents'].filter(k=>cached[k]);
-    if(cachedCore.length){state.lifecycle.core=cached.events||cached.members?(cachedCore.length===4?'ready':'partial'):'partial';buildDerived();render();if(preserveSelection)restoreSelection();}
+    if(cachedCore.length){state.lifecycle.core=cached.events||cached.members?(cachedCore.length===4?'ready':'partial'):'partial';buildDerived();fillTeamSwitchers();render();if(preserveSelection)restoreSelection();}
 
     const controller=new AbortController();state.runtime.coreController=controller;
     const keys=['events','members','locations','opponents'];
@@ -604,10 +636,10 @@ async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailab
     const missingRequired=['events','members'].filter(k=>!loaded.has(k));
     const missingAny=keys.filter(k=>!loaded.has(k));
     state.lifecycle.core=missingRequired.length===2?'error':missingAny.length?'partial':'ready';
-    state.lastLoaded=new Date();buildDerived();saveSession();render();
+    state.lastLoaded=new Date();buildDerived();fillTeamSwitchers();saveSession();render();
 
     if(missingRequired.length){toast('Some team data could not load',missingRequired.map(k=>`${k}: ${errors[k]||'not available'}`).join(' · '),'error',7000);}
-    else if(!quiet&&needed.length&&!Object.keys(errors).length)toast(refresh?'Updates checked':'Team loaded',`${teamDisplayName(team)} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
+    else if(!quiet&&needed.length&&!Object.keys(errors).length)toast(refresh?'Updates checked':'Team loaded',`${teamDisplayName(team)} · ${plural(activePlayers().length,'player')} · ${plural(rangeEvents('season').length,'season event')}`,'success');
     else if(!quiet&&teamIsHistorical(team)&&needed.length===0)toast('Loaded from saved history',`${teamDisplayName(team)} is cached locally; no TeamSnap requests were needed.`,'success');
     else if(!quiet&&Object.keys(errors).length)toast('Saved data retained','Some update checks failed, so the app kept the previously cached data.','info',6500);
 
@@ -719,16 +751,19 @@ function scoreBadge(p,total=1){if(!total)return '<span class="badge badge-neutra
 function resultBadge(r){return r?`<span class="form-dot ${r}" style="display:inline-grid;width:28px;height:28px;border-radius:8px">${r}</span>`:'<span class="badge badge-neutral">—</span>';}
 
 function rangeEvents(key,events=state.derived.events){
-  const n=now(),today=startDay(n);let start=null,end=null;
-  if(key==='next30'){start=today;end=new Date(today);end.setDate(end.getDate()+30);} 
-  else if(key==='month'){start=new Date(n.getFullYear(),n.getMonth(),1);end=new Date(n.getFullYear(),n.getMonth()+1,1);} 
-  else if(key==='last30'){start=new Date(today);start.setDate(start.getDate()-30);end=new Date(today);end.setDate(end.getDate()+1);} 
-  else if(key==='past'){end=today;} 
-  else if(key==='upcoming'){start=today;} 
-  else if(key==='season'){
-    const bounds=canonicalSeasonBounds(state.data.team);if(bounds){start=bounds.start;end=bounds.endExclusive;}
-  }
-  return events.filter(e=>{const d=toDate(e._date);if(!d)return false;if(start&&d<start)return false;if(end&&d>=end)return false;return true;});
+  const n=now(),today=startDay(n),season=canonicalSeasonBounds(selectedSeasonYear());
+  let start=season.start,end=season.endExclusive;
+  const intersect=(a,b)=>{if(a&&a>start)start=a;if(b&&b<end)end=b;};
+  if(key==='next30'){const a=today,b=new Date(today);b.setDate(b.getDate()+30);intersect(a,b);}
+  else if(key==='month'){intersect(new Date(n.getFullYear(),n.getMonth(),1),new Date(n.getFullYear(),n.getMonth()+1,1));}
+  else if(key==='last30'){const a=new Date(today);a.setDate(a.getDate()-30);const b=new Date(today);b.setDate(b.getDate()+1);intersect(a,b);}
+  else if(key==='past'){intersect(null,today);}
+  else if(key==='upcoming'){intersect(today,null);}
+  // 'season' and 'all' both mean the full selected July–May season. The team
+  // data source may contain many years, but ordinary app views never escape the
+  // selected season boundary.
+  if(end<=start)return [];
+  return events.filter(e=>{const d=toDate(e._date);if(!d)return false;return d>=start&&d<end;});
 }
 function trackedEvents(key='season',eventType='all'){return rangeEvents(key).filter(e=>eventTracksAvailability(e)&&(eventType==='all'||e._type.toLowerCase()===eventType));}
 function completedEvents(events){const cutoff=now();return events.filter(e=>{const d=toDate(e._date);return d&&d<=cutoff;});}
@@ -741,7 +776,7 @@ function eventAvailability(event){const c={yes:0,no:0,maybe:0,none:0,total:0};fo
 function ratingForPct(p){return p>=90?'Excellent':p>=80?'Good':p>=state.rules.lowAvailabilityPct?'Watch':'Low';}
 function scoredGames(events=state.derived.events){return events.filter(e=>e._isGame&&(e._teamScore!==null&&e._oppScore!==null||e._result));}
 function recordFor(events){const games=scoredGames(events);const r={wins:0,losses:0,ties:0,games:games.length,gf:0,ga:0};for(const g of games){if(g._result==='W')r.wins++;else if(g._result==='L')r.losses++;else if(g._result==='T')r.ties++;if(g._teamScore!==null)r.gf+=g._teamScore;if(g._oppScore!==null)r.ga+=g._oppScore;}r.winPct=pct(r.wins,r.games);r.diff=r.gf-r.ga;return r;}
-function selectedSeasonLabel(){return `Season: ${teamSeasonLabel(state.data.team||selectedTeamRecord())}`;}
+function selectedSeasonLabel(){return `Season: ${selectedSeasonLabelText()}`;}
 function currentRangeLabel(key){return ({season:selectedSeasonLabel(),next30:'Next 30 Days',month:'This Month',last30:'Last 30 Days',all:'All Events',upcoming:'Upcoming',past:'Past'})[key]||selectedSeasonLabel();}
 function rangeOptions(selected,includeSchedule=false){const opts=includeSchedule?[['upcoming','Upcoming'],['all','All Events'],['past','Past']]:[['season',selectedSeasonLabel()],['next30','Next 30 Days'],['month','This Month'],['last30','Last 30 Days'],['all','All Events']];return opts.map(([v,l])=>`<option value="${v}" ${selected===v?'selected':''}>${l}</option>`).join('');}
 function typeOptions(selected){return [['all','All Events'],['game','Games'],['practice','Practices'],['other','Other']].map(([v,l])=>`<option value="${v}" ${selected===v?'selected':''}>${l}</option>`).join('');}
@@ -749,12 +784,12 @@ function daysUntilEvent(e){const d=toDate(e._date);return d?Math.ceil((startDay(
 function eventTitle(e){if(e._isGame&&e._opponent)return `${e._name&&String(e._name).toLowerCase()!=='game'?e._name:'Game'} vs ${e._opponent}`;return e._name;}
 function eventLocation(e){return e._location||'Location TBD';}
 function eventOpponent(e){return e._opponent||'Opponent TBD';}
-function upcomingEvents(limit=8){return state.derived.events.filter(e=>toDate(e._date)>=startDay(now())).slice(0,limit);}
-function nextGame(){return state.derived.events.find(e=>e._isGame&&toDate(e._date)>=startDay(now()))||null;}
+function upcomingEvents(limit=8){return rangeEvents('season').filter(e=>toDate(e._date)>=startDay(now())).slice(0,limit);}
+function nextGame(){return rangeEvents('season').find(e=>e._isGame&&toDate(e._date)>=startDay(now()))||null;}
 function alertSeverityRank(s){return s==='danger'?0:s==='warn'?1:2;}
 function managerAlerts(){
   const alerts=[];const n=now();
-  for(const e of state.derived.events){
+  for(const e of rangeEvents('season')){
     const d=toDate(e._date);if(!d||d<n)continue;const days=daysUntilEvent(e),hours=hoursUntil(d);const av=eventTracksAvailability(e)?eventAvailability(e):null;
     if(e._isGame&&av&&av.yes<state.rules.minConfirmedGame){alerts.push({severity:hours<=state.rules.gameResponseHours?'danger':'warn',icon:'bi-people-fill',title:`Only ${av.yes} confirmed for ${eventTitle(e)}`,detail:`${av.none} no response · ${av.maybe} maybe · minimum rule is ${state.rules.minConfirmedGame}`,eventId:e.id,date:d});}
     const deadline=e._isGame?state.rules.gameResponseHours:state.rules.practiceResponseHours;
@@ -819,7 +854,7 @@ function renderHome(){
     metricCard('Players',players.length,`${state.derived.staff.length} staff / non-player ${state.derived.staff.length===1?'member':'members'}`,'bi-people'),
     metricCard('Next Game',game?fmtShortDate(game._date):'—',game?esc(eventOpponent(game)):'No upcoming game','bi-calendar-event'),
     metricCard('Season Record',record.games?`${record.wins}-${record.losses}-${record.ties}`:'—',record.games?`${record.winPct}% win rate · ${record.diff>=0?'+':''}${record.diff} goal diff`:'No scored games','bi-trophy'),
-    metricCard('Upcoming Events',state.derived.events.filter(e=>toDate(e._date)>=startDay(now())).length,alerts.filter(a=>a.severity==='danger').length?`<span style="color:var(--danger);font-weight:800">${alerts.filter(a=>a.severity==='danger').length} urgent</span>`:'No urgent attention items','bi-clock-history')
+    metricCard('Upcoming Events',rangeEvents('season').filter(e=>toDate(e._date)>=startDay(now())).length,alerts.filter(a=>a.severity==='danger').length?`<span style="color:var(--danger);font-weight:800">${alerts.filter(a=>a.severity==='danger').length} urgent</span>`:'No urgent attention items','bi-clock-history')
   ].join('');
   const alertHtml=alerts.length?alerts.slice(0,10).map(a=>`<div class="attention-item clickable-attention" data-event-id="${esc(a.eventId||'')}" data-player-id="${esc(a.playerId||'')}"><div class="attention-icon ${a.severity}"><i class="bi ${a.icon}"></i></div><div><div class="attention-title">${esc(a.title)}</div><div class="attention-detail">${esc(a.detail)}</div></div><div class="attention-meta">${a.eventId?fmtShortDate(a.date):''}</div></div>`).join(''):emptyState('bi-check-circle','Nothing needs attention','Your current manager rules do not flag any issues.');
   const upcomingHtml=upcoming.length?upcoming.map(e=>{const av=eventTracksAvailability(e)?eventAvailability(e):null;return `<article class="event-card" data-open-event="${esc(e.id)}"><div class="event-date">${fmtDate(e._date,{weekday:'short',month:'short',day:'numeric'})} · ${fmtTime(e._date)}</div><div class="event-name">${mark(eventTitle(e))}</div><div class="event-meta">${esc(e._type)}${e._location?` · ${esc(e._location)}`:''}</div>${av?`<div class="readiness"><div class="bar"><span style="width:${av.pct}%;background:${readinessColor(av.pct)}"></span></div><span>${av.yes}/${av.total} Yes</span></div>`:`<div class="small-note" style="margin-top:10px">Availability ${esc(eventAvailabilityStateText(e).toLowerCase())}</div>`}</article>`;}).join(''):emptyState('bi-calendar-x','No upcoming events','TeamSnap did not return any future events for this team.');
@@ -829,7 +864,7 @@ function renderHome(){
 }
 
 function scheduleFiltered(){
-  const f=state.filters.schedule;let evs=f.range==='all'?state.derived.events:rangeEvents(f.range);
+  const f=state.filters.schedule;let evs=rangeEvents(f.range);
   if(f.type!=='all')evs=evs.filter(e=>e._type.toLowerCase()===f.type);
   if(f.opponent!=='all')evs=evs.filter(e=>String(e.opponent_id||'')===f.opponent);
   if(f.location!=='all')evs=evs.filter(e=>String(e.location_id||'')===f.location);
@@ -863,7 +898,6 @@ function renderAvailability(){
 }
 
 function normalizeOpponentName(name){return String(name||'').trim().replace(/\s+/g,' ').toLowerCase();}
-function teamFamilyKey(team){return rawTeamFamilyKey(team);}
 function fixtureSide(e){
   const raw=String(e.home_or_away??e.home_away??e.location_type??'').trim().toLowerCase();
   if(raw.startsWith('h'))return 'Home';
@@ -910,7 +944,7 @@ function renderFixtures(){
   const opponentOptions=`<option value="all">All opponents</option>`+groups.map(x=>`<option value="${esc(normalizeOpponentName(x.name))}" ${f.opponent===normalizeOpponentName(x.name)?'selected':''}>${esc(x.name)}</option>`).join('');
   const cards=groups.filter(x=>matchesSearch([x.name])).map(x=>`<button class="opponent-card" type="button" data-open-opponent="${esc(x.name)}"><b>${mark(x.name)}</b><div class="record">${x.record.games?`${x.record.wins}-${x.record.losses}-${x.record.ties}`:'No result'}</div><div class="meta">${plural(x.games.length,'fixture')} · ${plural(x.upcoming.length,'upcoming')}${x.record.games?` · ${x.record.diff>=0?'+':''}${x.record.diff} GD`:''}</div></button>`).join('');
   const rows=games.map(g=>`<tr class="clickable" data-open-event="${esc(g.id)}">${tableCell('Date',`<div class="cell-main">${fmtDate(g._date,{month:'short',day:'numeric',year:'numeric'})}</div><div class="cell-sub">${fmtTime(g._date)}</div>`)}${tableCell('Opponent',`<button type="button" class="opponent-link" data-open-opponent="${esc(g._opponent||'Opponent TBD')}">${mark(g._opponent||'Opponent TBD')}</button>`)}${tableCell('H/A',esc(fixtureSide(g)))}${tableCell('Location',mark(g._location||'—'))}${tableCell('Score',`<span class="fixture-score">${esc(fixtureResultText(g))}</span>`,'num')}${tableCell('Result',resultBadge(g._result),'num')}</tr>`).join('');
-  $('#viewRoot').innerHTML=`${pageHead('Fixtures',`Games for ${state.data.team?teamDisplayName(state.data.team):'the selected season'}. Select any opponent for head-to-head history.`)}<div class="grid grid-4">${metricCard('Fixtures',all.length,`${groups.length} opponents`,'bi-calendar2-week')}${metricCard('Played',played.length,played.length?`${recordFor(played).wins}-${recordFor(played).losses}-${recordFor(played).ties} record`:'No completed results','bi-trophy')}${metricCard('Upcoming',upcoming.length,upcoming[0]?`Next: ${fmtShortDate(upcoming[0]._date)}`:'No upcoming games','bi-clock')}${metricCard('Opponents',groups.length,'Click a team below for H2H','bi-shield')}</div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Teams / Opponents</h3><p>Current selected season. Click a team for current-season and all-season H2H.</p></div></div><div class="card-body">${cards?`<div class="opponent-grid">${cards}</div>`:emptyState('bi-shield-x','No opponents match','Try a different search or season.')}</div></div><div class="toolbar" style="margin-top:16px"><span class="toolbar-label">Show</span><select id="fixtureStatus"><option value="all" ${f.status==='all'?'selected':''}>All Fixtures</option><option value="upcoming" ${f.status==='upcoming'?'selected':''}>Upcoming</option><option value="played" ${f.status==='played'?'selected':''}>Played / Past</option></select><select id="fixtureOpponent">${opponentOptions}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-list-ul"></i>${plural(games.length,'fixture')}</span><button class="btn btn-secondary btn-sm" id="resetFixtureFilters"><i class="bi bi-arrow-counterclockwise"></i>Reset</button></div><div class="table-wrap"><table class="data-table"><thead><tr>${fixtureSortTh('Date','date')}${fixtureSortTh('Opponent','opponent')}${fixtureSortTh('H/A','side')}${fixtureSortTh('Location','location')}<th class="num">Score</th>${fixtureSortTh('Result','result')}</tr></thead><tbody>${rows||`<tr>${tableCell('',emptyState('bi-calendar-x','No fixtures match','Adjust the fixture filters or search.'),'')}</tr>`}</tbody></table></div>`;
+  $('#viewRoot').innerHTML=`${pageHead('Fixtures',`Games for ${state.data.team?teamDisplayName(state.data.team):'the selected season'}. Select any opponent for head-to-head history.`)}<div class="grid grid-4">${metricCard('Fixtures',all.length,`${groups.length} opponents`,'bi-calendar2-week')}${metricCard('Played',played.length,played.length?`${recordFor(played).wins}-${recordFor(played).losses}-${recordFor(played).ties} record`:'No completed results','bi-trophy')}${metricCard('Upcoming',upcoming.length,upcoming[0]?`Next: ${fmtShortDate(upcoming[0]._date)}`:'No upcoming games','bi-clock')}${metricCard('Opponents',groups.length,'Click a team below for H2H','bi-shield')}</div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Teams / Opponents</h3><p>Selected July–May season. Click a team for selected-season and all-season H2H.</p></div></div><div class="card-body">${cards?`<div class="opponent-grid">${cards}</div>`:emptyState('bi-shield-x','No opponents match','Try a different search or season.')}</div></div><div class="toolbar" style="margin-top:16px"><span class="toolbar-label">Show</span><select id="fixtureStatus"><option value="all" ${f.status==='all'?'selected':''}>All Fixtures</option><option value="upcoming" ${f.status==='upcoming'?'selected':''}>Upcoming</option><option value="played" ${f.status==='played'?'selected':''}>Played / Past</option></select><select id="fixtureOpponent">${opponentOptions}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-list-ul"></i>${plural(games.length,'fixture')}</span><button class="btn btn-secondary btn-sm" id="resetFixtureFilters"><i class="bi bi-arrow-counterclockwise"></i>Reset</button></div><div class="table-wrap"><table class="data-table"><thead><tr>${fixtureSortTh('Date','date')}${fixtureSortTh('Opponent','opponent')}${fixtureSortTh('H/A','side')}${fixtureSortTh('Location','location')}<th class="num">Score</th>${fixtureSortTh('Result','result')}</tr></thead><tbody>${rows||`<tr>${tableCell('',emptyState('bi-calendar-x','No fixtures match','Adjust the fixture filters or search.'),'')}</tr>`}</tbody></table></div>`;
   $('#fixtureStatus').onchange=e=>{f.status=e.target.value;state.filters.fixtures=f;saveSession();renderFixtures();};
   $('#fixtureOpponent').onchange=e=>{f.opponent=e.target.value;state.filters.fixtures=f;saveSession();renderFixtures();};
   $('#resetFixtureFilters').onclick=()=>{state.filters.fixtures={status:'all',opponent:'all'};saveSession();renderFixtures();};
@@ -922,28 +956,39 @@ function normalizeHistoricalGame(raw,opponentsById,team){
   const opponent=opponentsById.get(String(raw.opponent_id))||{};
   const name=raw.name||raw.formatted_title||raw.label||'Game';
   const start=raw.start_date||raw.start_at||raw.starts_at||raw.date;
+  const seasonYear=seasonYearForDate(start);if(seasonYear===null)return null;
   const oppName=raw.opponent_name||opponent.name||opponent.label||'';
   const tf=num(raw.points_for_team??raw.team_score??raw.score_for),ta=num(raw.points_for_opponent??raw.opponent_score??raw.score_against);
   let result=null;if(tf!==null&&ta!==null)result=tf>ta?'W':tf<ta?'L':'T';else if(raw.result||raw.results){const r=String(raw.result||raw.results).trim().toUpperCase();if(/^W/.test(r))result='W';else if(/^L/.test(r))result='L';else if(/^T|^D/.test(r))result='T';}
-  return {...raw,_name:name,_isGame:true,_type:'Game',_date:start,_opponent:oppName,_teamScore:tf,_oppScore:ta,_result:result,_season:teamSeasonLabel(team)||teamDisplayName(team),_teamId:team.id};
+  return {...raw,_name:name,_isGame:true,_type:'Game',_date:start,_opponent:oppName,_teamScore:tf,_oppScore:ta,_result:result,_season:canonicalSeasonLabel(seasonYear),_seasonYear:seasonYear,_teamId:team.id};
 }
 async function loadAllSeasonH2H(opponentName){
-  const family=teamFamilyKey(state.data.team),target=normalizeOpponentName(opponentName),cacheKey=`${family}|${target}`;
+  const group=selectedTeamGroup(),family=group?.key||teamFamilyKey(state.data.team),target=normalizeOpponentName(opponentName),cacheKey=`${family}|${target}`;
   if(state.runtime.h2hCache.has(cacheKey))return state.runtime.h2hCache.get(cacheKey);
-  const siblings=state.teams.filter(t=>teamFamilyKey(t)===family);
+  const years=groupSeasonYears(group);
+  const sourceMap=new Map();
+  for(const year of years){
+    const team=sourceTeamForSeason(group,year);if(!team)continue;
+    const key=String(team.id);if(!sourceMap.has(key))sourceMap.set(key,{team,years:new Set()});sourceMap.get(key).years.add(year);
+  }
   const seq=++state.runtime.h2hLoadSeq;
   try{state.runtime.h2hController?.abort();}catch{}
   const controller=new AbortController();state.runtime.h2hController=controller;
-  const results=await Promise.allSettled(siblings.map(async team=>{
+  const results=await Promise.allSettled([...sourceMap.values()].map(async entry=>{
     if(controller.signal.aborted)throw new DOMException('Aborted','AbortError');
-    if(sameId(team.id,state.teamId))return fixtureGames().filter(g=>normalizeOpponentName(g._opponent)===target).map(g=>({...g,_season:teamSeasonLabel(team)||teamDisplayName(team),_teamId:team.id}));
-    const [eventResource,opponentResource]=await Promise.all([
-      cachedOrFetchTeamResource(team,'events',{signal:controller.signal}),
-      cachedOrFetchTeamResource(team,'opponents',{signal:controller.signal})
-    ]);
-    const events=eventResource.data,opponents=opponentResource.data,bounds=canonicalSeasonBounds(team);
-    const map=new Map(opponents.map(o=>[String(o.id),o]));
-    return events.map(e=>normalizeHistoricalGame(e,map,team)).filter(Boolean).filter(g=>{const d=toDate(g._date);return d&&(!bounds||d>=bounds.start&&d<bounds.endExclusive);}).filter(g=>normalizeOpponentName(g._opponent)===target);
+    let events,opponents;
+    if(sameId(entry.team.id,state.teamId)){
+      events=state.data.events;opponents=state.data.opponents;
+    }else{
+      const representativeYear=[...entry.years].sort((a,b)=>b-a)[0]??selectedSeasonYear();
+      const [eventResource,opponentResource]=await Promise.all([
+        cachedOrFetchTeamResource(entry.team,'events',{signal:controller.signal,seasonYear:representativeYear}),
+        cachedOrFetchTeamResource(entry.team,'opponents',{signal:controller.signal,seasonYear:representativeYear})
+      ]);
+      events=eventResource.data;opponents=opponentResource.data;
+    }
+    const map=new Map((opponents||[]).map(o=>[String(o.id),o]));
+    return (events||[]).map(e=>normalizeHistoricalGame(e,map,entry.team)).filter(Boolean).filter(g=>entry.years.has(g._seasonYear)).filter(g=>normalizeOpponentName(g._opponent)===target);
   }));
   if(seq!==state.runtime.h2hLoadSeq||controller.signal.aborted)throw new DOMException('Aborted','AbortError');
   const games=[];let failures=0,authError=null;
@@ -954,7 +999,7 @@ async function loadAllSeasonH2H(opponentName){
   }
   if(authError)throw authError;
   const dedup=new Map();for(const g of games)dedup.set(`${g._teamId}|${g.id}`,g);
-  const value={games:[...dedup.values()].sort((a,b)=>(toDate(a._date)||0)-(toDate(b._date)||0)),seasonCount:siblings.length,failures};
+  const value={games:[...dedup.values()].sort((a,b)=>(toDate(a._date)||0)-(toDate(b._date)||0)),seasonCount:years.length,failures};
   state.runtime.h2hCache.set(cacheKey,value);return value;
 }
 function h2hMeetingsTable(games,includeSeason=false){
@@ -972,7 +1017,7 @@ async function openOpponentDetail(opponentName,{fromRestore=false}={}){
   state.selection={type:'opponent',id:name};saveSession();
   const targetKey=normalizeOpponentName(name),seasonGames=fixtureGames().filter(g=>normalizeOpponentName(g._opponent)===targetKey),r=recordFor(seasonGames),upcoming=seasonGames.filter(g=>toDate(g._date)>=startDay(now())&&!g._result&&!(g._teamScore!==null&&g._oppScore!==null));
   const recent=[...scoredGames(seasonGames)].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);
-  const currentHtml=`${h2hSummaryCards(seasonGames)}<div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Current Season</h3><p>${esc(teamSeasonLabel(state.data.team)||teamDisplayName(state.data.team))}</p></div></div><div class="card-body"><div class="kpi-inline"><div><b>${r.games?`${r.wins}-${r.losses}-${r.ties}`:'—'}</b><span>Record</span></div><div><b>${upcoming.length}</b><span>Upcoming</span></div><div><b>${r.games?`${r.diff>=0?'+':''}${r.diff}`:'—'}</b><span>Goal Diff</span></div></div><div class="divider"></div><div class="form-dots">${recent.length?recent.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join(''):'<span class="muted">No completed meetings this season</span>'}</div></div></div><div class="card"><div class="card-head"><div><h3>Season Meetings</h3><p>Fixtures and results against ${esc(name)}</p></div></div><div class="card-body" style="padding:0">${h2hMeetingsTable(seasonGames,false)}</div></div></div><div class="section-title" style="margin-top:18px">All Seasons H2H</div><div id="allSeasonH2H" class="h2h-loading">${loadingState('Loading matching opponent history across seasons')}</div>`;
+  const currentHtml=`${h2hSummaryCards(seasonGames)}<div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Selected Season</h3><p>${esc(selectedSeasonLabelText())}</p></div></div><div class="card-body"><div class="kpi-inline"><div><b>${r.games?`${r.wins}-${r.losses}-${r.ties}`:'—'}</b><span>Record</span></div><div><b>${upcoming.length}</b><span>Upcoming</span></div><div><b>${r.games?`${r.diff>=0?'+':''}${r.diff}`:'—'}</b><span>Goal Diff</span></div></div><div class="divider"></div><div class="form-dots">${recent.length?recent.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join(''):'<span class="muted">No completed meetings this season</span>'}</div></div></div><div class="card"><div class="card-head"><div><h3>Season Meetings</h3><p>Fixtures and results against ${esc(name)}</p></div></div><div class="card-body" style="padding:0">${h2hMeetingsTable(seasonGames,false)}</div></div></div><div class="section-title" style="margin-top:18px">All Seasons H2H</div><div id="allSeasonH2H" class="h2h-loading">${loadingState('Loading matching opponent history across seasons')}</div>`;
   openDrawer(`${teamBaseName(state.data.team)} vs ${name}`,currentHtml,true);bindCommonActions();
   try{
     const all=await loadAllSeasonH2H(name);
@@ -1110,7 +1155,7 @@ function openEventDetail(id,{fromRestore=false}={}){
   const posHtml=positions.length?positions.map(pos=>`<div class="stat-box"><b>${groups.yes.filter(p=>memberPosition(p)===pos).length}</b><span>${esc(pos)}</span></div>`).join(''):'<div class="small-note">No position data is available for confirmed players.</div>';
   let h2h='';
   if(e._isGame&&e._opponent){
-    const meetings=scoredGames(state.derived.events).filter(g=>g._opponent===e._opponent).sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);
+    const meetings=scoredGames(rangeEvents('season')).filter(g=>g._opponent===e._opponent).sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);
     if(meetings.length){const rr=recordFor(meetings);h2h=`<div class="card"><div class="card-head"><div><h3>Recent vs ${esc(e._opponent)}</h3><p>${rr.wins}-${rr.losses}-${rr.ties} across ${meetings.length} meeting${meetings.length===1?'':'s'}</p></div></div><div class="card-body"><div class="form-dots">${meetings.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join('')}</div></div></div>`;}
   }
   const statusCols=av?['yes','maybe','no','none'].map(status=>`<div class="status-col"><div class="status-col-head"><span>${statusBadge(status)}</span><strong>${groups[status].length}</strong></div>${groups[status].length?groups[status].map(p=>`<div class="status-person" data-open-player="${esc(p.id)}"><b>${esc(memberName(p))}</b><span>${esc(memberPosition(p))}</span></div>`).join(''):`<div class="empty" style="padding:18px 8px">None</div>`}</div>`).join(''):'';
@@ -1172,7 +1217,7 @@ function bindCommonActions(){
 
 async function disconnect(show=true){
   abortTeamRequests();stopRefreshTimer();
-  state.token=null;state.user=null;state.teams=[];state.teamId=null;state.lastLoaded=null;
+  state.token=null;state.user=null;state.teams=[];state.teamId=null;state.seasonYear=currentCanonicalSeasonStartYear();state.lastLoaded=null;
   state.selection={type:null,id:null};
   state.lifecycle={core:'idle',availability:'idle',resourceErrors:{},resourceLoaded:{},cacheMeta:{},teamLoadSeq:state.lifecycle.teamLoadSeq+1,availabilityLoadSeq:state.lifecycle.availabilityLoadSeq+1,lastAvailabilityLoaded:null};
   state.data={team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]};
@@ -1188,7 +1233,7 @@ function parseOAuthHash(){
   if(p.get('error')){const msg=p.get('error_description')||p.get('error');state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin(msg);return true;}
   const expected=sessionStorage.getItem('tsmc.oauth.state'),returned=p.get('state');
   if(expected&&returned&&expected!==returned){state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin('OAuth state validation failed. Please connect again.');return true;}
-  state.token=p.get('access_token');state.user=null;state.teams=[];state.teamId=null;sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
+  state.token=p.get('access_token');state.user=null;state.teams=[];state.teamId=null;state.seasonYear=currentCanonicalSeasonStartYear();sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
 }
 function connectOAuth(e){
   e.preventDefault();const clientId=$('#clientId').value.trim(),redirect=$('#redirectUri').value.trim();if(!clientId||!redirect)return;
@@ -1212,6 +1257,7 @@ async function bootstrapAuthenticatedSession(){
   showApp();setLoading(true);
   try{
     await loadIdentityAndTeams();
+    alignSourceTeamToSelection();fillTeamSwitchers();saveSession();
     normalizeRestoredView();
     const loaded=await loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()});
     if(!loaded&&state.token)return false;
@@ -1241,8 +1287,8 @@ async function start(){
   $('#accountBtn').onclick=()=>{$('#accountContent').innerHTML=accountHtml();openModal('accountModal');};
   $('#clearCacheBtn').onclick=async()=>{const userId=cacheUserId();const count=await cacheDeleteUser(userId);state.runtime.h2hCache=new Map();state.lifecycle.cacheMeta={};closeModal('accountModal');toast('Saved data cleared',`${count} cached record${count===1?'':'s'} removed for this TeamSnap account.`,'success');};
   $('#disconnectBtn').onclick=()=>{closeModal('accountModal');disconnect();};
-  $('#teamSwitcher').onchange=e=>{const target=chooseTeamForFamily(e.target.value);if(target&&!sameId(target.id,state.teamId))loadTeam(target.id);else fillTeamSwitchers();};
-  $('#seasonSwitcher').onchange=e=>{if(!sameId(e.target.value,state.teamId))loadTeam(e.target.value);};
+  $('#teamSwitcher').onchange=e=>{const target=chooseTeamForFamily(e.target.value);if(target&&!sameId(target.id,state.teamId))loadTeam(target.id);else{fillTeamSwitchers();saveSession();render();ensureDataForView();}};
+  $('#seasonSwitcher').onchange=e=>selectSeasonYear(e.target.value);
   $('#refreshBtn').onclick=manualRefresh;
   $$('#mainNav .nav-btn').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#globalSearch').addEventListener('input',e=>{state.search=e.target.value;$('#clearSearch').classList.toggle('hidden',!state.search);saveSession();render();});
