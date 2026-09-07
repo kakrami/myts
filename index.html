@@ -186,7 +186,7 @@ main{max-width:1500px;margin:0 auto;padding:24px 20px 48px}.page-head{display:fl
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='2.3.1';
+const VERSION='2.3.2';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v2';
@@ -443,16 +443,105 @@ function normalizeCommunications(sources){
   for(const r of normalizeDiscoveredChats(discovered,state.communication.chatSource||'discovered chat'))if(!rows.some(x=>x.kind==='chat'&&x.id===r.id))rows.push(r);
   return rows.sort((a,b)=>(toDate(b.date)?.getTime()||0)-(toDate(a.date)?.getTime()||0));
 }
-function chatDiscoveryEntries(payload){const out=[];const add=x=>{if(!x||typeof x!=='object')return;const href=x.href||x.url;if(!href)return;const text=[x.rel,x.name,x.prompt,x.title,href].filter(Boolean).join(' ');if(!/(chat|conversation)/i.test(text)||/(delete|mark.?read|send|create|update)/i.test(text))return;let u;try{u=new URL(href,API);}catch{return;}if(u.origin!==new URL(API).origin||!u.pathname.startsWith('/v3/'))return;if(/[{}]/.test(u.toString()))return;out.push({href:u.toString(),label:text});};for(const x of payload?.collection?.links||[])add(x);for(const x of payload?.collection?.queries||[])add(x);for(const item of payload?.collection?.items||[]){for(const x of item.links||[])add(x);}const map=new Map(out.map(x=>[x.href,x]));return [...map.values()].slice(0,4);}
+function chatDiscoveryEntries(payload){
+  const out=[];
+  const add=x=>{
+    if(!x||typeof x!=='object')return;
+    const href=x.href||x.url;if(!href)return;
+    const text=[x.rel,x.name,x.prompt,x.title,href].filter(Boolean).join(' ');
+    if(!/(chat|conversation)/i.test(text)||/(delete|mark.?read|send|create|update)/i.test(text))return;
+    let u;try{u=new URL(href,API);}catch{return;}
+    if(u.origin!==new URL(API).origin||!u.pathname.startsWith('/v3/')||/[{}]/.test(u.toString()))return;
+    const params=(x.data||x.template?.data||[]).map(d=>String(d?.name||'').trim()).filter(Boolean);
+    out.push({href:u.toString(),label:text,params});
+  };
+  for(const x of payload?.collection?.links||[])add(x);
+  for(const x of payload?.collection?.queries||[])add(x);
+  for(const item of payload?.collection?.items||[])for(const x of item.links||[])add(x);
+  return [...new Map(out.map(x=>[x.href,x])).values()].slice(0,4);
+}
+function chatPayloadObjects(payload){
+  const cj=collectionObjects(payload);if(cj.length)return cj;
+  const walk=(v,depth=0)=>{
+    if(depth>2||v==null)return [];
+    if(Array.isArray(v))return v.filter(x=>x&&typeof x==='object');
+    if(typeof v!=='object')return [];
+    for(const key of ['conversations','chats','threads','messages','items','results','data']){
+      if(v[key]!==undefined){const found=walk(v[key],depth+1);if(found.length)return found;}
+    }
+    return [];
+  };
+  return walk(payload);
+}
+async function fetchChatObjects(url,signal){return chatPayloadObjects(await apiJson(url,{signal}));}
+function currentUserMemberId(){
+  const uid=state.user?.id;if(uid==null)return null;
+  const m=(state.data.members||[]).find(x=>sameId(valueFirst(x,['user_id','userId','account_id','accountId'],null),uid));
+  return m?.id??null;
+}
+function chatProbeVariants(candidate,team){
+  const variants=[],seen=new Set();
+  const add=(scope,mutate)=>{const u=new URL(candidate.href);mutate?.(u);const key=u.toString();if(!seen.has(key)){seen.add(key);variants.push({url:key,scope});}};
+  add('account');
+  const advertised=new Set((candidate.params||[]).map(x=>x.toLowerCase()));
+  const has=(...names)=>names.find(n=>advertised.has(n.toLowerCase()));
+  const teamParam=has('team_id','teamid','team');
+  const userParam=has('user_id','userid','user');
+  const memberParam=has('member_id','memberid','member');
+  if(teamParam)add('team',u=>u.searchParams.set(teamParam,String(team.id)));
+  if(userParam&&state.user?.id!=null)add('user',u=>u.searchParams.set(userParam,String(state.user.id)));
+  const memberId=currentUserMemberId();if(memberParam&&memberId!=null)add('member',u=>u.searchParams.set(memberParam,String(memberId)));
+  if(!advertised.size){
+    add('team',u=>u.searchParams.set('team_id',String(team.id)));
+    if(state.user?.id!=null)add('user',u=>u.searchParams.set('user_id',String(state.user.id)));
+  }
+  return variants.slice(0,4);
+}
+function chatChildLinks(item){
+  const out=[];
+  for(const [k,v] of Object.entries(item||{}))if(k.startsWith('_link_')&&typeof v==='string'&&/(message|chat)/i.test(k)&&!/delete|send|create|update|mark/i.test(k))out.push(v);
+  for(const l of item?.links||[])if(l?.href&&/(message|chat)/i.test([l.rel,l.name,l.title,l.href].filter(Boolean).join(' '))&&!/delete|send|create|update|mark/i.test(String(l.rel||'')))out.push(l.href);
+  return [...new Set(out)];
+}
+async function expandChatConversations(items,signal,scope,team){
+  const direct=items.filter(x=>messageText(valueFirst(x,['body','message','content','text','latest_message','last_message','preview'],'')));
+  if(direct.length)return direct.map(x=>({...x,_chat_scope:scope,_chat_team_id:scope==='team'?String(team.id):undefined}));
+  const expanded=[];
+  for(const conv of items.slice(0,8)){
+    const links=chatChildLinks(conv).slice(0,2);if(!links.length)continue;
+    for(const href of links){
+      try{
+        const child=await fetchChatObjects(href,signal);
+        for(const msg of child)expanded.push({...msg,conversation_id:valueFirst(msg,['conversation_id','conversationId'],valueFirst(conv,['id','conversation_id','conversationId'],null)),conversation_name:valueFirst(msg,['conversation_name','conversationName'],valueFirst(conv,['name','title','subject'],'Team chat')),team_id:valueFirst(msg,['team_id','teamId'],valueFirst(conv,['team_id','teamId'],scope==='team'?team.id:null)),_chat_scope:scope,_chat_team_id:scope==='team'?String(team.id):undefined});
+      }catch(e){if(e instanceof AuthExpiredError)throw e;if(isAbortError(e))throw e;}
+    }
+  }
+  return expanded;
+}
 async function discoverChatResource(team,parentSignal){
-  const controller=new AbortController();let timedOut=false;const abort=()=>{try{controller.abort();}catch{}};if(parentSignal){if(parentSignal.aborted)abort();else parentSignal.addEventListener('abort',abort,{once:true});}const timer=setTimeout(()=>{timedOut=true;abort();},5000);
+  const controller=new AbortController();let timedOut=false;const abort=()=>{try{controller.abort();}catch{}};
+  if(parentSignal){if(parentSignal.aborted)abort();else parentSignal.addEventListener('abort',abort,{once:true});}
+  const timer=setTimeout(()=>{timedOut=true;abort();},8000);
   try{
-    const root=await apiJson(API,{signal:controller.signal}),candidates=chatDiscoveryEntries(root);if(!candidates.length)return {status:'not_exposed',detail:'No chat or conversation collection is advertised by TeamSnap API v3.',items:[],source:null};
-    const attempts=await Promise.allSettled(candidates.map(async c=>{const u=new URL(c.href);if(!u.searchParams.has('team_id')&&!u.searchParams.has('teamId'))u.searchParams.set('team_id',team.id);const items=await fetchCollection(u.toString(),{}, {signal:controller.signal});return {items,source:u.toString()};}));
-    for(const a of attempts)if(a.status==='fulfilled'&&a.value.items?.length)return {status:'available',detail:'TeamSnap advertised a chat/conversation resource for this account.',...a.value};
-    return {status:'advertised_empty',detail:'TeamSnap advertised a chat/conversation resource, but it returned no records for this team.',items:[],source:candidates[0]?.href||null};
-  }catch(e){if(timedOut)return {status:'not_exposed',detail:'No usable chat collection was discovered before the capability check timed out.',items:[],source:null};if(e instanceof AuthExpiredError)throw e;return {status:'not_exposed',detail:'The authenticated API did not expose a usable chat/conversation collection.',items:[],source:null};}
-  finally{clearTimeout(timer);if(parentSignal)parentSignal.removeEventListener('abort',abort);}
+    const root=await apiJson(API,{signal:controller.signal}),candidates=chatDiscoveryEntries(root);
+    if(!candidates.length)return {status:'not_exposed',detail:'No chat or conversation collection is advertised by TeamSnap API v3.',items:[],source:null};
+    let discoveredSource=candidates[0]?.href||null;
+    for(const candidate of candidates){
+      for(const probe of chatProbeVariants(candidate,team)){
+        try{
+          const items=await fetchChatObjects(probe.url,controller.signal);if(!items.length)continue;
+          const expanded=await expandChatConversations(items,controller.signal,probe.scope,team);
+          const usable=expanded.length?expanded:items.map(x=>({...x,_chat_scope:probe.scope,_chat_team_id:probe.scope==='team'?String(team.id):undefined}));
+          if(usable.length)return {status:'available',detail:`Conversation records were returned using ${probe.scope} scope.`,items:usable,source:probe.url};
+        }catch(e){if(e instanceof AuthExpiredError)throw e;if(isAbortError(e))throw e;}
+      }
+    }
+    return {status:'advertised_empty',detail:'A conversation-related API resource was discovered, but none of the account, team, user, or advertised search scopes returned usable chat records.',items:[],source:discoveredSource};
+  }catch(e){
+    if(timedOut)return {status:'not_exposed',detail:'No usable chat records were returned before the capability check timed out.',items:[],source:null};
+    if(e instanceof AuthExpiredError)throw e;
+    return {status:'not_exposed',detail:'The authenticated API did not return a usable chat/conversation collection.',items:[],source:null};
+  }finally{clearTimeout(timer);if(parentSignal)parentSignal.removeEventListener('abort',abort);}
 }
 async function ensureMessages({force=false}={}){
   if(!state.token||!state.teamId)return false;const team=state.data.team||selectedTeamRecord()||{id:state.teamId},teamId=String(team.id);
@@ -474,7 +563,7 @@ function renderMessagesContent(){
   const loading=state.communication.status==='loading',counts=messageCounts(),type=state.filters.messages?.type||'all',rows=filteredMessages(),errors=state.communication.errors||{},errorNames=Object.keys(errors),ss=state.communication.sourceStatus||{};
   const metricValue=(resource,count)=>ss[resource]==='loading'?'…':count;
   const chatValue=counts.chat?counts.chat:(state.communication.chatCapability==='checking'?'…':'—');
-  const chatDetail=counts.chat?'Chat records returned by TeamSnap':state.communication.chatCapability==='checking'?'Checking authenticated API':state.communication.chatCapability==='advertised_empty'?'Chat API exposed; no team records':state.communication.chatCapability==='not_returned'?'Legacy message API returned no chats':'Not exposed by TeamSnap API';
+  const chatDetail=counts.chat?'Chat records returned by TeamSnap':state.communication.chatCapability==='checking'?'Checking authenticated API':state.communication.chatCapability==='advertised_empty'?'Conversation endpoint found; no chat records':state.communication.chatCapability==='not_returned'?'Legacy message API returned no chats':'Not exposed by TeamSnap API';
   const sourceNote=!loading&&errorNames.length?`<div class="data-state"><i class="bi bi-info-circle"></i><div><b>Some message sources were unavailable</b><br>${esc(errorNames.map(x=>`${messageSourceLabel(x)}: ${errors[x]}`).join(' · '))}</div></div>`:'';
   const chatNote=type==='chat'&&counts.chat===0&&!loading?`<div class="data-state"><i class="bi bi-chat-left-dots"></i><div><b>TeamSnap chat exists, but it was not returned here</b><br>${esc(state.communication.chatDetail||'The authenticated API did not return chat conversations for this team.')}</div></div>`:'';
   const progress=loading?`<div class="small-note" style="margin:10px 0 14px"><i class="bi bi-arrow-repeat"></i> Loading message sources independently. Available results appear as each source finishes.</div>`:'';
