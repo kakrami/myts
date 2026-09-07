@@ -36,7 +36,7 @@ a{color:inherit}.hidden{display:none!important}.muted{color:var(--muted)}.nowrap
 #errorLogin{margin-top:12px;padding:10px 12px;background:var(--danger-soft);color:var(--danger);border-radius:9px;font-size:13px}
 #appShell{min-height:100vh}.topbar{height:64px;background:var(--nav);color:#fff;display:grid;grid-template-columns:auto minmax(250px,580px) 1fr auto;gap:18px;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.07)}
 .topbar .brand-mark{font-size:17px;white-space:nowrap}.topbar .brand-ball{width:32px;height:32px;border-radius:9px}.global-search{position:relative}.global-search i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#8390a5}.global-search input{width:100%;height:40px;border:1px solid #2a3850;background:#131e31;color:#fff;border-radius:10px;padding:0 38px 0 38px;outline:none}.global-search input::placeholder{color:#8390a5}.global-search input:focus{border-color:#4d85d7;background:#17243a}.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#8290a6;font-size:17px;padding:5px}
-.team-select{justify-self:end;display:flex;align-items:center;gap:8px}.team-select select{height:38px;max-width:260px;border:1px solid #2a3850;background:#131e31;color:#fff;border-radius:9px;padding:0 30px 0 10px}.top-actions{display:flex;gap:6px}.top-action{width:38px;height:38px;border:1px solid #2a3850;background:#131e31;color:#d9e1ed;border-radius:9px;display:grid;place-items:center}.top-action:hover{background:#1a2941}
+.team-select{justify-self:end;display:flex;align-items:center;gap:10px}.selector-field{display:flex;align-items:center;gap:6px;min-width:0}.selector-field>span{color:#91a0b7;font-size:10px;font-weight:800;letter-spacing:.045em}.team-select select{height:38px;max-width:220px;border:1px solid #2a3850;background:#131e31;color:#fff;border-radius:9px;padding:0 30px 0 10px}.selector-field:first-child select{min-width:150px}.selector-field:last-child select{min-width:104px}.top-actions{display:flex;gap:6px}.top-action{width:38px;height:38px;border:1px solid #2a3850;background:#131e31;color:#d9e1ed;border-radius:9px;display:grid;place-items:center}.top-action:hover{background:#1a2941}
 .subnav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:64px;z-index:90}.nav-inner{display:flex;gap:4px;max-width:1500px;margin:auto;padding:0 18px;overflow-x:auto;scrollbar-width:none}.nav-inner::-webkit-scrollbar{display:none}.nav-btn{border:0;background:transparent;color:#627087;font-weight:760;padding:15px 16px 13px;border-bottom:3px solid transparent;white-space:nowrap}.nav-btn:hover{color:var(--text)}.nav-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
 main{max-width:1500px;margin:0 auto;padding:24px 20px 48px}.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}.page-head h1{font-size:28px;letter-spacing:-.035em;margin:0}.page-head p{margin:5px 0 0;color:var(--muted);font-size:14px}.page-actions{display:flex;gap:8px;flex-wrap:wrap}
 .toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:16px}.toolbar select,.toolbar input{height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);padding:0 10px;min-width:140px}.toolbar .spacer{flex:1}.toolbar-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.filter-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:750;color:#4b5870}
@@ -67,8 +67,8 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 .data-state{display:flex;align-items:flex-start;gap:10px;margin:0 0 14px;padding:11px 13px;border:1px solid #dbe5f2;border-radius:10px;background:#f7faff;color:#536178;font-size:12px;line-height:1.45}.data-state i{font-size:16px;color:var(--brand);margin-top:1px}.data-state.error{background:var(--danger-soft);border-color:#f2c9cd;color:#8e343a}.data-state.error i{color:var(--danger)}.data-state .btn{margin-left:auto;flex:0 0 auto}
 .loading-block{display:flex;align-items:center;justify-content:center;gap:9px;padding:40px;color:var(--muted);font-size:13px}.spinner{width:18px;height:18px;border:2px solid #d8e0eb;border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .small-note{font-size:11px;color:var(--muted);line-height:1.5}.right{text-align:right}.divider{height:1px;background:var(--line);margin:14px 0}.section-title{font-size:13px;font-weight:850;margin:0 0 10px}.click-link{color:var(--brand);font-weight:760;cursor:pointer}.click-link:hover{text-decoration:underline}.opponent-link{border:0;background:transparent;color:var(--brand);font-weight:820;padding:0;text-align:left;cursor:pointer}.opponent-link:hover{text-decoration:underline}.opponent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.opponent-card{border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px;text-align:left;min-width:0}.opponent-card:hover{border-color:#a9c5ec;box-shadow:0 4px 16px rgba(21,75,145,.08)}.opponent-card b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.opponent-card .record{font-size:19px;font-weight:850;letter-spacing:-.02em;margin-top:8px}.opponent-card .meta{font-size:11px;color:var(--muted);margin-top:3px}.fixture-score{font-weight:850;white-space:nowrap}.h2h-season-pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#eef2f6;color:#5a687d;font-size:11px;font-weight:800}.h2h-loading{min-height:90px;display:grid;place-items:center}
-@media(max-width:1150px){.grid-4{grid-template-columns:repeat(2,1fr)}.opponent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(2,1fr)}.report-templates{grid-template-columns:repeat(3,1fr)}.topbar{grid-template-columns:auto minmax(220px,1fr) auto}.team-select{display:none}.span-4{grid-column:span 2}.span-3{grid-column:span 2}}
-@media(max-width:800px){#loginScreen{grid-template-columns:1fr}.login-hero{display:none}.login-side{padding:20px}.topbar{height:auto;min-height:60px;grid-template-columns:1fr auto;padding:10px 12px;gap:9px}.topbar .brand-mark{grid-column:1}.top-actions{grid-column:2;grid-row:1}.global-search{grid-column:1/-1;grid-row:2}.subnav{top:101px}.nav-inner{padding:0 8px}.nav-btn{padding:12px 12px 10px;font-size:13px}main{padding:17px 12px 36px}.page-head{flex-direction:column;gap:10px}.page-head h1{font-size:24px}.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.span-2,.span-3,.span-4{grid-column:span 1}.report-templates{grid-template-columns:repeat(2,1fr)}.status-columns{grid-template-columns:repeat(2,1fr)}.toolbar{align-items:stretch}.toolbar select,.toolbar input{flex:1;min-width:145px}.toolbar .spacer{display:none}.profile-head{grid-template-columns:52px 1fr}.profile-head .profile-actions{grid-column:1/-1}.avatar{width:50px;height:50px;border-radius:13px}.stat-split{grid-template-columns:repeat(2,1fr)}.rule-grid{grid-template-columns:1fr 110px}
+@media(max-width:1150px){.grid-4{grid-template-columns:repeat(2,1fr)}.opponent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(2,1fr)}.report-templates{grid-template-columns:repeat(3,1fr)}.topbar{height:auto;min-height:64px;grid-template-columns:auto minmax(220px,1fr) auto;padding:10px 12px}.top-actions{grid-column:3}.team-select{grid-column:1/-1;grid-row:2;justify-self:stretch;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.selector-field{display:grid;grid-template-columns:auto minmax(0,1fr)}.team-select select{width:100%;max-width:none;min-width:0!important}.subnav{position:static}.span-4{grid-column:span 2}.span-3{grid-column:span 2}}
+@media(max-width:800px){#loginScreen{grid-template-columns:1fr}.login-hero{display:none}.login-side{padding:20px}.topbar{height:auto;min-height:60px;grid-template-columns:1fr auto;padding:10px 12px;gap:9px}.topbar .brand-mark{grid-column:1}.top-actions{grid-column:2;grid-row:1}.global-search{grid-column:1/-1;grid-row:2}.team-select{grid-column:1/-1;grid-row:3}.subnav{position:static}.nav-inner{padding:0 8px}.nav-btn{padding:12px 12px 10px;font-size:13px}main{padding:17px 12px 36px}.page-head{flex-direction:column;gap:10px}.page-head h1{font-size:24px}.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.span-2,.span-3,.span-4{grid-column:span 1}.report-templates{grid-template-columns:repeat(2,1fr)}.status-columns{grid-template-columns:repeat(2,1fr)}.toolbar{align-items:stretch}.toolbar select,.toolbar input{flex:1;min-width:145px}.toolbar .spacer{display:none}.profile-head{grid-template-columns:52px 1fr}.profile-head .profile-actions{grid-column:1/-1}.avatar{width:50px;height:50px;border-radius:13px}.stat-split{grid-template-columns:repeat(2,1fr)}.rule-grid{grid-template-columns:1fr 110px}
 .table-wrap{overflow:visible;border:0;background:transparent}.data-table,.data-table tbody,.data-table tr,.data-table td{display:block;width:100%}.data-table thead{display:none}.data-table tbody{display:grid;gap:10px}.data-table tbody tr{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.data-table td{display:grid;grid-template-columns:minmax(92px,34%) 1fr;gap:10px;padding:9px 12px;border-bottom:1px solid #edf1f5;text-align:left!important}.data-table td:last-child{border-bottom:0}.data-table td:before{content:attr(data-label);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:800;align-self:center}.data-table td[data-label=""]{grid-template-columns:1fr}.data-table td[data-label=""]:before{display:none}.group-title-row td{display:block!important}.group-title-row td:before{display:none}.group-title-row td[colspan]{grid-template-columns:1fr}.drawer-content{padding:12px}.drawer-top{padding:12px}.event-card{min-width:235px}}
 @media(max-width:480px){.report-templates{grid-template-columns:1fr}.opponent-grid{grid-template-columns:1fr}.status-columns{grid-template-columns:1fr}.rule-grid{grid-template-columns:1fr}.rule-grid input{margin-bottom:8px}.metric .value{font-size:26px}.login-card{padding:22px}.topbar .brand-mark span:last-child{display:none}}
 @media print{.topbar,.subnav,.toolbar,.page-actions,#progress,.toast-wrap{display:none!important}main{max-width:none;padding:0}.card{box-shadow:none}.drawer,.modal{display:none!important}}
@@ -112,9 +112,11 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
   <header class="topbar">
     <div class="brand-mark"><div class="brand-ball"><i class="bi bi-people-fill"></i></div><span>Manager Console</span></div>
     <div class="global-search"><i class="bi bi-search"></i><input id="globalSearch" type="search" placeholder="Search this view"><button id="clearSearch" class="search-clear hidden" aria-label="Clear search"><i class="bi bi-x"></i></button></div>
-    <div class="team-select"><span class="muted" style="color:#91a0b7;font-size:11px">TEAM / SEASON</span><select id="teamSwitcher"></select></div>
+    <div class="team-select">
+      <label class="selector-field"><span>TEAM</span><select id="teamSwitcher" aria-label="Team"></select></label>
+      <label class="selector-field"><span>SEASON</span><select id="seasonSwitcher" aria-label="Season"></select></label>
+    </div>
     <div class="top-actions">
-      <button class="top-action" id="mobileTeamBtn" title="Switch team"><i class="bi bi-people"></i></button>
       <button class="top-action" id="refreshBtn" title="Refresh TeamSnap data"><i class="bi bi-arrow-clockwise"></i></button>
       <button class="top-action" id="settingsBtn" title="Manager rules"><i class="bi bi-sliders"></i></button>
       <button class="top-action" id="accountBtn" title="Account"><i class="bi bi-person-circle"></i></button>
@@ -133,17 +135,20 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 </section>
 <div class="drawer" id="detailDrawer"><div class="drawer-backdrop" data-close-drawer></div><div class="drawer-panel" id="drawerPanel"><div class="drawer-top"><h2 id="drawerTitle">Details</h2><button class="drawer-close" data-close-drawer><i class="bi bi-x-lg"></i></button></div><div class="drawer-content" id="drawerContent"></div></div></div>
 <div class="modal" id="rulesModal"><div class="modal-bg" data-close-modal="rulesModal"></div><div class="modal-card"><div class="modal-head"><h2>Manager Rules</h2><button class="drawer-close" data-close-modal="rulesModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="small-note" style="margin-bottom:16px">These thresholds control manager attention items and smart warnings. They are preferences only and do not change TeamSnap data.</div><div class="rule-grid" id="ruleFields"></div></div><div class="modal-foot"><button class="btn btn-secondary" id="resetRulesBtn">Reset defaults</button><button class="btn btn-primary" id="saveRulesBtn">Save rules</button></div></div></div>
-<div class="modal" id="teamModal"><div class="modal-bg" data-close-modal="teamModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Switch Team / Season</h2><button class="drawer-close" data-close-modal="teamModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="field"><label for="mobileTeamSelect">Team / Season</label><select id="mobileTeamSelect"></select></div></div><div class="modal-foot"><button class="btn btn-primary" id="mobileTeamApply">Open team</button></div></div></div>
-<div class="modal" id="accountModal"><div class="modal-bg" data-close-modal="accountModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Account</h2><button class="drawer-close" data-close-modal="accountModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body" id="accountContent"></div><div class="modal-foot"><button class="btn btn-danger" id="disconnectBtn"><i class="bi bi-box-arrow-right"></i>Disconnect TeamSnap</button></div></div></div>
+<div class="modal" id="accountModal"><div class="modal-bg" data-close-modal="accountModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Account</h2><button class="drawer-close" data-close-modal="accountModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body" id="accountContent"></div><div class="modal-foot"><button class="btn btn-secondary" id="clearCacheBtn"><i class="bi bi-database-x"></i>Clear saved data</button><button class="btn btn-danger" id="disconnectBtn"><i class="bi bi-box-arrow-right"></i>Disconnect TeamSnap</button></div></div></div>
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='1.3.1';
+const VERSION='1.4.1';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v1';
 const RULES_KEY='tsmc.rules.v1';
 const CONFIG_KEY='tsmc.config.v1';
+const CACHE_DB_NAME='tsmc.data.v1';
+const CACHE_DB_VERSION=1;
+const CACHE_STORE='resources';
+const CACHE_TTL={catalog:24*60*60*1000,events:30*60*1000,members:12*60*60*1000,locations:24*60*60*1000,opponents:24*60*60*1000,availabilities:10*60*1000};
 const DEFAULT_RULES={
   minConfirmedGame:11,
   gameResponseHours:48,
@@ -178,8 +183,8 @@ const state={
   sorts:{schedule:{key:'date',dir:'asc'},fixtures:{key:'date',dir:'asc'},roster:{key:'name',dir:'asc'},availability:{key:'pct',dir:'desc'}},
   report:{template:'team',source:'summary',columns:['Metric','Value'],group:'none'},rules:{...DEFAULT_RULES},lastLoaded:null,
   selection:{type:null,id:null},
-  lifecycle:{core:'idle',availability:'idle',resourceErrors:{},teamLoadSeq:0,availabilityLoadSeq:0,lastAvailabilityLoaded:null},
-  runtime:{coreController:null,availabilityController:null,availabilityPromise:null,refreshTimer:null,h2hController:null,h2hCache:new Map(),h2hLoadSeq:0},
+  lifecycle:{core:'idle',availability:'idle',resourceErrors:{},resourceLoaded:{},cacheMeta:{},teamLoadSeq:0,availabilityLoadSeq:0,lastAvailabilityLoaded:null},
+  runtime:{coreController:null,availabilityController:null,availabilityPromise:null,refreshTimer:null,h2hController:null,h2hCache:new Map(),h2hLoadSeq:0,cacheDbPromise:null},
   derived:{events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()}
 };
 
@@ -212,7 +217,7 @@ function mark(text,q=state.search){const safe=esc(text);if(!q?.trim())return saf
 function matchesSearch(values){const q=state.search.trim().toLowerCase();if(!q)return true;return values.some(v=>String(v??'').toLowerCase().includes(q));}
 function toast(title,detail='',type='info',ms=4300){const wrap=$('#toastWrap');const el=document.createElement('div');el.className=`toast ${type==='error'?'error':type==='success'?'success':''}`;el.innerHTML=`<i class="bi ${type==='error'?'bi-exclamation-triangle':type==='success'?'bi-check-circle':'bi-info-circle'}"></i><div><b>${esc(title)}</b>${detail?`<span>${esc(detail)}</span>`:''}</div>`;wrap.appendChild(el);setTimeout(()=>el.remove(),ms);}
 function setLoading(on){const p=$('#progress');p.classList.toggle('active',on);p.classList.toggle('progress-indeterminate',on);if(!on){p.style.width='100%';setTimeout(()=>{p.style.width='0';},220);}else p.style.width='';}
-function saveSession(){const clean={token:state.token,clientId:state.clientId,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
+function saveSession(){const clean={token:state.token,clientId:state.clientId,user:state.user,teams:state.teams,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
 function loadSession(){
   try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(saved){const selection=saved.selection&&typeof saved.selection==='object'?saved.selection:{type:null,id:null};Object.assign(state,saved,{selection});}}catch{}
   if(!state.filters?.fixtures)state.filters={...(state.filters||{}),fixtures:{status:'all',opponent:'all'}};
@@ -231,6 +236,78 @@ function setView(view){closeDrawer();state.view=view;state.search='';$('#globalS
 function tableCell(label,html,cls=''){return `<td data-label="${esc(label)}" class="${cls}">${html}</td>`;}
 function emptyState(icon,title,detail){return `<div class="empty"><i class="bi ${icon}"></i><b>${esc(title)}</b><span>${esc(detail)}</span></div>`;}
 function loadingState(label='Loading data'){return `<div class="loading-block"><span class="spinner"></span>${esc(label)}</div>`;}
+
+function cacheUserId(){return String(state.user?.id??'');}
+function cacheCatalogKey(userId=cacheUserId()){return userId?`user:${userId}:catalog`:'';}
+function cacheResourceKey(teamId,resource,userId=cacheUserId()){return userId?`user:${userId}:team:${teamId}:${resource}`:'';}
+function teamIsHistorical(team){
+  if(teamIsArchived(team))return true;
+  const end=toDate(team?.season_end_date||team?.end_date||team?.ends_at);
+  return !!(end&&end<startDay(now()));
+}
+function cacheTtl(team,resource){return teamIsHistorical(team)?Infinity:(CACHE_TTL[resource]??60*60*1000);}
+function cacheRecordFresh(record,team,resource){if(!record)return false;if(teamIsHistorical(team))return true;return Date.now()-Number(record.fetchedAt||0)<cacheTtl(team,resource);}
+function openCacheDb(){
+  if(state.runtime.cacheDbPromise)return state.runtime.cacheDbPromise;
+  if(!('indexedDB' in window))return Promise.resolve(null);
+  state.runtime.cacheDbPromise=new Promise(resolve=>{
+    let req;
+    try{req=indexedDB.open(CACHE_DB_NAME,CACHE_DB_VERSION);}catch{resolve(null);return;}
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(CACHE_STORE))db.createObjectStore(CACHE_STORE,{keyPath:'key'});};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>resolve(null);
+    req.onblocked=()=>resolve(null);
+  });
+  return state.runtime.cacheDbPromise;
+}
+async function cacheGet(key){
+  if(!key)return null;const db=await openCacheDb();if(!db)return null;
+  return new Promise(resolve=>{try{const tx=db.transaction(CACHE_STORE,'readonly'),req=tx.objectStore(CACHE_STORE).get(key);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>resolve(null);}catch{resolve(null);}});
+}
+async function cachePut(record){
+  if(!record?.key)return false;const db=await openCacheDb();if(!db)return false;
+  return new Promise(resolve=>{try{const tx=db.transaction(CACHE_STORE,'readwrite');tx.objectStore(CACHE_STORE).put(record);tx.oncomplete=()=>resolve(true);tx.onerror=()=>resolve(false);tx.onabort=()=>resolve(false);}catch{resolve(false);}});
+}
+async function cacheDeleteUser(userId=cacheUserId()){
+  if(!userId)return 0;const db=await openCacheDb();if(!db)return 0;const prefix=`user:${userId}:`;let count=0;
+  return new Promise(resolve=>{try{const tx=db.transaction(CACHE_STORE,'readwrite'),store=tx.objectStore(CACHE_STORE),req=store.openCursor();req.onsuccess=()=>{const cur=req.result;if(!cur)return;if(String(cur.key).startsWith(prefix)){cur.delete();count++;}cur.continue();};tx.oncomplete=()=>resolve(count);tx.onerror=()=>resolve(count);tx.onabort=()=>resolve(count);}catch{resolve(0);}});
+}
+async function cacheUserStats(userId=cacheUserId()){
+  if(!userId)return {records:0,teams:0};const db=await openCacheDb();if(!db)return {records:0,teams:0};const prefix=`user:${userId}:`,teams=new Set();let records=0;
+  return new Promise(resolve=>{try{const tx=db.transaction(CACHE_STORE,'readonly'),req=tx.objectStore(CACHE_STORE).openCursor();req.onsuccess=()=>{const cur=req.result;if(!cur)return;if(String(cur.key).startsWith(prefix)){records++;const m=String(cur.key).match(/:team:([^:]+):/);if(m)teams.add(m[1]);}cur.continue();};tx.oncomplete=()=>resolve({records,teams:teams.size});tx.onerror=()=>resolve({records,teams:teams.size});}catch{resolve({records:0,teams:0});}});
+}
+async function readCachedTeamResource(team,resource){const rec=await cacheGet(cacheResourceKey(team.id,resource));return rec&&Array.isArray(rec.data)?rec:null;}
+async function writeCachedTeamResource(team,resource,data){
+  const key=cacheResourceKey(team.id,resource);if(!key)return false;const fetchedAt=Date.now();
+  const ok=await cachePut({key,userId:cacheUserId(),teamId:String(team.id),resource,data:Array.isArray(data)?data:[],fetchedAt,historical:teamIsHistorical(team),version:1});
+  if(ok){state.lifecycle.cacheMeta[resource]={fetchedAt,historical:teamIsHistorical(team)};state.lifecycle.resourceLoaded[resource]=true;}
+  return ok;
+}
+async function hydrateTeamFromCache(team){
+  const resources=['events','members','locations','opponents','availabilities'];
+  const entries=await Promise.all(resources.map(async resource=>[resource,await readCachedTeamResource(team,resource)]));
+  const records={};
+  for(const [resource,rec] of entries){
+    records[resource]=rec;
+    if(!rec)continue;
+    state.data[resource]=rec.data;
+    state.lifecycle.resourceLoaded[resource]=true;
+    state.lifecycle.cacheMeta[resource]={fetchedAt:Number(rec.fetchedAt||0),historical:!!rec.historical};
+  }
+  if(records.availabilities){state.lifecycle.availability='ready';state.lifecycle.lastAvailabilityLoaded=new Date(records.availabilities.fetchedAt||Date.now());}
+  buildDerived();
+  return records;
+}
+function cachedResourceFresh(team,resource){const meta=state.lifecycle.cacheMeta?.[resource];return !!meta&&(teamIsHistorical(team)||Date.now()-Number(meta.fetchedAt||0)<cacheTtl(team,resource));}
+function coreResourceRequest(team,resource,signal){
+  const params={team_id:team.id};if(resource==='events')params.sort_start_date='asc';
+  return fetchCollection(`${resource}/search`,params,{signal});
+}
+async function cachedOrFetchTeamResource(team,resource,{signal,force=false}={}){
+  const cached=await readCachedTeamResource(team,resource);
+  if(cached&&(teamIsHistorical(team)||(!force&&cacheRecordFresh(cached,team,resource))))return {data:cached.data,fromCache:true,fetchedAt:cached.fetchedAt};
+  const data=await coreResourceRequest(team,resource,signal);await writeCachedTeamResource(team,resource,data);return {data,fromCache:false,fetchedAt:Date.now()};
+}
 
 function collectionObjects(payload){return (payload?.collection?.items||[]).map(item=>{const o={};for(const d of item.data||[])o[d.name]=d.value;for(const l of item.links||[])if(l.rel&&!o[`_link_${l.rel}`])o[`_link_${l.rel}`]=l.href;o._href=item.href||item.links?.find(l=>l.rel==='self')?.href||null;return o;});}
 function collectionLink(payload,rel){return payload?.collection?.links?.find(l=>l.rel===rel)?.href||payload?.collection?.items?.flatMap(i=>i.links||[]).find(l=>l.rel===rel)?.href||null;}
@@ -330,49 +407,89 @@ function discoverTeamRelationUrls(mePayload,me){
   return [...urls];
 }
 async function loadIdentityAndTeams(){
+  // A normal page refresh can restore the already authenticated identity/team
+  // catalog from sessionStorage without repeating /me and team discovery.
+  if(state.user?.id&&Array.isArray(state.teams)&&state.teams.length){
+    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
+    fillTeamSwitchers();return;
+  }
+
   const mePayload=await apiJson(`${API}/me`);
   const me=collectionObjects(mePayload)[0]||{};
   state.user=me;
   if(me.id===undefined||me.id===null||me.id==='')throw new Error('TeamSnap login succeeded, but the authenticated user ID was missing from /me.');
 
-  // TeamSnap's SDK discovers the user's active teams with userId. Historical or
-  // archived seasons may also be exposed through user-specific team relations.
-  // Load and merge every supported team collection instead of stopping after the
-  // current-team search so the switcher can show every season the API exposes.
-  let searchTeams=[];
-  let searchError=null;
-  try{searchTeams=await fetchCollection('teams/search',{user_id:me.id});}catch(err){searchError=err;}
+  const catalogKey=cacheCatalogKey(me.id),cachedCatalog=await cacheGet(catalogKey);
+  if(cachedCatalog&&Array.isArray(cachedCatalog.data)&&cachedCatalog.data.length&&Date.now()-Number(cachedCatalog.fetchedAt||0)<CACHE_TTL.catalog){
+    state.teams=mergeTeams(cachedCatalog.data);
+    if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
+    fillTeamSwitchers();saveSession();return;
+  }
 
+  // Refresh the catalog only when it is missing/stale. Merge any saved catalog
+  // so historical seasons remain visible even if TeamSnap omits them transiently.
+  let searchTeams=[];let searchError=null;
+  try{searchTeams=await fetchCollection('teams/search',{user_id:me.id});}catch(err){searchError=err;}
   const relationUrls=discoverTeamRelationUrls(mePayload,me);
   const relationResults=await Promise.allSettled(relationUrls.map(url=>fetchCollection(url)));
-  const relationTeams=[];
-  let relationError=null;
-  for(const r of relationResults){
-    if(r.status==='fulfilled')relationTeams.push(...r.value);
-    else if(!relationError)relationError=r.reason;
-  }
+  const relationTeams=[];let relationError=null;
+  for(const r of relationResults){if(r.status==='fulfilled')relationTeams.push(...r.value);else if(!relationError)relationError=r.reason;}
 
-  const teams=mergeTeams(searchTeams,relationTeams);
-  if(!teams.length){
-    if(searchError)throw searchError;
-    if(relationError)throw relationError;
-    throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams or seasons were returned.`);
-  }
+  const teams=mergeTeams(cachedCatalog?.data||[],searchTeams,relationTeams);
+  if(!teams.length){if(searchError)throw searchError;if(relationError)throw relationError;throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams or seasons were returned.`);}
 
   state.teams=teams;
+  await cachePut({key:catalogKey,userId:String(me.id),resource:'catalog',data:teams,fetchedAt:Date.now(),version:1});
   if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
   fillTeamSwitchers();saveSession();
 }
+function teamSelectorBaseName(team){
+  let base=String(teamBaseName(team)||'').trim();
+  const season=String(teamSeasonLabel(team)||'').trim();
+  if(season){
+    const rx=new RegExp(season.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig');
+    base=base.replace(rx,' ');
+  }
+  base=base.replace(/\s*[\-–—|:]\s*$/g,'').replace(/\s+/g,' ').trim();
+  return base||teamBaseName(team);
+}
+function teamSelectorGroups(){
+  const groups=new Map();
+  for(const team of state.teams){
+    const key=teamFamilyKey(team)||`team:${team.id}`;
+    if(!groups.has(key))groups.set(key,{key,label:teamSelectorBaseName(team),teams:[]});
+    groups.get(key).teams.push(team);
+  }
+  for(const group of groups.values())group.teams.sort((a,b)=>teamSeasonSortTime(b)-teamSeasonSortTime(a)||compare(b.id,a.id));
+  return [...groups.values()].sort((a,b)=>a.label.localeCompare(b.label,undefined,{numeric:true,sensitivity:'base'}));
+}
+function selectedTeamRecord(){return state.teams.find(t=>sameId(t.id,state.teamId))||state.data.team||null;}
+function seasonOptionLabel(team){
+  const season=teamSeasonLabel(team)||'Unlabeled Season';
+  return `${season}${teamIsArchived(team)?' · Archived':''}`;
+}
 function fillTeamSwitchers(){
-  const html=state.teams.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(teamDisplayName(t))}</option>`).join('');
-  $('#teamSwitcher').innerHTML=html;
-  $('#mobileTeamSelect').innerHTML=html;
+  const team=selectedTeamRecord();
+  const family=team?(teamFamilyKey(team)||`team:${team.id}`):'';
+  const groups=teamSelectorGroups();
+  $('#teamSwitcher').innerHTML=groups.map(g=>`<option value="${esc(g.key)}" ${g.key===family?'selected':''}>${esc(g.label)}</option>`).join('');
+  const activeGroup=groups.find(g=>g.key===family)||groups[0];
+  const seasons=activeGroup?.teams||[];
+  $('#seasonSwitcher').innerHTML=seasons.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(seasonOptionLabel(t))}</option>`).join('');
+}
+function chooseTeamForFamily(familyKey){
+  const group=teamSelectorGroups().find(g=>g.key===familyKey);
+  if(!group?.teams?.length)return null;
+  const current=selectedTeamRecord(),season=current?teamSeasonLabel(current):'';
+  return group.teams.find(t=>season&&teamSeasonLabel(t)===season)||group.teams.find(t=>!teamIsArchived(t))||group.teams[0];
 }
 function resetTeamData(team){
   state.data={team,events:[],members:[],locations:[],opponents:[],availabilities:[]};
   state.lifecycle.availability='idle';
   state.lifecycle.lastAvailabilityLoaded=null;
   state.lifecycle.resourceErrors={};
+  state.lifecycle.resourceLoaded={};
+  state.lifecycle.cacheMeta={};
   state.runtime.h2hCache=new Map();
   buildDerived();
 }
@@ -391,82 +508,121 @@ function availabilityStateNotice(){
 }
 function bindAvailabilityRetry(){const b=$('#retryAvailability');if(b)b.onclick=()=>ensureAvailability({force:true,quiet:false});}
 function ensureDataForView(){if(viewNeedsAvailability())ensureAvailability({quiet:true});}
-async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailability=false}={}){
+async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailability=false,refresh=false}={}){
   abortTeamRequests();
   const seq=++state.lifecycle.teamLoadSeq;
   state.lifecycle.availabilityLoadSeq++;
   const team=state.teams.find(t=>sameId(t.id,teamId))||{id:teamId};
   state.teamId=teamId;
-  if(!preserveSelection){state.selection={type:null,id:null};closeDrawer({preserveSelection:true});}
-  else closeDrawer({preserveSelection:true});
-  resetTeamData(team);
-  state.lifecycle.core='loading';
-  fillTeamSwitchers();saveSession();render();
-  if(!quiet)setLoading(true);
-  const controller=new AbortController();state.runtime.coreController=controller;
-  const resources={
-    events:fetchCollection('events/search',{team_id:teamId,sort_start_date:'asc'},{signal:controller.signal}),
-    members:fetchCollection('members/search',{team_id:teamId},{signal:controller.signal}),
-    locations:fetchCollection('locations/search',{team_id:teamId},{signal:controller.signal}),
-    opponents:fetchCollection('opponents/search',{team_id:teamId},{signal:controller.signal})
-  };
+  if(!preserveSelection){state.selection={type:null,id:null};closeDrawer({preserveSelection:true});}else closeDrawer({preserveSelection:true});
+  resetTeamData(team);state.lifecycle.core='loading';fillTeamSwitchers();saveSession();render();if(!quiet)setLoading(true);
+
   try{
-    const keys=Object.keys(resources),results=await Promise.allSettled(Object.values(resources));
+    const cached=await hydrateTeamFromCache(team);
     if(!currentLoad(seq,teamId))return false;
-    const errors={};let authError=null;
-    results.forEach((r,i)=>{const key=keys[i];if(r.status==='fulfilled')state.data[key]=r.value;else if(r.reason instanceof AuthExpiredError)authError=r.reason;else if(!isAbortError(r.reason))errors[key]=r.reason?.message||String(r.reason);});
+
+    const cachedCore=['events','members','locations','opponents'].filter(k=>cached[k]);
+    if(cachedCore.length){state.lifecycle.core=cached.events||cached.members?(cachedCore.length===4?'ready':'partial'):'partial';buildDerived();render();if(preserveSelection)restoreSelection();}
+
+    const controller=new AbortController();state.runtime.coreController=controller;
+    const keys=['events','members','locations','opponents'];
+    const needed=keys.filter(resource=>{
+      const rec=cached[resource];
+      if(!rec)return true;
+      if(teamIsHistorical(team))return false;
+      if(refresh)return true;
+      return !cacheRecordFresh(rec,team,resource);
+    });
+
+    const errors={};const loaded=new Set(cachedCore);let authError=null;
+    if(needed.length){
+      const results=await Promise.allSettled(needed.map(resource=>coreResourceRequest(team,resource,controller.signal)));
+      if(!currentLoad(seq,teamId))return false;
+      for(let i=0;i<results.length;i++){
+        const resource=needed[i],r=results[i];
+        if(r.status==='fulfilled'){
+          state.data[resource]=r.value;loaded.add(resource);state.lifecycle.resourceLoaded[resource]=true;await writeCachedTeamResource(team,resource,r.value);
+        }else if(r.reason instanceof AuthExpiredError)authError=r.reason;
+        else if(!isAbortError(r.reason)){
+          // If cached data exists, keep it and treat this as a refresh miss rather
+          // than taking the whole app down.
+          if(cached[resource])errors[`refresh_${resource}`]=r.reason?.message||String(r.reason);
+          else errors[resource]=r.reason?.message||String(r.reason);
+        }
+      }
+    }
     if(authError)throw authError;
+    if(!currentLoad(seq,teamId))return false;
+
     state.lifecycle.resourceErrors=errors;
-    const requiredFailed=['events','members'].filter(k=>errors[k]);
-    state.lifecycle.core=requiredFailed.length===2?'error':Object.keys(errors).length?'partial':'ready';
+    const missingRequired=['events','members'].filter(k=>!loaded.has(k));
+    const missingAny=keys.filter(k=>!loaded.has(k));
+    state.lifecycle.core=missingRequired.length===2?'error':missingAny.length?'partial':'ready';
     state.lastLoaded=new Date();buildDerived();saveSession();render();
-    if(requiredFailed.length){toast('Some team data could not load',requiredFailed.map(k=>`${k}: ${errors[k]}`).join(' · '),'error',7000);}
-    else if(Object.keys(errors).length){toast('Team loaded with limited data',Object.keys(errors).map(k=>`${k}: ${errors[k]}`).join(' · '),'info',6500);}
-    else if(!quiet)toast('Team loaded',`${teamDisplayName(team)} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
+
+    if(missingRequired.length){toast('Some team data could not load',missingRequired.map(k=>`${k}: ${errors[k]||'not available'}`).join(' · '),'error',7000);}
+    else if(!quiet&&needed.length&&!Object.keys(errors).length)toast(refresh?'Updates checked':'Team loaded',`${teamDisplayName(team)} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
+    else if(!quiet&&teamIsHistorical(team)&&needed.length===0)toast('Loaded from saved history',`${teamDisplayName(team)} is cached locally; no TeamSnap requests were needed.`,'success');
+    else if(!quiet&&Object.keys(errors).length)toast('Saved data retained','Some update checks failed, so the app kept the previously cached data.','info',6500);
+
     const shouldLoadAvailability=forceAvailability||viewNeedsAvailability()||state.selection?.type;
-    if(shouldLoadAvailability)ensureAvailability({force:forceAvailability,quiet:true});
+    if(shouldLoadAvailability)ensureAvailability({force:refresh&&forceAvailability,quiet:true});
     if(preserveSelection)restoreSelection();
-    return true;
+    return state.lifecycle.core!=='error';
   }catch(e){
     if(isAbortError(e)||!currentLoad(seq,teamId))return false;
     console.error(e);
     if(e instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);disconnect(false);return false;}
+    // A network/startup failure is only fatal when there was no usable cache.
+    if(state.lifecycle.resourceLoaded.events||state.lifecycle.resourceLoaded.members){state.lifecycle.core='partial';state.lifecycle.resourceErrors.core=e.message;render();if(!quiet)toast('Using saved data','TeamSnap could not be reached, so cached team data is being used.','info',6500);return true;}
     state.lifecycle.core='error';state.lifecycle.resourceErrors.core=e.message;render();toast('Could not load team',e.message,'error',7000);return false;
-  }finally{
-    if(currentLoad(seq,teamId)){state.runtime.coreController=null;if(!quiet)setLoading(false);}
-  }
+  }finally{if(currentLoad(seq,teamId)){state.runtime.coreController=null;if(!quiet)setLoading(false);}}
 }
 async function ensureAvailability({force=false,quiet=true}={}){
   if(!state.token||!state.teamId||!['ready','partial'].includes(state.lifecycle.core))return false;
-  if(state.lifecycle.availability==='ready'&&!force)return true;
+  const team=state.data.team||state.teams.find(t=>sameId(t.id,state.teamId))||{id:state.teamId};
+
+  // Historical availability is immutable for this app once cached. Current
+  // availability refreshes only after its freshness window expires or when the
+  // user explicitly asks for an update.
+  if(state.lifecycle.availability==='ready'){
+    if(teamIsHistorical(team))return true;
+    if(!force&&cachedResourceFresh(team,'availabilities'))return true;
+  }
   if(state.lifecycle.availability==='loading'&&!force&&state.runtime.availabilityPromise)return state.runtime.availabilityPromise;
+
+  // If loadTeam did not already hydrate availability, attempt the persistent
+  // cache before going to TeamSnap.
+  if(state.lifecycle.availability!=='ready'){
+    const cached=await readCachedTeamResource(team,'availabilities');
+    if(cached){state.data.availabilities=cached.data;state.lifecycle.resourceLoaded.availabilities=true;state.lifecycle.cacheMeta.availabilities={fetchedAt:Number(cached.fetchedAt||0),historical:!!cached.historical};state.lifecycle.availability='ready';state.lifecycle.lastAvailabilityLoaded=new Date(cached.fetchedAt||Date.now());buildDerived();render();restoreSelection();if(teamIsHistorical(team)||(!force&&cacheRecordFresh(cached,team,'availabilities')))return true;}
+  }
+
   try{state.runtime.availabilityController?.abort();}catch{}
   const teamId=state.teamId,teamSeq=state.lifecycle.teamLoadSeq,seq=++state.lifecycle.availabilityLoadSeq;
   const controller=new AbortController();state.runtime.availabilityController=controller;state.lifecycle.availability='loading';delete state.lifecycle.resourceErrors.availabilities;
   if(!quiet)setLoading(true);render();
+  const hadCached=Array.isArray(state.data.availabilities)&&state.lifecycle.resourceLoaded.availabilities;
   const promise=(async()=>{
     try{
       const avail=await fetchCollection('availabilities/search',{team_id:teamId},{signal:controller.signal});
       if(teamSeq!==state.lifecycle.teamLoadSeq||seq!==state.lifecycle.availabilityLoadSeq||!sameId(teamId,state.teamId))return false;
-      state.data.availabilities=avail;state.lifecycle.availability='ready';state.lifecycle.lastAvailabilityLoaded=new Date();state.lastLoaded=new Date();buildDerived();render();restoreSelection();return true;
+      state.data.availabilities=avail;state.lifecycle.resourceLoaded.availabilities=true;await writeCachedTeamResource(team,'availabilities',avail);state.lifecycle.availability='ready';state.lifecycle.lastAvailabilityLoaded=new Date();state.lastLoaded=new Date();buildDerived();render();restoreSelection();return true;
     }catch(e){
       if(isAbortError(e)||teamSeq!==state.lifecycle.teamLoadSeq||!sameId(teamId,state.teamId))return false;
       if(e instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);disconnect(false);return false;}
-      console.error(e);state.lifecycle.availability='error';state.lifecycle.resourceErrors.availabilities=e.message;render();if(!quiet)toast('Availability could not load',e.message,'error',6500);return false;
-    }finally{
-      if(seq===state.lifecycle.availabilityLoadSeq){state.runtime.availabilityController=null;state.runtime.availabilityPromise=null;if(!quiet)setLoading(false);}
-    }
+      console.error(e);
+      if(hadCached){state.lifecycle.availability='ready';state.lifecycle.resourceErrors.availabilityRefresh=e.message;render();if(!quiet)toast('Using saved availability','The update check failed, so cached availability was retained.','info',6500);return true;}
+      state.lifecycle.availability='error';state.lifecycle.resourceErrors.availabilities=e.message;render();if(!quiet)toast('Availability could not load',e.message,'error',6500);return false;
+    }finally{if(seq===state.lifecycle.availabilityLoadSeq){state.runtime.availabilityController=null;state.runtime.availabilityPromise=null;if(!quiet)setLoading(false);}}
   })();
   state.runtime.availabilityPromise=promise;return promise;
 }
 async function refreshAvailabilityQuiet(){
   if(!state.token||!state.teamId||document.hidden||!viewNeedsAvailability())return;
-  await ensureAvailability({force:true,quiet:true});
+  await ensureAvailability({force:false,quiet:true});
 }
-function startRefreshTimer(){
-  if(state.runtime.refreshTimer)clearInterval(state.runtime.refreshTimer);
-  state.runtime.refreshTimer=setInterval(refreshAvailabilityQuiet,5*60*1000);
-}
+function startRefreshTimer(){if(state.runtime.refreshTimer)clearInterval(state.runtime.refreshTimer);state.runtime.refreshTimer=setInterval(refreshAvailabilityQuiet,5*60*1000);}
 function stopRefreshTimer(){if(state.runtime.refreshTimer){clearInterval(state.runtime.refreshTimer);state.runtime.refreshTimer=null;}}
 
 function buildDerived(){
@@ -740,7 +896,11 @@ async function loadAllSeasonH2H(opponentName){
   const results=await Promise.allSettled(siblings.map(async team=>{
     if(controller.signal.aborted)throw new DOMException('Aborted','AbortError');
     if(sameId(team.id,state.teamId))return fixtureGames().filter(g=>normalizeOpponentName(g._opponent)===target).map(g=>({...g,_season:teamSeasonLabel(team)||teamDisplayName(team),_teamId:team.id}));
-    const [events,opponents]=await Promise.all([fetchCollection('events/search',{team_id:team.id,sort_start_date:'asc'},{signal:controller.signal}),fetchCollection('opponents/search',{team_id:team.id},{signal:controller.signal})]);
+    const [eventResource,opponentResource]=await Promise.all([
+      cachedOrFetchTeamResource(team,'events',{signal:controller.signal}),
+      cachedOrFetchTeamResource(team,'opponents',{signal:controller.signal})
+    ]);
+    const events=eventResource.data,opponents=opponentResource.data;
     const map=new Map(opponents.map(o=>[String(o.id),o]));
     return events.map(e=>normalizeHistoricalGame(e,map,team)).filter(Boolean).filter(g=>normalizeOpponentName(g._opponent)===target);
   }));
@@ -960,7 +1120,7 @@ function exportPdf(){
 function openRules(){const host=$('#ruleFields');host.innerHTML=Object.entries(RULE_META).map(([k,[title,desc,unit]])=>`<div><div class="rule-title">${esc(title)}</div><div class="rule-desc">${esc(desc)}</div></div><div class="field" style="margin:0"><input type="number" min="0" step="1" data-rule="${k}" value="${esc(state.rules[k])}"><div class="field-help">${esc(unit)}</div></div>`).join('');openModal('rulesModal');}
 function saveRulesFromModal(){for(const inp of $$('#ruleFields [data-rule]')){const v=Number(inp.value);if(Number.isFinite(v))state.rules[inp.dataset.rule]=v;}saveRules();closeModal('rulesModal');render();toast('Manager rules saved','Attention items were recalculated.','success');}
 function resetRules(){state.rules={...DEFAULT_RULES};saveRules();openRules();toast('Rules reset','Default manager thresholds restored.','success');}
-function accountHtml(){return `<div class="profile-head"><div class="avatar">${esc(initials([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TS'))}</div><div><h2 style="font-size:18px">${esc([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TeamSnap User')}</h2><p>${esc(state.user?.email||'Connected through TeamSnap OAuth')}</p></div></div><div class="divider"></div><div class="small-note"><b>Active team / season:</b> ${esc(state.data.team?teamDisplayName(state.data.team):'—')}<br><b>Last refreshed:</b> ${state.lastLoaded?state.lastLoaded.toLocaleString():'—'}<br><b>Access:</b> Read-only TeamSnap API<br><b>App version:</b> ${VERSION}</div>`;}
+function accountHtml(){return `<div class="profile-head"><div class="avatar">${esc(initials([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TS'))}</div><div><h2 style="font-size:18px">${esc([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TeamSnap User')}</h2><p>${esc(state.user?.email||'Connected through TeamSnap OAuth')}</p></div></div><div class="divider"></div><div class="small-note"><b>Active team / season:</b> ${esc(state.data.team?teamDisplayName(state.data.team):'—')}<br><b>Last checked:</b> ${state.lastLoaded?state.lastLoaded.toLocaleString():'—'}<br><b>Cache:</b> Persistent on this device; completed historical seasons are reused without automatic re-downloads.<br><b>Disconnect:</b> Clears the TeamSnap login token but keeps saved team data.<br><b>Access:</b> Read-only TeamSnap API<br><b>App version:</b> ${VERSION}</div>`;}
 function bindCommonActions(){
   $$('[data-open-event]').forEach(x=>x.onclick=e=>{e.stopPropagation();openEventDetail(x.dataset.openEvent);});
   $$('[data-open-player]').forEach(x=>x.onclick=e=>{e.stopPropagation();openPlayerDetail(x.dataset.openPlayer);});
@@ -973,12 +1133,12 @@ async function disconnect(show=true){
   abortTeamRequests();stopRefreshTimer();
   state.token=null;state.user=null;state.teams=[];state.teamId=null;state.lastLoaded=null;
   state.selection={type:null,id:null};
-  state.lifecycle={core:'idle',availability:'idle',resourceErrors:{},teamLoadSeq:state.lifecycle.teamLoadSeq+1,availabilityLoadSeq:state.lifecycle.availabilityLoadSeq+1,lastAvailabilityLoaded:null};
+  state.lifecycle={core:'idle',availability:'idle',resourceErrors:{},resourceLoaded:{},cacheMeta:{},teamLoadSeq:state.lifecycle.teamLoadSeq+1,availabilityLoadSeq:state.lifecycle.availabilityLoadSeq+1,lastAvailabilityLoaded:null};
   state.data={team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]};
   state.derived={events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()};
   sessionStorage.removeItem(SESSION_KEY);sessionStorage.removeItem('tsmc.oauth.state');sessionStorage.removeItem('tsmc.oauth.redirect');
   closeDrawer({preserveSelection:true});
-  if(show)toast('Disconnected','The TeamSnap session was cleared from this browser.','success');
+  if(show)toast('Disconnected','Login cleared. Saved team history remains on this device for the next connection.','success');
   showLogin();
 }
 function parseOAuthHash(){
@@ -987,7 +1147,7 @@ function parseOAuthHash(){
   if(p.get('error')){const msg=p.get('error_description')||p.get('error');state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin(msg);return true;}
   const expected=sessionStorage.getItem('tsmc.oauth.state'),returned=p.get('state');
   if(expected&&returned&&expected!==returned){state.token=null;saveSession();history.replaceState(null,'',location.pathname+location.search);showLogin('OAuth state validation failed. Please connect again.');return true;}
-  state.token=p.get('access_token');sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
+  state.token=p.get('access_token');state.user=null;state.teams=[];state.teamId=null;sessionStorage.removeItem('tsmc.oauth.state');history.replaceState(null,'',location.pathname+location.search);saveSession();return true;
 }
 function connectOAuth(e){
   e.preventDefault();const clientId=$('#clientId').value.trim(),redirect=$('#redirectUri').value.trim();if(!clientId||!redirect)return;
@@ -1026,8 +1186,9 @@ async function manualRefresh(){
   if(!state.token||!state.teamId)return;
   setLoading(true);
   try{
-    const ok=await loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()||state.selection?.type==='player'||state.selection?.type==='event'});
-    if(ok)toast('Data refreshed','Latest TeamSnap data loaded.','success');
+    const historical=teamIsHistorical(state.data.team||state.teams.find(t=>sameId(t.id,state.teamId))||{});
+    const ok=await loadTeam(state.teamId,{quiet:true,preserveSelection:true,refresh:true,forceAvailability:viewNeedsAvailability()||state.selection?.type==='player'||state.selection?.type==='event'});
+    if(ok)toast(historical?'Saved history verified':'Updates checked',historical?'Historical data was loaded from the local cache; only missing data would contact TeamSnap.':'Current-season data was checked and the local cache was updated.','success');
   }finally{setLoading(false);}
 }
 async function start(){
@@ -1037,16 +1198,16 @@ async function start(){
   $$('[data-close-modal]').forEach(x=>x.addEventListener('click',()=>closeModal(x.dataset.closeModal)));
   $('#saveRulesBtn').onclick=saveRulesFromModal;$('#resetRulesBtn').onclick=resetRules;$('#settingsBtn').onclick=openRules;
   $('#accountBtn').onclick=()=>{$('#accountContent').innerHTML=accountHtml();openModal('accountModal');};
+  $('#clearCacheBtn').onclick=async()=>{const userId=cacheUserId();const count=await cacheDeleteUser(userId);state.runtime.h2hCache=new Map();state.lifecycle.cacheMeta={};closeModal('accountModal');toast('Saved data cleared',`${count} cached record${count===1?'':'s'} removed for this TeamSnap account.`,'success');};
   $('#disconnectBtn').onclick=()=>{closeModal('accountModal');disconnect();};
-  $('#mobileTeamBtn').onclick=()=>{fillTeamSwitchers();openModal('teamModal');};
-  $('#mobileTeamApply').onclick=()=>{const id=$('#mobileTeamSelect').value;closeModal('teamModal');if(!sameId(id,state.teamId))loadTeam(id);};
-  $('#teamSwitcher').onchange=e=>{if(!sameId(e.target.value,state.teamId))loadTeam(e.target.value);};
+  $('#teamSwitcher').onchange=e=>{const target=chooseTeamForFamily(e.target.value);if(target&&!sameId(target.id,state.teamId))loadTeam(target.id);else fillTeamSwitchers();};
+  $('#seasonSwitcher').onchange=e=>{if(!sameId(e.target.value,state.teamId))loadTeam(e.target.value);};
   $('#refreshBtn').onclick=manualRefresh;
   $$('#mainNav .nav-btn').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#globalSearch').addEventListener('input',e=>{state.search=e.target.value;$('#clearSearch').classList.toggle('hidden',!state.search);saveSession();render();});
   $('#clearSearch').onclick=()=>{state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');saveSession();render();};
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$$('.modal.open').forEach(m=>closeModal(m.id));}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#globalSearch').focus();}});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.token&&state.teamId){const last=state.lifecycle.lastAvailabilityLoaded;const stale=!last||Date.now()-new Date(last).getTime()>=5*60*1000;if(stale&&viewNeedsAvailability())refreshAvailabilityQuiet();}});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.token&&state.teamId&&viewNeedsAvailability())refreshAvailabilityQuiet();});
   window.addEventListener('online',()=>{if(state.token&&state.teamId&&state.lifecycle.core==='error')loadTeam(state.teamId,{quiet:true,preserveSelection:true,forceAvailability:viewNeedsAvailability()});});
   window.addEventListener('pagehide',stopRefreshTimer);
   window.addEventListener('error',e=>{console.error(e.error||e.message);});
