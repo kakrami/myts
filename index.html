@@ -66,11 +66,11 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 .toast-wrap{position:fixed;right:18px;bottom:18px;z-index:1000;display:flex;flex-direction:column;gap:8px;width:min(390px,calc(100vw - 36px))}.toast{background:#132035;color:#fff;border-radius:11px;padding:12px 13px;box-shadow:0 12px 32px rgba(0,0,0,.22);display:flex;gap:10px;align-items:flex-start;animation:toastin .2s ease}.toast.error{background:#7e2630}.toast.success{background:#135f45}.toast i{margin-top:1px}.toast b{font-size:12px;display:block}.toast span{font-size:11px;color:rgba(255,255,255,.78);display:block;margin-top:2px;line-height:1.4}@keyframes toastin{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
 .data-state{display:flex;align-items:flex-start;gap:10px;margin:0 0 14px;padding:11px 13px;border:1px solid #dbe5f2;border-radius:10px;background:#f7faff;color:#536178;font-size:12px;line-height:1.45}.data-state i{font-size:16px;color:var(--brand);margin-top:1px}.data-state.error{background:var(--danger-soft);border-color:#f2c9cd;color:#8e343a}.data-state.error i{color:var(--danger)}.data-state .btn{margin-left:auto;flex:0 0 auto}
 .loading-block{display:flex;align-items:center;justify-content:center;gap:9px;padding:40px;color:var(--muted);font-size:13px}.spinner{width:18px;height:18px;border:2px solid #d8e0eb;border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.small-note{font-size:11px;color:var(--muted);line-height:1.5}.right{text-align:right}.divider{height:1px;background:var(--line);margin:14px 0}.section-title{font-size:13px;font-weight:850;margin:0 0 10px}.click-link{color:var(--brand);font-weight:760;cursor:pointer}.click-link:hover{text-decoration:underline}
-@media(max-width:1150px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.report-templates{grid-template-columns:repeat(3,1fr)}.topbar{grid-template-columns:auto minmax(220px,1fr) auto}.team-select{display:none}.span-4{grid-column:span 2}.span-3{grid-column:span 2}}
+.small-note{font-size:11px;color:var(--muted);line-height:1.5}.right{text-align:right}.divider{height:1px;background:var(--line);margin:14px 0}.section-title{font-size:13px;font-weight:850;margin:0 0 10px}.click-link{color:var(--brand);font-weight:760;cursor:pointer}.click-link:hover{text-decoration:underline}.opponent-link{border:0;background:transparent;color:var(--brand);font-weight:820;padding:0;text-align:left;cursor:pointer}.opponent-link:hover{text-decoration:underline}.opponent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.opponent-card{border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px;text-align:left;min-width:0}.opponent-card:hover{border-color:#a9c5ec;box-shadow:0 4px 16px rgba(21,75,145,.08)}.opponent-card b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.opponent-card .record{font-size:19px;font-weight:850;letter-spacing:-.02em;margin-top:8px}.opponent-card .meta{font-size:11px;color:var(--muted);margin-top:3px}.fixture-score{font-weight:850;white-space:nowrap}.h2h-season-pill{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:#eef2f6;color:#5a687d;font-size:11px;font-weight:800}.h2h-loading{min-height:90px;display:grid;place-items:center}
+@media(max-width:1150px){.grid-4{grid-template-columns:repeat(2,1fr)}.opponent-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(2,1fr)}.report-templates{grid-template-columns:repeat(3,1fr)}.topbar{grid-template-columns:auto minmax(220px,1fr) auto}.team-select{display:none}.span-4{grid-column:span 2}.span-3{grid-column:span 2}}
 @media(max-width:800px){#loginScreen{grid-template-columns:1fr}.login-hero{display:none}.login-side{padding:20px}.topbar{height:auto;min-height:60px;grid-template-columns:1fr auto;padding:10px 12px;gap:9px}.topbar .brand-mark{grid-column:1}.top-actions{grid-column:2;grid-row:1}.global-search{grid-column:1/-1;grid-row:2}.subnav{top:101px}.nav-inner{padding:0 8px}.nav-btn{padding:12px 12px 10px;font-size:13px}main{padding:17px 12px 36px}.page-head{flex-direction:column;gap:10px}.page-head h1{font-size:24px}.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.span-2,.span-3,.span-4{grid-column:span 1}.report-templates{grid-template-columns:repeat(2,1fr)}.status-columns{grid-template-columns:repeat(2,1fr)}.toolbar{align-items:stretch}.toolbar select,.toolbar input{flex:1;min-width:145px}.toolbar .spacer{display:none}.profile-head{grid-template-columns:52px 1fr}.profile-head .profile-actions{grid-column:1/-1}.avatar{width:50px;height:50px;border-radius:13px}.stat-split{grid-template-columns:repeat(2,1fr)}.rule-grid{grid-template-columns:1fr 110px}
 .table-wrap{overflow:visible;border:0;background:transparent}.data-table,.data-table tbody,.data-table tr,.data-table td{display:block;width:100%}.data-table thead{display:none}.data-table tbody{display:grid;gap:10px}.data-table tbody tr{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.data-table td{display:grid;grid-template-columns:minmax(92px,34%) 1fr;gap:10px;padding:9px 12px;border-bottom:1px solid #edf1f5;text-align:left!important}.data-table td:last-child{border-bottom:0}.data-table td:before{content:attr(data-label);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:800;align-self:center}.data-table td[data-label=""]{grid-template-columns:1fr}.data-table td[data-label=""]:before{display:none}.group-title-row td{display:block!important}.group-title-row td:before{display:none}.group-title-row td[colspan]{grid-template-columns:1fr}.drawer-content{padding:12px}.drawer-top{padding:12px}.event-card{min-width:235px}}
-@media(max-width:480px){.report-templates{grid-template-columns:1fr}.status-columns{grid-template-columns:1fr}.rule-grid{grid-template-columns:1fr}.rule-grid input{margin-bottom:8px}.metric .value{font-size:26px}.login-card{padding:22px}.topbar .brand-mark span:last-child{display:none}}
+@media(max-width:480px){.report-templates{grid-template-columns:1fr}.opponent-grid{grid-template-columns:1fr}.status-columns{grid-template-columns:1fr}.rule-grid{grid-template-columns:1fr}.rule-grid input{margin-bottom:8px}.metric .value{font-size:26px}.login-card{padding:22px}.topbar .brand-mark span:last-child{display:none}}
 @media print{.topbar,.subnav,.toolbar,.page-actions,#progress,.toast-wrap{display:none!important}main{max-width:none;padding:0}.card{box-shadow:none}.drawer,.modal{display:none!important}}
 </style>
 </head>
@@ -112,7 +112,7 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
   <header class="topbar">
     <div class="brand-mark"><div class="brand-ball"><i class="bi bi-people-fill"></i></div><span>Manager Console</span></div>
     <div class="global-search"><i class="bi bi-search"></i><input id="globalSearch" type="search" placeholder="Search this view"><button id="clearSearch" class="search-clear hidden" aria-label="Clear search"><i class="bi bi-x"></i></button></div>
-    <div class="team-select"><span class="muted" style="color:#91a0b7;font-size:11px">TEAM</span><select id="teamSwitcher"></select></div>
+    <div class="team-select"><span class="muted" style="color:#91a0b7;font-size:11px">TEAM / SEASON</span><select id="teamSwitcher"></select></div>
     <div class="top-actions">
       <button class="top-action" id="mobileTeamBtn" title="Switch team"><i class="bi bi-people"></i></button>
       <button class="top-action" id="refreshBtn" title="Refresh TeamSnap data"><i class="bi bi-arrow-clockwise"></i></button>
@@ -123,6 +123,7 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
   <nav class="subnav"><div class="nav-inner" id="mainNav">
     <button class="nav-btn active" data-view="home"><i class="bi bi-house-door"></i>&nbsp; Home</button>
     <button class="nav-btn" data-view="schedule"><i class="bi bi-calendar3"></i>&nbsp; Schedule</button>
+    <button class="nav-btn" data-view="fixtures"><i class="bi bi-shield"></i>&nbsp; Fixtures</button>
     <button class="nav-btn" data-view="roster"><i class="bi bi-person-lines-fill"></i>&nbsp; Roster</button>
     <button class="nav-btn" data-view="availability"><i class="bi bi-check2-circle"></i>&nbsp; Availability</button>
     <button class="nav-btn" data-view="stats"><i class="bi bi-bar-chart-line"></i>&nbsp; Stats</button>
@@ -132,12 +133,12 @@ mark{background:#fff0a6;color:inherit;border-radius:2px;padding:0}
 </section>
 <div class="drawer" id="detailDrawer"><div class="drawer-backdrop" data-close-drawer></div><div class="drawer-panel" id="drawerPanel"><div class="drawer-top"><h2 id="drawerTitle">Details</h2><button class="drawer-close" data-close-drawer><i class="bi bi-x-lg"></i></button></div><div class="drawer-content" id="drawerContent"></div></div></div>
 <div class="modal" id="rulesModal"><div class="modal-bg" data-close-modal="rulesModal"></div><div class="modal-card"><div class="modal-head"><h2>Manager Rules</h2><button class="drawer-close" data-close-modal="rulesModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="small-note" style="margin-bottom:16px">These thresholds control manager attention items and smart warnings. They are preferences only and do not change TeamSnap data.</div><div class="rule-grid" id="ruleFields"></div></div><div class="modal-foot"><button class="btn btn-secondary" id="resetRulesBtn">Reset defaults</button><button class="btn btn-primary" id="saveRulesBtn">Save rules</button></div></div></div>
-<div class="modal" id="teamModal"><div class="modal-bg" data-close-modal="teamModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Switch Team</h2><button class="drawer-close" data-close-modal="teamModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="field"><label for="mobileTeamSelect">Team</label><select id="mobileTeamSelect"></select></div></div><div class="modal-foot"><button class="btn btn-primary" id="mobileTeamApply">Open team</button></div></div></div>
+<div class="modal" id="teamModal"><div class="modal-bg" data-close-modal="teamModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Switch Team / Season</h2><button class="drawer-close" data-close-modal="teamModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="field"><label for="mobileTeamSelect">Team / Season</label><select id="mobileTeamSelect"></select></div></div><div class="modal-foot"><button class="btn btn-primary" id="mobileTeamApply">Open team</button></div></div></div>
 <div class="modal" id="accountModal"><div class="modal-bg" data-close-modal="accountModal"></div><div class="modal-card" style="width:min(460px,100%)"><div class="modal-head"><h2>Account</h2><button class="drawer-close" data-close-modal="accountModal"><i class="bi bi-x-lg"></i></button></div><div class="modal-body" id="accountContent"></div><div class="modal-foot"><button class="btn btn-danger" id="disconnectBtn"><i class="bi bi-box-arrow-right"></i>Disconnect TeamSnap</button></div></div></div>
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='1.1.1';
+const VERSION='1.3.1';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
 const SESSION_KEY='tsmc.session.v1';
@@ -156,7 +157,7 @@ const RULE_META={
   minConfirmedGame:['Minimum confirmed for games','Warn when an upcoming game has fewer Yes responses than this.','players'],
   gameResponseHours:['Game response deadline','Treat missing game responses inside this window as urgent.','hours'],
   practiceResponseHours:['Practice response deadline','Treat missing practice responses inside this window as urgent.','hours'],
-  lowAvailabilityPct:['Low availability threshold','Flag players below this Yes percentage after enough tracked events.','%'],
+  lowAvailabilityPct:['Low availability threshold','Flag players below this Yes percentage after enough completed tracked events.','%'],
   missingLocationDays:['Missing location warning','Warn this many days before an event when its location is missing.','days'],
   missingOpponentDays:['Missing opponent warning','Warn this many days before a game when its opponent is missing.','days'],
   trendDropPct:['Availability decline threshold','Highlight a recent player availability drop of at least this many percentage points.','pts']
@@ -166,19 +167,19 @@ const STATUS_LABEL={yes:'Yes',no:'No',maybe:'Maybe',none:'No Response'};
 const REPORT_TEMPLATES={
   team:{name:'Team Summary',icon:'bi-people',desc:'Core team, schedule, and record totals',source:'summary',columns:['Metric','Value']},
   season:{name:'Season Summary',icon:'bi-calendar2-range',desc:'Schedule, availability, and results together',source:'season',columns:['Metric','Value']},
-  availability:{name:'Availability',icon:'bi-check2-square',desc:'Player participation and response summary',source:'availability',columns:['Player','Overall %','Rating','Games %','Practices %','Yes','No','Maybe','No Response','Tracked']},
+  availability:{name:'Availability',icon:'bi-check2-square',desc:'Player participation and response summary',source:'availability',columns:['Player','Overall %','Rating','Games %','Practices %','Yes','No','Maybe','No Response','Completed Tracked']},
   roster:{name:'Roster',icon:'bi-person-vcard',desc:'Players and staff with roster details',source:'roster',columns:['Name','Category','Role','Position']},
   stats:{name:'Stats',icon:'bi-bar-chart',desc:'Results and opponent performance',source:'stats',columns:['Opponent','Games','Wins','Losses','Ties','Goals For','Goals Against','Goal Diff']}
 };
 const state={
   token:null,clientId:null,user:null,teams:[],teamId:null,view:'home',search:'',
   data:{team:null,events:[],members:[],locations:[],opponents:[],availabilities:[]},
-  filters:{schedule:{range:'upcoming',type:'all',opponent:'all',location:'all'},availability:{range:'season',eventType:'all',missingScope:'next30'},stats:{range:'season'},reports:{range:'season'}},
-  sorts:{schedule:{key:'date',dir:'asc'},roster:{key:'name',dir:'asc'},availability:{key:'pct',dir:'desc'}},
+  filters:{schedule:{range:'upcoming',type:'all',opponent:'all',location:'all'},fixtures:{status:'all',opponent:'all'},availability:{range:'season',eventType:'all',missingScope:'next30'},stats:{range:'season'},reports:{range:'season'}},
+  sorts:{schedule:{key:'date',dir:'asc'},fixtures:{key:'date',dir:'asc'},roster:{key:'name',dir:'asc'},availability:{key:'pct',dir:'desc'}},
   report:{template:'team',source:'summary',columns:['Metric','Value'],group:'none'},rules:{...DEFAULT_RULES},lastLoaded:null,
   selection:{type:null,id:null},
   lifecycle:{core:'idle',availability:'idle',resourceErrors:{},teamLoadSeq:0,availabilityLoadSeq:0,lastAvailabilityLoaded:null},
-  runtime:{coreController:null,availabilityController:null,availabilityPromise:null,refreshTimer:null},
+  runtime:{coreController:null,availabilityController:null,availabilityPromise:null,refreshTimer:null,h2hController:null,h2hCache:new Map(),h2hLoadSeq:0},
   derived:{events:[],players:[],staff:[],availabilityByKey:new Map(),availabilityByEvent:new Map(),locationsById:new Map(),opponentsById:new Map(),membersById:new Map()}
 };
 
@@ -214,6 +215,8 @@ function setLoading(on){const p=$('#progress');p.classList.toggle('active',on);p
 function saveSession(){const clean={token:state.token,clientId:state.clientId,teamId:state.teamId,view:state.view,search:state.search,filters:state.filters,sorts:state.sorts,report:state.report,selection:state.selection};sessionStorage.setItem(SESSION_KEY,JSON.stringify(clean));}
 function loadSession(){
   try{const saved=JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');if(saved){const selection=saved.selection&&typeof saved.selection==='object'?saved.selection:{type:null,id:null};Object.assign(state,saved,{selection});}}catch{}
+  if(!state.filters?.fixtures)state.filters={...(state.filters||{}),fixtures:{status:'all',opponent:'all'}};
+  if(!state.sorts?.fixtures)state.sorts={...(state.sorts||{}),fixtures:{key:'date',dir:'asc'}};
   try{state.rules={...DEFAULT_RULES,...JSON.parse(localStorage.getItem(RULES_KEY)||'{}')};}catch{state.rules={...DEFAULT_RULES};}
   try{const config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}');if(!state.clientId&&config.clientId)state.clientId=config.clientId;if(config.redirectUri)state.redirectUri=config.redirectUri;}catch{}
 }
@@ -222,7 +225,7 @@ function showLogin(error=''){ $('#loginScreen').classList.remove('hidden');$('#a
 function showApp(){ $('#loginScreen').classList.add('hidden');$('#appShell').classList.remove('hidden'); }
 function openModal(id){$(`#${id}`).classList.add('open');}
 function closeModal(id){$(`#${id}`).classList.remove('open');}
-function closeDrawer(options={}){const d=$('#detailDrawer');d.classList.remove('open');document.body.style.overflow='';if(!options.preserveSelection){state.selection={type:null,id:null};saveSession();}}
+function closeDrawer(options={}){const d=$('#detailDrawer');d.classList.remove('open');document.body.style.overflow='';if(state.selection?.type==='opponent'){try{state.runtime.h2hController?.abort();}catch{}state.runtime.h2hController=null;state.runtime.h2hLoadSeq++;}if(!options.preserveSelection){state.selection={type:null,id:null};saveSession();}}
 function openDrawer(title,html,wide=false){$('#drawerTitle').textContent=title;$('#drawerContent').innerHTML=html;$('#drawerPanel').classList.toggle('drawer-wide',wide);$('#detailDrawer').classList.add('open');document.body.style.overflow='hidden';}
 function setView(view){closeDrawer();state.view=view;state.search='';$('#globalSearch').value='';$('#clearSearch').classList.add('hidden');$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));saveSession();render();ensureDataForView();}
 function tableCell(label,html,cls=''){return `<td data-label="${esc(label)}" class="${cls}">${html}</td>`;}
@@ -236,6 +239,9 @@ function isAbortError(error){return error?.name==='AbortError';}
 function abortTeamRequests(){
   try{state.runtime.coreController?.abort();}catch{}
   try{state.runtime.availabilityController?.abort();}catch{}
+  try{state.runtime.h2hController?.abort();}catch{}
+  state.runtime.h2hController=null;
+  state.runtime.h2hLoadSeq++;
   state.runtime.coreController=null;
   state.runtime.availabilityController=null;
   state.runtime.availabilityPromise=null;
@@ -267,48 +273,107 @@ async function fetchCollection(pathOrUrl,params={},options={}){
   }
   return out;
 }
+function teamBaseName(t){return t?.name||t?.team_name||t?.label||`Team ${t?.id??''}`;}
+function teamSeasonLabel(t){
+  const explicit=t?.season_name||t?.season_label||t?.season_title||t?.season;
+  if(explicit!==undefined&&explicit!==null&&String(explicit).trim())return String(explicit).trim();
+  const start=toDate(t?.season_start_date||t?.start_date||t?.starts_at);
+  const end=toDate(t?.season_end_date||t?.end_date||t?.ends_at);
+  if(start&&end){
+    const sy=start.getFullYear(),ey=end.getFullYear();
+    return sy===ey?String(sy):`${sy}–${String(ey).slice(-2)}`;
+  }
+  if(start)return String(start.getFullYear());
+  if(end)return String(end.getFullYear());
+  return '';
+}
+function teamIsArchived(t){return bool(t?.is_archived)||bool(t?.archived)||bool(t?.is_retired)||bool(t?.retired)||String(t?.status||'').toLowerCase().match(/archiv|retir|past/)!==null;}
+function teamDisplayName(t){
+  const base=teamBaseName(t),season=teamSeasonLabel(t);
+  let label=season&&!base.toLowerCase().includes(season.toLowerCase())?`${base} — ${season}`:base;
+  if(teamIsArchived(t)&&!label.toLowerCase().includes('archived'))label+=` · Archived`;
+  return label;
+}
+function teamSeasonSortTime(t){
+  const d=toDate(t?.season_end_date||t?.end_date||t?.ends_at||t?.season_start_date||t?.start_date||t?.starts_at);
+  return d?d.getTime():0;
+}
+function mergeTeams(...groups){
+  const byId=new Map();
+  for(const group of groups)for(const team of group||[]){
+    if(team?.id===undefined||team?.id===null)continue;
+    const key=String(team.id),existing=byId.get(key)||{};
+    byId.set(key,{...existing,...team});
+  }
+  return [...byId.values()].sort((a,b)=>{
+    const an=teamBaseName(a),bn=teamBaseName(b),nameCmp=an.localeCompare(bn,undefined,{numeric:true,sensitivity:'base'});
+    if(nameCmp)return nameCmp;
+    return teamSeasonSortTime(b)-teamSeasonSortTime(a)||compare(b.id,a.id);
+  });
+}
+function discoverTeamRelationUrls(mePayload,me){
+  const urls=new Set();
+  const addLink=l=>{
+    if(!l?.href)return;
+    const rel=String(l.rel||'').toLowerCase();
+    let u;try{u=new URL(l.href);}catch{return;}
+    const teamPath=/\/teams(?:\/|$)/i.test(u.pathname);
+    const teamRel=['teams','active_teams','archived_teams','past_teams','retired_teams','team_history'].includes(rel);
+    if(teamPath&&teamRel)urls.add(u.toString());
+  };
+  for(const l of mePayload?.collection?.links||[])addLink(l);
+  for(const item of mePayload?.collection?.items||[])for(const l of item.links||[])addLink(l);
+  for(const [key,value] of Object.entries(me||{})){
+    if(!key.startsWith('_link_')||!value)continue;
+    addLink({rel:key.slice(6),href:value});
+  }
+  return [...urls];
+}
 async function loadIdentityAndTeams(){
   const mePayload=await apiJson(`${API}/me`);
   const me=collectionObjects(mePayload)[0]||{};
   state.user=me;
   if(me.id===undefined||me.id===null||me.id==='')throw new Error('TeamSnap login succeeded, but the authenticated user ID was missing from /me.');
 
-  // Match TeamSnap's official SDK lifecycle: loadMe() -> loadTeams({ userId: me.id }).
-  // The direct API equivalent is /teams/search?user_id=<authenticated user id>.
-  let teams=[];
+  // TeamSnap's SDK discovers the user's active teams with userId. Historical or
+  // archived seasons may also be exposed through user-specific team relations.
+  // Load and merge every supported team collection instead of stopping after the
+  // current-team search so the switcher can show every season the API exposes.
+  let searchTeams=[];
   let searchError=null;
-  try{
-    teams=await fetchCollection('teams/search',{user_id:me.id});
-  }catch(err){
-    searchError=err;
+  try{searchTeams=await fetchCollection('teams/search',{user_id:me.id});}catch(err){searchError=err;}
+
+  const relationUrls=discoverTeamRelationUrls(mePayload,me);
+  const relationResults=await Promise.allSettled(relationUrls.map(url=>fetchCollection(url)));
+  const relationTeams=[];
+  let relationError=null;
+  for(const r of relationResults){
+    if(r.status==='fulfilled')relationTeams.push(...r.value);
+    else if(!relationError)relationError=r.reason;
   }
 
-  // Some API responses also expose a user-specific teams relation. Treat it only as
-  // a fallback because collection-level discovery links are not guaranteed to be
-  // scoped to the authenticated user.
-  if(!teams.length){
-    const meItem=mePayload?.collection?.items?.[0];
-    const itemTeamsUrl=meItem?.links?.find(l=>l.rel==='teams')?.href||me._link_teams||null;
-    if(itemTeamsUrl){
-      try{teams=await fetchCollection(itemTeamsUrl);}catch(err){if(!searchError)searchError=err;}
-    }
-  }
-
+  const teams=mergeTeams(searchTeams,relationTeams);
   if(!teams.length){
     if(searchError)throw searchError;
-    throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams were returned.`);
+    if(relationError)throw relationError;
+    throw new Error(`TeamSnap login succeeded for user ${me.id}, but no accessible teams or seasons were returned.`);
   }
 
   state.teams=teams;
   if(!state.teamId||!state.teams.some(t=>sameId(t.id,state.teamId)))state.teamId=state.teams[0].id;
   fillTeamSwitchers();saveSession();
 }
-function fillTeamSwitchers(){const html=state.teams.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(t.name||t.team_name||`Team ${t.id}`)}</option>`).join('');$('#teamSwitcher').innerHTML=html;$('#mobileTeamSelect').innerHTML=html;}
+function fillTeamSwitchers(){
+  const html=state.teams.map(t=>`<option value="${esc(t.id)}" ${sameId(t.id,state.teamId)?'selected':''}>${esc(teamDisplayName(t))}</option>`).join('');
+  $('#teamSwitcher').innerHTML=html;
+  $('#mobileTeamSelect').innerHTML=html;
+}
 function resetTeamData(team){
   state.data={team,events:[],members:[],locations:[],opponents:[],availabilities:[]};
   state.lifecycle.availability='idle';
   state.lifecycle.lastAvailabilityLoaded=null;
   state.lifecycle.resourceErrors={};
+  state.runtime.h2hCache=new Map();
   buildDerived();
 }
 function currentLoad(seq,teamId){return seq===state.lifecycle.teamLoadSeq&&sameId(teamId,state.teamId);}
@@ -357,7 +422,7 @@ async function loadTeam(teamId,{quiet=false,preserveSelection=false,forceAvailab
     state.lastLoaded=new Date();buildDerived();saveSession();render();
     if(requiredFailed.length){toast('Some team data could not load',requiredFailed.map(k=>`${k}: ${errors[k]}`).join(' · '),'error',7000);}
     else if(Object.keys(errors).length){toast('Team loaded with limited data',Object.keys(errors).map(k=>`${k}: ${errors[k]}`).join(' · '),'info',6500);}
-    else if(!quiet)toast('Team loaded',`${team.name||'Team'} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
+    else if(!quiet)toast('Team loaded',`${teamDisplayName(team)} · ${plural(activePlayers().length,'player')} · ${plural(state.derived.events.length,'event')}`,'success');
     const shouldLoadAvailability=forceAvailability||viewNeedsAvailability()||state.selection?.type;
     if(shouldLoadAvailability)ensureAvailability({force:forceAvailability,quiet:true});
     if(preserveSelection)restoreSelection();
@@ -448,7 +513,7 @@ function availabilityStatus(eid,mid){
   const c=Number(a.status_code);return c===STATUS.YES?'yes':c===STATUS.NO?'no':c===STATUS.MAYBE?'maybe':'none';
 }
 function statusBadge(s){const label=s==='untracked'?'Not Tracked':STATUS_LABEL[s]||'No Response';const cls=s==='yes'?'badge-yes':s==='no'?'badge-no':s==='maybe'?'badge-maybe':'badge-none';return `<span class="badge ${cls}">${esc(label)}</span>`;}
-function scoreBadge(p){const c=p>=90?'badge-success':p>=80?'badge-info':p>=state.rules.lowAvailabilityPct?'badge-warn':'badge-danger';const label=p>=90?'Excellent':p>=80?'Good':p>=state.rules.lowAvailabilityPct?'Watch':'Low';return `<span class="badge ${c}">${label}</span>`;}
+function scoreBadge(p,total=1){if(!total)return '<span class="badge badge-neutral">No History</span>';const c=p>=90?'badge-success':p>=80?'badge-info':p>=state.rules.lowAvailabilityPct?'badge-warn':'badge-danger';const label=p>=90?'Excellent':p>=80?'Good':p>=state.rules.lowAvailabilityPct?'Watch':'Low';return `<span class="badge ${c}">${label}</span>`;}
 function resultBadge(r){return r?`<span class="form-dot ${r}" style="display:inline-grid;width:28px;height:28px;border-radius:8px">${r}</span>`:'<span class="badge badge-neutral">—</span>';}
 
 function rangeEvents(key,events=state.derived.events){
@@ -464,16 +529,19 @@ function rangeEvents(key,events=state.derived.events){
   return events.filter(e=>{const d=toDate(e._date);if(!d)return false;if(start&&d<start)return false;if(end&&d>=end)return false;return true;});
 }
 function trackedEvents(key='season',eventType='all'){return rangeEvents(key).filter(e=>eventTracksAvailability(e)&&(eventType==='all'||e._type.toLowerCase()===eventType));}
+function completedEvents(events){const cutoff=now();return events.filter(e=>{const d=toDate(e._date);return d&&d<=cutoff;});}
+function completedTrackedEvents(key='season',eventType='all'){return completedEvents(trackedEvents(key,eventType));}
 function availabilityCounts(events,players=activePlayers()){
-  const c={yes:0,no:0,maybe:0,none:0,total:0};for(const e of events)for(const p of players){const s=availabilityStatus(e.id,p.id);if(s==='untracked')continue;c[s]++;c.total++;}return c;
+  const c={yes:0,no:0,maybe:0,none:0,total:0};for(const e of completedEvents(events))for(const p of players){const s=availabilityStatus(e.id,p.id);if(s==='untracked')continue;c[s]++;c.total++;}return c;
 }
-function playerAvailability(player,events){const c={yes:0,no:0,maybe:0,none:0,total:0};for(const e of events){const s=availabilityStatus(e.id,player.id);if(s==='untracked')continue;c[s]++;c.total++;}return {...c,pct:pct(c.yes,c.total)};}
+function playerAvailability(player,events){const c={yes:0,no:0,maybe:0,none:0,total:0};for(const e of completedEvents(events)){const s=availabilityStatus(e.id,player.id);if(s==='untracked')continue;c[s]++;c.total++;}return {...c,pct:pct(c.yes,c.total)};}
 function eventAvailability(event){const c={yes:0,no:0,maybe:0,none:0,total:0};for(const p of activePlayers()){const s=availabilityStatus(event.id,p.id);if(s==='untracked')continue;c[s]++;c.total++;}return {...c,pct:pct(c.yes,c.total)};}
 function ratingForPct(p){return p>=90?'Excellent':p>=80?'Good':p>=state.rules.lowAvailabilityPct?'Watch':'Low';}
 function scoredGames(events=state.derived.events){return events.filter(e=>e._isGame&&(e._teamScore!==null&&e._oppScore!==null||e._result));}
 function recordFor(events){const games=scoredGames(events);const r={wins:0,losses:0,ties:0,games:games.length,gf:0,ga:0};for(const g of games){if(g._result==='W')r.wins++;else if(g._result==='L')r.losses++;else if(g._result==='T')r.ties++;if(g._teamScore!==null)r.gf+=g._teamScore;if(g._oppScore!==null)r.ga+=g._oppScore;}r.winPct=pct(r.wins,r.games);r.diff=r.gf-r.ga;return r;}
-function currentRangeLabel(key){return ({season:'Current Season',next30:'Next 30 Days',month:'This Month',last30:'Last 30 Days',all:'All Events',upcoming:'Upcoming',past:'Past'})[key]||'Current Season';}
-function rangeOptions(selected,includeSchedule=false){const opts=includeSchedule?[['upcoming','Upcoming'],['all','All Events'],['past','Past']]:[['season','Current Season'],['next30','Next 30 Days'],['month','This Month'],['last30','Last 30 Days'],['all','All Events']];return opts.map(([v,l])=>`<option value="${v}" ${selected===v?'selected':''}>${l}</option>`).join('');}
+function selectedSeasonLabel(){const label=teamSeasonLabel(state.data.team);return label?`Season: ${label}`:'Selected Season';}
+function currentRangeLabel(key){return ({season:selectedSeasonLabel(),next30:'Next 30 Days',month:'This Month',last30:'Last 30 Days',all:'All Events',upcoming:'Upcoming',past:'Past'})[key]||selectedSeasonLabel();}
+function rangeOptions(selected,includeSchedule=false){const opts=includeSchedule?[['upcoming','Upcoming'],['all','All Events'],['past','Past']]:[['season',selectedSeasonLabel()],['next30','Next 30 Days'],['month','This Month'],['last30','Last 30 Days'],['all','All Events']];return opts.map(([v,l])=>`<option value="${v}" ${selected===v?'selected':''}>${l}</option>`).join('');}
 function typeOptions(selected){return [['all','All Events'],['game','Games'],['practice','Practices'],['other','Other']].map(([v,l])=>`<option value="${v}" ${selected===v?'selected':''}>${l}</option>`).join('');}
 function daysUntilEvent(e){const d=toDate(e._date);return d?Math.ceil((startDay(d)-startDay(now()))/86400000):Infinity;}
 function eventTitle(e){if(e._isGame&&e._opponent)return `${e._name&&String(e._name).toLowerCase()!=='game'?e._name:'Game'} vs ${e._opponent}`;return e._name;}
@@ -492,12 +560,12 @@ function managerAlerts(){
     if(!e._location&&days<=state.rules.missingLocationDays){alerts.push({severity:days<=1?'danger':'warn',icon:'bi-geo-alt',title:`Location missing for ${eventTitle(e)}`,detail:`Event is ${days===0?'today':days===1?'tomorrow':`in ${days} days`}`,eventId:e.id,date:d});}
     if(e._isGame&&!e._opponent&&days<=state.rules.missingOpponentDays){alerts.push({severity:days<=1?'danger':'warn',icon:'bi-shield-exclamation',title:'Opponent missing for upcoming game',detail:`${fmtDateTime(e._date)} · opponent rule window is ${state.rules.missingOpponentDays} days`,eventId:e.id,date:d});}
   }
-  const evs=trackedEvents('season');const lows=[];if(evs.length>=5){for(const p of activePlayers()){const m=playerAvailability(p,evs);if(m.total>=5&&m.pct<state.rules.lowAvailabilityPct)lows.push({p,m});}if(lows.length){lows.sort((a,b)=>a.m.pct-b.m.pct);alerts.push({severity:'info',icon:'bi-person-down',title:`${plural(lows.length,'player')} below ${state.rules.lowAvailabilityPct}% availability`,detail:lows.slice(0,3).map(x=>`${memberName(x.p)} ${x.m.pct}%`).join(' · '),playerId:lows[0].p.id,date:new Date(8640000000000000)});}}
+  const evs=completedTrackedEvents('season');const lows=[];if(evs.length>=5){for(const p of activePlayers()){const m=playerAvailability(p,evs);if(m.total>=5&&m.pct<state.rules.lowAvailabilityPct)lows.push({p,m});}if(lows.length){lows.sort((a,b)=>a.m.pct-b.m.pct);alerts.push({severity:'info',icon:'bi-person-down',title:`${plural(lows.length,'player')} below ${state.rules.lowAvailabilityPct}% availability`,detail:lows.slice(0,3).map(x=>`${memberName(x.p)} ${x.m.pct}%`).join(' · '),playerId:lows[0].p.id,date:new Date(8640000000000000)});}}
   return alerts.sort((a,b)=>alertSeverityRank(a.severity)-alertSeverityRank(b.severity)||(a.date-b.date));
 }
-function playerTrend(player,events=trackedEvents('season')){const sorted=[...events].sort((a,b)=>(toDate(a._date)||0)-(toDate(b._date)||0));const vals=sorted.map(e=>availabilityStatus(e.id,player.id)==='yes'?100:0);if(vals.length<6)return null;const split=Math.ceil(vals.length/2),old=avg(vals.slice(0,split)),recent=avg(vals.slice(split));return {old:Math.round(old),recent:Math.round(recent),delta:Math.round(recent-old)};}
+function playerTrend(player,events=completedTrackedEvents('season')){const sorted=[...events].sort((a,b)=>(toDate(a._date)||0)-(toDate(b._date)||0));const vals=sorted.map(e=>availabilityStatus(e.id,player.id)==='yes'?100:0);if(vals.length<6)return null;const split=Math.ceil(vals.length/2),old=avg(vals.slice(0,split)),recent=avg(vals.slice(split));return {old:Math.round(old),recent:Math.round(recent),delta:Math.round(recent-old)};}
 function teamInsights(range='season'){
-  const insights=[];const evs=trackedEvents(range),players=activePlayers();if(!evs.length||!players.length)return insights;
+  const insights=[];const evs=completedTrackedEvents(range),players=activePlayers();if(!evs.length||!players.length)return insights;
   const gameE=evs.filter(e=>e._type==='Game'),pracE=evs.filter(e=>e._type==='Practice');
   if(gameE.length&&pracE.length){const g=availabilityCounts(gameE),p=availabilityCounts(pracE),gp=pct(g.yes,g.total),pp=pct(p.yes,p.total),diff=gp-pp;insights.push({icon:'bi-trophy',title:'Games vs practices',text:`Game availability is ${gp}% and practice availability is ${pp}%${Math.abs(diff)>=5?`, a ${Math.abs(diff)} point ${diff>0?'increase':'decrease'} for games`:''}.`});}
   const byDay=new Map();for(const e of evs){const d=toDate(e._date);if(!d)continue;const k=d.toLocaleDateString(undefined,{weekday:'long'});if(!byDay.has(k))byDay.set(k,[]);byDay.get(k).push(e);}const dayStats=[...byDay.entries()].filter(([,a])=>a.length>=2).map(([k,a])=>{const c=availabilityCounts(a);return {k,p:pct(c.yes,c.total),n:a.length};}).sort((a,b)=>b.p-a.p);if(dayStats.length>=2){insights.push({icon:'bi-calendar-week',title:'Weekday pattern',text:`${dayStats[0].k} has the strongest availability at ${dayStats[0].p}% across ${dayStats[0].n} tracked events; ${dayStats.at(-1).k} is lowest at ${dayStats.at(-1).p}%.`});}
@@ -532,7 +600,7 @@ function render(){
     $('#viewRoot').innerHTML=`${pageHead('Availability','Who is coming and what participation patterns exist?')}${availabilityStateNotice()}${state.lifecycle.availability==='error'?'':loadingState('Loading availability history')}`;
     bindLifecycleActions();return;
   }
-  const fn={home:renderHome,schedule:renderSchedule,roster:renderRoster,availability:renderAvailability,stats:renderStats,reports:renderReports}[state.view]||renderHome;
+  const fn={home:renderHome,schedule:renderSchedule,fixtures:renderFixtures,roster:renderRoster,availability:renderAvailability,stats:renderStats,reports:renderReports}[state.view]||renderHome;
   fn();
   const notices=`${coreStateNotice()}${!availabilityReady()?availabilityStateNotice():''}`;
   if(notices)$('#viewRoot').insertAdjacentHTML('afterbegin',notices);
@@ -581,22 +649,147 @@ function renderRoster(){
   $$('[data-sort-key]').forEach(th=>th.onclick=()=>{const k=th.dataset.sortKey;if(s.key===k)s.dir=s.dir==='asc'?'desc':'asc';else{s.key=k;s.dir='asc';}saveSession();renderRoster();});bindCommonActions();
 }
 
-function availabilityPlayerRows(events){let rows=activePlayers().map(p=>{const all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice'));return {p,all,games,prac};}).filter(x=>matchesSearch([memberName(x.p),memberPosition(x.p),ratingForPct(x.all.pct)]));const s=state.sorts.availability;rows.sort((a,b)=>{const va=s.key==='name'?memberName(a.p):s.key==='pct'?a.all.pct:s.key==='games'?a.games.pct:s.key==='practice'?a.prac.pct:s.key==='none'?a.all.none:a.all.total;const vb=s.key==='name'?memberName(b.p):s.key==='pct'?b.all.pct:s.key==='games'?b.games.pct:s.key==='practice'?b.prac.pct:s.key==='none'?b.all.none:b.all.total;return compare(va,vb)*(s.dir==='asc'?1:-1);});return rows;}
+function availabilityPlayerRows(events){let rows=activePlayers().map(p=>{const all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice'));return {p,all,games,prac};}).filter(x=>matchesSearch([memberName(x.p),memberPosition(x.p),x.all.total?ratingForPct(x.all.pct):'No History']));const s=state.sorts.availability;rows.sort((a,b)=>{const metric=m=>m.total?m.pct:null;const va=s.key==='name'?memberName(a.p):s.key==='pct'?metric(a.all):s.key==='games'?metric(a.games):s.key==='practice'?metric(a.prac):s.key==='none'?a.all.none:a.all.total;const vb=s.key==='name'?memberName(b.p):s.key==='pct'?metric(b.all):s.key==='games'?metric(b.games):s.key==='practice'?metric(b.prac):s.key==='none'?b.all.none:b.all.total;return compare(va,vb)*(s.dir==='asc'?1:-1);});return rows;}
 function renderAvailability(){
-  const f=state.filters.availability;let events=trackedEvents(f.range,f.eventType);const counts=availabilityCounts(events);const teamPct=pct(counts.yes,counts.total);const rows=availabilityPlayerRows(events);const missingEvents=(f.missingScope==='next30'?trackedEvents('next30'):events).filter(e=>eventAvailability(e).none>0);const totalMissing=missingEvents.reduce((n,e)=>n+eventAvailability(e).none,0);
+  const f=state.filters.availability;let events=trackedEvents(f.range,f.eventType);const historyEvents=completedEvents(events);const counts=availabilityCounts(historyEvents);const teamPct=pct(counts.yes,counts.total);const rows=availabilityPlayerRows(historyEvents);const upcomingCount=events.length-historyEvents.length;const missingEvents=(f.missingScope==='next30'?trackedEvents('next30'):events).filter(e=>eventAvailability(e).none>0);const totalMissing=missingEvents.reduce((n,e)=>n+eventAvailability(e).none,0);
   const readinessRows=events.filter(e=>toDate(e._date)>=startDay(now())).slice(0,12).map(e=>{const a=eventAvailability(e);return `<tr class="clickable" data-open-event="${esc(e.id)}">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',mark(eventTitle(e)))}${tableCell('Yes',`<b>${a.yes}</b>`,'num')}${tableCell('Maybe',a.maybe,'num')}${tableCell('No',a.no,'num')}${tableCell('No Response',a.none,'num')}${tableCell('Readiness',`<b>${a.pct}%</b>`,'num')}</tr>`;}).join('');
-  const playerRows=rows.map(x=>`<tr class="clickable" data-open-player="${esc(x.p.id)}">${tableCell('Player',`<div class="cell-main">${mark(memberName(x.p))}</div><div class="cell-sub">${esc(memberPosition(x.p))}</div>`)}${tableCell('Availability',`<b>${x.all.pct}%</b> ${scoreBadge(x.all.pct)}`)}${tableCell('Games',x.games.total?`${x.games.pct}%`:'—','num')}${tableCell('Practices',x.prac.total?`${x.prac.pct}%`:'—','num')}${tableCell('Yes',x.all.yes,'num')}${tableCell('No',x.all.no,'num')}${tableCell('Maybe',x.all.maybe,'num')}${tableCell('No Response',x.all.none,'num')}</tr>`).join('');
+  const playerRows=rows.map(x=>`<tr class="clickable" data-open-player="${esc(x.p.id)}">${tableCell('Player',`<div class="cell-main">${mark(memberName(x.p))}</div><div class="cell-sub">${esc(memberPosition(x.p))}</div>`)}${tableCell('Availability',x.all.total?`<b>${x.all.pct}%</b> ${scoreBadge(x.all.pct,x.all.total)}`:'<span class="muted">No history</span>')}${tableCell('Games',x.games.total?`${x.games.pct}%`:'—','num')}${tableCell('Practices',x.prac.total?`${x.prac.pct}%`:'—','num')}${tableCell('Yes',x.all.yes,'num')}${tableCell('No',x.all.no,'num')}${tableCell('Maybe',x.all.maybe,'num')}${tableCell('No Response',x.all.none,'num')}</tr>`).join('');
   const missingByPlayer=activePlayers().map(p=>({p,count:missingEvents.filter(e=>availabilityStatus(e.id,p.id)==='none').length})).filter(x=>x.count).sort((a,b)=>b.count-a.count);const missingHtml=missingByPlayer.length?missingByPlayer.slice(0,12).map(x=>`<div class="attention-item" data-open-player="${esc(x.p.id)}"><div class="attention-icon warn"><i class="bi bi-person-question"></i></div><div><div class="attention-title">${mark(memberName(x.p))}</div><div class="attention-detail">${plural(x.count,'missing response')} in scope</div></div><div class="attention-meta">${x.count}</div></div>`).join(''):emptyState('bi-check2-circle','No missing responses','Everyone has responded in the selected missing-response scope.');
-  const byMonth=new Map();for(const e of events){const d=toDate(e._date);if(!d)continue;const k=monthKey(d);if(!byMonth.has(k))byMonth.set(k,[]);byMonth.get(k).push(e);}const trend=[...byMonth.entries()].sort().map(([k,a])=>{const c=availabilityCounts(a);return {k,p:pct(c.yes,c.total),n:a.length};});const trendHtml=trend.length?trend.map(x=>`<div class="trend-row"><span>${esc(monthLabel(x.k))}</span><div class="bar"><span style="width:${x.p}%;background:${readinessColor(x.p)}"></span></div><strong>${x.p}%</strong></div>`).join(''):emptyState('bi-graph-up','No monthly trend','No tracked availability falls inside this timeframe.');
-  $('#viewRoot').innerHTML=`${pageHead('Availability','Who is coming and what participation patterns exist?')}<div class="toolbar"><span class="toolbar-label">Timeframe</span><select id="availabilityRange">${rangeOptions(f.range)}</select><select id="availabilityType">${typeOptions(f.eventType)}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-calendar-check"></i>${plural(events.length,'tracked event')}</span></div><div class="grid grid-4">${metricCard('Team Availability',`${teamPct}%`,`${counts.yes} Yes of ${counts.total} opportunities`,'bi-check-circle')}${metricCard('No Response',counts.none,`${pct(counts.none,counts.total)}% of tracked opportunities`,'bi-question-circle')}${metricCard('Explicit No',counts.no,'Kept separate from no response','bi-x-circle')}${metricCard('Maybe',counts.maybe,'Counts against Yes percentage','bi-question-diamond')}</div><div class="grid grid-3" style="margin-top:16px"><div class="card span-2"><div class="card-head"><div><h3>Player Availability</h3><p>Yes ÷ all tracked opportunities. No, Maybe, and No Response all count against the percentage.</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr>${sortTh('Player','name',state.sorts.availability)}${sortTh('Availability','pct',state.sorts.availability)}${sortTh('Games','games',state.sorts.availability)}${sortTh('Practices','practice',state.sorts.availability)}<th class="num">Yes</th><th class="num">No</th><th class="num">Maybe</th>${sortTh('No Response','none',state.sorts.availability)}</tr></thead><tbody>${playerRows||`<tr>${tableCell('',emptyState('bi-people','No player data','No players match the current filters.'),'')}</tr>`}</tbody></table></div></div></div><div class="card"><div class="card-head"><div><h3>Missing Responses</h3><p>${totalMissing} unresolved player-event responses</p></div><select id="missingScope" style="height:32px;border:1px solid var(--line);border-radius:8px"><option value="next30" ${f.missingScope==='next30'?'selected':''}>Next 30 Days</option><option value="current" ${f.missingScope==='current'?'selected':''}>Current Timeframe</option></select></div><div class="card-body" style="padding-top:4px;padding-bottom:4px"><div class="attention-list">${missingHtml}</div></div></div><div class="card span-2"><div class="card-head"><div><h3>Event Readiness</h3><p>Yes responses relative to the current player roster</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th class="num">Yes</th><th class="num">Maybe</th><th class="num">No</th><th class="num">No Response</th><th class="num">Readiness</th></tr></thead><tbody>${readinessRows||`<tr>${tableCell('',emptyState('bi-calendar-check','No upcoming tracked events','Change the timeframe to see additional history.'),'')}</tr>`}</tbody></table></div></div></div><div class="card"><div class="card-head"><div><h3>Monthly Trend</h3><p>Yes percentage over time</p></div></div><div class="card-body"><div class="trend-list">${trendHtml}</div></div></div><div class="card span-3"><div class="card-head"><div><h3>Smart Participation Patterns</h3><p>Automatically derived from TeamSnap availability history</p></div></div><div class="card-body"><div class="grid grid-3">${teamInsights(f.range).map(x=>`<div class="insight"><i class="bi ${x.icon}"></i><div><b>${esc(x.title)}</b><span>${esc(x.text)}</span></div></div>`).join('')||emptyState('bi-lightbulb','No pattern yet','More TeamSnap history is needed.')}</div></div></div></div>`;
+  const byMonth=new Map();for(const e of historyEvents){const d=toDate(e._date);if(!d)continue;const k=monthKey(d);if(!byMonth.has(k))byMonth.set(k,[]);byMonth.get(k).push(e);}const trend=[...byMonth.entries()].sort().map(([k,a])=>{const c=availabilityCounts(a);return {k,p:pct(c.yes,c.total),n:a.length};});const trendHtml=trend.length?trend.map(x=>`<div class="trend-row"><span>${esc(monthLabel(x.k))}</span><div class="bar"><span style="width:${x.p}%;background:${readinessColor(x.p)}"></span></div><strong>${x.p}%</strong></div>`).join(''):emptyState('bi-graph-up','No monthly trend','No tracked availability falls inside this timeframe.');
+  $('#viewRoot').innerHTML=`${pageHead('Availability','Who is coming and what participation patterns exist?')}<div class="toolbar"><span class="toolbar-label">Timeframe</span><select id="availabilityRange">${rangeOptions(f.range)}</select><select id="availabilityType">${typeOptions(f.eventType)}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-calendar-check"></i>${plural(historyEvents.length,'completed tracked event')} · ${plural(upcomingCount,'upcoming')}</span></div><div class="grid grid-4">${metricCard('Historical Availability',counts.total?`${teamPct}%`:'—',counts.total?`${counts.yes} Yes of ${counts.total} completed opportunities`:'No completed tracked events','bi-check-circle')}${metricCard('Historical No Response',counts.none,counts.total?`${pct(counts.none,counts.total)}% of completed opportunities`:'Completed events only','bi-question-circle')}${metricCard('Historical No',counts.no,'Completed events only · separate from no response','bi-x-circle')}${metricCard('Historical Maybe',counts.maybe,'Completed events only · counts against Yes','bi-question-diamond')}</div><div class="grid grid-3" style="margin-top:16px"><div class="card span-2"><div class="card-head"><div><h3>Player Availability</h3><p>Completed tracked events only. Yes ÷ completed opportunities; No, Maybe, and No Response count against the percentage after the event starts.</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr>${sortTh('Player','name',state.sorts.availability)}${sortTh('Availability','pct',state.sorts.availability)}${sortTh('Games','games',state.sorts.availability)}${sortTh('Practices','practice',state.sorts.availability)}<th class="num">Yes</th><th class="num">No</th><th class="num">Maybe</th>${sortTh('No Response','none',state.sorts.availability)}</tr></thead><tbody>${playerRows||`<tr>${tableCell('',emptyState('bi-people','No player data','No players match the current filters.'),'')}</tr>`}</tbody></table></div></div></div><div class="card"><div class="card-head"><div><h3>Missing Responses</h3><p>${totalMissing} unresolved player-event responses</p></div><select id="missingScope" style="height:32px;border:1px solid var(--line);border-radius:8px"><option value="next30" ${f.missingScope==='next30'?'selected':''}>Next 30 Days</option><option value="current" ${f.missingScope==='current'?'selected':''}>Current Timeframe</option></select></div><div class="card-body" style="padding-top:4px;padding-bottom:4px"><div class="attention-list">${missingHtml}</div></div></div><div class="card span-2"><div class="card-head"><div><h3>Event Readiness</h3><p>Yes responses relative to the current player roster</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th class="num">Yes</th><th class="num">Maybe</th><th class="num">No</th><th class="num">No Response</th><th class="num">Readiness</th></tr></thead><tbody>${readinessRows||`<tr>${tableCell('',emptyState('bi-calendar-check','No upcoming tracked events','Change the timeframe to see additional history.'),'')}</tr>`}</tbody></table></div></div></div><div class="card"><div class="card-head"><div><h3>Monthly Trend</h3><p>Completed events only · future responses are excluded</p></div></div><div class="card-body"><div class="trend-list">${trendHtml}</div></div></div><div class="card span-3"><div class="card-head"><div><h3>Smart Participation Patterns</h3><p>Automatically derived from TeamSnap availability history</p></div></div><div class="card-body"><div class="grid grid-3">${teamInsights(f.range).map(x=>`<div class="insight"><i class="bi ${x.icon}"></i><div><b>${esc(x.title)}</b><span>${esc(x.text)}</span></div></div>`).join('')||emptyState('bi-lightbulb','No pattern yet','More TeamSnap history is needed.')}</div></div></div></div>`;
   $('#availabilityRange').onchange=e=>{f.range=e.target.value;saveSession();renderAvailability();};$('#availabilityType').onchange=e=>{f.eventType=e.target.value;saveSession();renderAvailability();};$('#missingScope').onchange=e=>{f.missingScope=e.target.value;saveSession();renderAvailability();};$$('[data-sort-key]').forEach(th=>th.onclick=()=>{const k=th.dataset.sortKey,s=state.sorts.availability;if(s.key===k)s.dir=s.dir==='asc'?'desc':'asc';else{s.key=k;s.dir=k==='name'?'asc':'desc';}saveSession();renderAvailability();});bindCommonActions();
+}
+
+function normalizeOpponentName(name){return String(name||'').trim().replace(/\s+/g,' ').toLowerCase();}
+function teamFamilyKey(team){
+  let base=String(teamBaseName(team)||'').trim().toLowerCase();
+  const season=String(teamSeasonLabel(team)||'').trim().toLowerCase();
+  if(season)base=base.replace(season,' ');
+  return base.replace(/\s+/g,' ').replace(/[\s\-–—|:]+$/g,'').trim();
+}
+function fixtureSide(e){
+  const raw=String(e.home_or_away??e.home_away??e.location_type??'').trim().toLowerCase();
+  if(raw.startsWith('h'))return 'Home';
+  if(raw.startsWith('a'))return 'Away';
+  if(e.is_home!==undefined&&e.is_home!==null)return bool(e.is_home)?'Home':'Away';
+  if(e.is_away!==undefined&&e.is_away!==null)return bool(e.is_away)?'Away':'Home';
+  return '—';
+}
+function fixtureResultText(e){
+  if(e._teamScore!==null&&e._oppScore!==null)return `${e._teamScore}–${e._oppScore}`;
+  return e._result||'—';
+}
+function fixtureGames(events=state.derived.events){return events.filter(e=>e._isGame);}
+function fixtureOpponentGroups(events=fixtureGames()){
+  const map=new Map();
+  for(const g of events){
+    const name=g._opponent||'Opponent TBD',key=normalizeOpponentName(name)||`id:${g.opponent_id||'unknown'}`;
+    if(!map.has(key))map.set(key,{name,games:[]});
+    map.get(key).games.push(g);
+  }
+  return [...map.values()].map(x=>{
+    const played=scoredGames(x.games),record=recordFor(played),upcoming=x.games.filter(g=>toDate(g._date)>=startDay(now())&&!g._result&&!(g._teamScore!==null&&g._oppScore!==null));
+    return {...x,played,record,upcoming};
+  }).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
+}
+function fixtureFiltered(){
+  const f=state.filters.fixtures||{status:'all',opponent:'all'};
+  let games=fixtureGames();
+  if(f.status==='upcoming')games=games.filter(g=>toDate(g._date)>=startDay(now())&&!g._result&&!(g._teamScore!==null&&g._oppScore!==null));
+  else if(f.status==='played')games=games.filter(g=>g._result||g._teamScore!==null&&g._oppScore!==null||toDate(g._date)<startDay(now()));
+  if(f.opponent!=='all')games=games.filter(g=>normalizeOpponentName(g._opponent)===f.opponent);
+  games=games.filter(g=>matchesSearch([g._opponent,g._location,fmtDateTime(g._date),fixtureSide(g),g._result,fixtureResultText(g)]));
+  const sort=state.sorts.fixtures||{key:'date',dir:'asc'};
+  games.sort((a,b)=>{
+    const value=g=>sort.key==='date'?(toDate(g._date)?.getTime()||0):sort.key==='opponent'?g._opponent:sort.key==='side'?fixtureSide(g):sort.key==='location'?g._location:sort.key==='result'?(g._result||''):'';
+    return compare(value(a),value(b))*(sort.dir==='asc'?1:-1);
+  });
+  return games;
+}
+function fixtureSortTh(label,key){const s=state.sorts.fixtures||{key:'date',dir:'asc'},active=s.key===key;return `<th class="sortable ${key==='result'?'num':''}" data-fixture-sort="${key}">${esc(label)}<i class="bi ${active?(s.dir==='asc'?'bi-caret-up-fill':'bi-caret-down-fill'):'bi-arrow-down-up'} sort-icon"></i></th>`;}
+function renderFixtures(){
+  const all=fixtureGames(),groups=fixtureOpponentGroups(all),games=fixtureFiltered(),f=state.filters.fixtures||{status:'all',opponent:'all'};
+  const played=scoredGames(all),upcoming=all.filter(g=>toDate(g._date)>=startDay(now())&&!g._result&&!(g._teamScore!==null&&g._oppScore!==null));
+  const opponentOptions=`<option value="all">All opponents</option>`+groups.map(x=>`<option value="${esc(normalizeOpponentName(x.name))}" ${f.opponent===normalizeOpponentName(x.name)?'selected':''}>${esc(x.name)}</option>`).join('');
+  const cards=groups.filter(x=>matchesSearch([x.name])).map(x=>`<button class="opponent-card" type="button" data-open-opponent="${esc(x.name)}"><b>${mark(x.name)}</b><div class="record">${x.record.games?`${x.record.wins}-${x.record.losses}-${x.record.ties}`:'No result'}</div><div class="meta">${plural(x.games.length,'fixture')} · ${plural(x.upcoming.length,'upcoming')}${x.record.games?` · ${x.record.diff>=0?'+':''}${x.record.diff} GD`:''}</div></button>`).join('');
+  const rows=games.map(g=>`<tr class="clickable" data-open-event="${esc(g.id)}">${tableCell('Date',`<div class="cell-main">${fmtDate(g._date,{month:'short',day:'numeric',year:'numeric'})}</div><div class="cell-sub">${fmtTime(g._date)}</div>`)}${tableCell('Opponent',`<button type="button" class="opponent-link" data-open-opponent="${esc(g._opponent||'Opponent TBD')}">${mark(g._opponent||'Opponent TBD')}</button>`)}${tableCell('H/A',esc(fixtureSide(g)))}${tableCell('Location',mark(g._location||'—'))}${tableCell('Score',`<span class="fixture-score">${esc(fixtureResultText(g))}</span>`,'num')}${tableCell('Result',resultBadge(g._result),'num')}</tr>`).join('');
+  $('#viewRoot').innerHTML=`${pageHead('Fixtures',`Games for ${state.data.team?teamDisplayName(state.data.team):'the selected season'}. Select any opponent for head-to-head history.`)}<div class="grid grid-4">${metricCard('Fixtures',all.length,`${groups.length} opponents`,'bi-calendar2-week')}${metricCard('Played',played.length,played.length?`${recordFor(played).wins}-${recordFor(played).losses}-${recordFor(played).ties} record`:'No completed results','bi-trophy')}${metricCard('Upcoming',upcoming.length,upcoming[0]?`Next: ${fmtShortDate(upcoming[0]._date)}`:'No upcoming games','bi-clock')}${metricCard('Opponents',groups.length,'Click a team below for H2H','bi-shield')}</div><div class="card" style="margin-top:16px"><div class="card-head"><div><h3>Teams / Opponents</h3><p>Current selected season. Click a team for current-season and all-season H2H.</p></div></div><div class="card-body">${cards?`<div class="opponent-grid">${cards}</div>`:emptyState('bi-shield-x','No opponents match','Try a different search or season.')}</div></div><div class="toolbar" style="margin-top:16px"><span class="toolbar-label">Show</span><select id="fixtureStatus"><option value="all" ${f.status==='all'?'selected':''}>All Fixtures</option><option value="upcoming" ${f.status==='upcoming'?'selected':''}>Upcoming</option><option value="played" ${f.status==='played'?'selected':''}>Played / Past</option></select><select id="fixtureOpponent">${opponentOptions}</select><div class="spacer"></div><span class="filter-chip"><i class="bi bi-list-ul"></i>${plural(games.length,'fixture')}</span><button class="btn btn-secondary btn-sm" id="resetFixtureFilters"><i class="bi bi-arrow-counterclockwise"></i>Reset</button></div><div class="table-wrap"><table class="data-table"><thead><tr>${fixtureSortTh('Date','date')}${fixtureSortTh('Opponent','opponent')}${fixtureSortTh('H/A','side')}${fixtureSortTh('Location','location')}<th class="num">Score</th>${fixtureSortTh('Result','result')}</tr></thead><tbody>${rows||`<tr>${tableCell('',emptyState('bi-calendar-x','No fixtures match','Adjust the fixture filters or search.'),'')}</tr>`}</tbody></table></div>`;
+  $('#fixtureStatus').onchange=e=>{f.status=e.target.value;state.filters.fixtures=f;saveSession();renderFixtures();};
+  $('#fixtureOpponent').onchange=e=>{f.opponent=e.target.value;state.filters.fixtures=f;saveSession();renderFixtures();};
+  $('#resetFixtureFilters').onclick=()=>{state.filters.fixtures={status:'all',opponent:'all'};saveSession();renderFixtures();};
+  $$('[data-fixture-sort]').forEach(th=>th.onclick=()=>{const key=th.dataset.fixtureSort,s=state.sorts.fixtures;if(s.key===key)s.dir=s.dir==='asc'?'desc':'asc';else{s.key=key;s.dir=key==='date'?'asc':'desc';}saveSession();renderFixtures();});
+  bindCommonActions();
+}
+function normalizeHistoricalGame(raw,opponentsById,team){
+  const isGame=bool(raw.is_game);if(!isGame)return null;
+  const opponent=opponentsById.get(String(raw.opponent_id))||{};
+  const name=raw.name||raw.formatted_title||raw.label||'Game';
+  const start=raw.start_date||raw.start_at||raw.starts_at||raw.date;
+  const oppName=raw.opponent_name||opponent.name||opponent.label||'';
+  const tf=num(raw.points_for_team??raw.team_score??raw.score_for),ta=num(raw.points_for_opponent??raw.opponent_score??raw.score_against);
+  let result=null;if(tf!==null&&ta!==null)result=tf>ta?'W':tf<ta?'L':'T';else if(raw.result||raw.results){const r=String(raw.result||raw.results).trim().toUpperCase();if(/^W/.test(r))result='W';else if(/^L/.test(r))result='L';else if(/^T|^D/.test(r))result='T';}
+  return {...raw,_name:name,_isGame:true,_type:'Game',_date:start,_opponent:oppName,_teamScore:tf,_oppScore:ta,_result:result,_season:teamSeasonLabel(team)||teamDisplayName(team),_teamId:team.id};
+}
+async function loadAllSeasonH2H(opponentName){
+  const family=teamFamilyKey(state.data.team),target=normalizeOpponentName(opponentName),cacheKey=`${family}|${target}`;
+  if(state.runtime.h2hCache.has(cacheKey))return state.runtime.h2hCache.get(cacheKey);
+  const siblings=state.teams.filter(t=>teamFamilyKey(t)===family);
+  const seq=++state.runtime.h2hLoadSeq;
+  try{state.runtime.h2hController?.abort();}catch{}
+  const controller=new AbortController();state.runtime.h2hController=controller;
+  const results=await Promise.allSettled(siblings.map(async team=>{
+    if(controller.signal.aborted)throw new DOMException('Aborted','AbortError');
+    if(sameId(team.id,state.teamId))return fixtureGames().filter(g=>normalizeOpponentName(g._opponent)===target).map(g=>({...g,_season:teamSeasonLabel(team)||teamDisplayName(team),_teamId:team.id}));
+    const [events,opponents]=await Promise.all([fetchCollection('events/search',{team_id:team.id,sort_start_date:'asc'},{signal:controller.signal}),fetchCollection('opponents/search',{team_id:team.id},{signal:controller.signal})]);
+    const map=new Map(opponents.map(o=>[String(o.id),o]));
+    return events.map(e=>normalizeHistoricalGame(e,map,team)).filter(Boolean).filter(g=>normalizeOpponentName(g._opponent)===target);
+  }));
+  if(seq!==state.runtime.h2hLoadSeq||controller.signal.aborted)throw new DOMException('Aborted','AbortError');
+  const games=[];let failures=0,authError=null;
+  for(const r of results){
+    if(r.status==='fulfilled')games.push(...r.value);
+    else if(r.reason instanceof AuthExpiredError)authError=r.reason;
+    else if(!isAbortError(r.reason))failures++;
+  }
+  if(authError)throw authError;
+  const dedup=new Map();for(const g of games)dedup.set(`${g._teamId}|${g.id}`,g);
+  const value={games:[...dedup.values()].sort((a,b)=>(toDate(a._date)||0)-(toDate(b._date)||0)),seasonCount:siblings.length,failures};
+  state.runtime.h2hCache.set(cacheKey,value);return value;
+}
+function h2hMeetingsTable(games,includeSeason=false){
+  const rows=[...games].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).map(g=>`<tr>${includeSeason?tableCell('Season',`<span class="h2h-season-pill">${esc(g._season||'—')}</span>`):''}${tableCell('Date',fmtShortDate(g._date))}${tableCell('H/A',esc(fixtureSide(g)))}${tableCell('Score',`<span class="fixture-score">${esc(fixtureResultText(g))}</span>`,'num')}${tableCell('Result',resultBadge(g._result),'num')}</tr>`).join('');
+  return `<div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr>${includeSeason?'<th>Season</th>':''}<th>Date</th><th>H/A</th><th class="num">Score</th><th class="num">Result</th></tr></thead><tbody>${rows||`<tr>${tableCell('',emptyState('bi-clock-history','No meetings','No matching fixtures were returned.'),'')}</tr>`}</tbody></table></div>`;
+}
+function h2hSummaryCards(games){const r=recordFor(games),played=scoredGames(games);return `<div class="grid grid-4">${metricCard('Meetings',games.length,`${played.length} with results`,'bi-shield')}${metricCard('Record',played.length?`${r.wins}-${r.losses}-${r.ties}`:'—',played.length?`${r.winPct}% win rate`:'No scored meetings','bi-trophy')}${metricCard('Goals',played.length?`${r.gf}-${r.ga}`:'—',played.length?'For – Against':'No score data','bi-bullseye')}${metricCard('Goal Diff',played.length?`${r.diff>=0?'+':''}${r.diff}`:'—',played.length?'Across scored meetings':'No score data','bi-plus-slash-minus')}</div>`;}
+function renderAllSeasonH2H(target,games,seasonCount,failures=0){
+  if(!target)return;const bySeason=new Map();for(const g of games){const k=g._season||'Unknown';if(!bySeason.has(k))bySeason.set(k,[]);bySeason.get(k).push(g);}
+  const seasonRows=[...bySeason.entries()].sort((a,b)=>String(b[0]).localeCompare(String(a[0]),undefined,{numeric:true})).map(([season,list])=>{const r=recordFor(list);return `<tr>${tableCell('Season',`<span class="h2h-season-pill">${esc(season)}</span>`)}${tableCell('Games',list.length,'num')}${tableCell('Record',r.games?`${r.wins}-${r.losses}-${r.ties}`:'—','num')}${tableCell('GF',r.games?r.gf:'—','num')}${tableCell('GA',r.games?r.ga:'—','num')}${tableCell('Diff',r.games?`${r.diff>=0?'+':''}${r.diff}`:'—','num')}</tr>`;}).join('');
+  target.innerHTML=`${failures?`<div class="data-state error"><i class="bi bi-exclamation-triangle"></i><div><b>Some seasons could not be loaded</b><br>${failures} season request${failures===1?'':'s'} failed. The totals below use the seasons TeamSnap returned successfully.</div></div>`:''}${h2hSummaryCards(games)}<div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>By Season</h3><p>${seasonCount} discovered season${seasonCount===1?'':'s'}</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Season</th><th class="num">Games</th><th class="num">Record</th><th class="num">GF</th><th class="num">GA</th><th class="num">Diff</th></tr></thead><tbody>${seasonRows||`<tr>${tableCell('',emptyState('bi-calendar2-x','No historical meetings','No additional season meetings matched this opponent.'),'')}</tr>`}</tbody></table></div></div></div><div class="card"><div class="card-head"><div><h3>All Meetings</h3><p>Newest first across discovered seasons</p></div></div><div class="card-body" style="padding:0">${h2hMeetingsTable(games,true)}</div></div></div>`;
+}
+async function openOpponentDetail(opponentName,{fromRestore=false}={}){
+  const name=String(opponentName||'').trim();if(!name)return;
+  state.selection={type:'opponent',id:name};saveSession();
+  const targetKey=normalizeOpponentName(name),seasonGames=fixtureGames().filter(g=>normalizeOpponentName(g._opponent)===targetKey),r=recordFor(seasonGames),upcoming=seasonGames.filter(g=>toDate(g._date)>=startDay(now())&&!g._result&&!(g._teamScore!==null&&g._oppScore!==null));
+  const recent=[...scoredGames(seasonGames)].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,5);
+  const currentHtml=`${h2hSummaryCards(seasonGames)}<div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Current Season</h3><p>${esc(teamSeasonLabel(state.data.team)||teamDisplayName(state.data.team))}</p></div></div><div class="card-body"><div class="kpi-inline"><div><b>${r.games?`${r.wins}-${r.losses}-${r.ties}`:'—'}</b><span>Record</span></div><div><b>${upcoming.length}</b><span>Upcoming</span></div><div><b>${r.games?`${r.diff>=0?'+':''}${r.diff}`:'—'}</b><span>Goal Diff</span></div></div><div class="divider"></div><div class="form-dots">${recent.length?recent.map(g=>`<div class="form-dot ${g._result||'T'}" title="${fmtShortDate(g._date)} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join(''):'<span class="muted">No completed meetings this season</span>'}</div></div></div><div class="card"><div class="card-head"><div><h3>Season Meetings</h3><p>Fixtures and results against ${esc(name)}</p></div></div><div class="card-body" style="padding:0">${h2hMeetingsTable(seasonGames,false)}</div></div></div><div class="section-title" style="margin-top:18px">All Seasons H2H</div><div id="allSeasonH2H" class="h2h-loading">${loadingState('Loading matching opponent history across seasons')}</div>`;
+  openDrawer(`${teamBaseName(state.data.team)} vs ${name}`,currentHtml,true);bindCommonActions();
+  try{
+    const all=await loadAllSeasonH2H(name);
+    if(!selectionIs('opponent',name))return;
+    renderAllSeasonH2H($('#allSeasonH2H'),all.games,all.seasonCount,all.failures);
+  }catch(error){
+    if(isAbortError(error)||!selectionIs('opponent',name))return;
+    if(error instanceof AuthExpiredError){toast('TeamSnap session expired','Connect again to continue.','error',6500);disconnect(false);return;}
+    const host=$('#allSeasonH2H');if(host)host.innerHTML=`<div class="data-state error"><i class="bi bi-exclamation-triangle"></i><div><b>All-season H2H could not be loaded</b><br>${esc(error.message||'TeamSnap history request failed.')}</div><button class="btn btn-sm btn-secondary" data-retry-h2h>Retry</button></div>`;
+    const retry=$('[data-retry-h2h]');if(retry)retry.onclick=()=>{state.runtime.h2hCache.delete(`${teamFamilyKey(state.data.team)}|${targetKey}`);openOpponentDetail(name);};
+  }
 }
 function opponentStats(events){const map=new Map();for(const g of scoredGames(events)){const k=g._opponent||'Unknown opponent';if(!map.has(k))map.set(k,[]);map.get(k).push(g);}return [...map.entries()].map(([opponent,games])=>({opponent,...recordFor(games)})).sort((a,b)=>b.games-a.games||b.winPct-a.winPct);}
 function locationStats(events){const map=new Map();for(const g of scoredGames(events)){const k=g._location||'Unknown location';if(!map.has(k))map.set(k,[]);map.get(k).push(g);}return [...map.entries()].map(([location,games])=>({location,...recordFor(games)})).sort((a,b)=>b.games-a.games||b.winPct-a.winPct);}
 function availabilityImpact(events){const buckets=[{label:'90% and above',min:90,max:101,games:[]},{label:'80–89%',min:80,max:90,games:[]},{label:'Below 80%',min:0,max:80,games:[]}];for(const g of scoredGames(events)){if(!eventTracksAvailability(g))continue;const p=eventAvailability(g).pct;const b=buckets.find(x=>p>=x.min&&p<x.max);if(b)b.games.push(g);}return buckets.map(b=>({...b,...recordFor(b.games)}));}
 function renderStats(){
   const f=state.filters.stats,events=rangeEvents(f.range),games=scoredGames(events),r=recordFor(events),recent=games.slice(-10).reverse(),opp=opponentStats(events),loc=locationStats(events),impact=availabilityImpact(events);const gpg=r.games?(r.gf/r.games).toFixed(2):'—',gapg=r.games?(r.ga/r.games).toFixed(2):'—',shutouts=games.filter(g=>g._oppScore===0).length;const biggestWin=games.filter(g=>g._result==='W'&&g._teamScore!==null&&g._oppScore!==null).sort((a,b)=>(b._teamScore-b._oppScore)-(a._teamScore-a._oppScore))[0];const biggestLoss=games.filter(g=>g._result==='L'&&g._teamScore!==null&&g._oppScore!==null).sort((a,b)=>(b._oppScore-b._teamScore)-(a._oppScore-a._teamScore))[0];
-  const oppRows=opp.filter(x=>matchesSearch([x.opponent])).map(x=>`<tr>${tableCell('Opponent',mark(x.opponent))}${tableCell('Games',x.games,'num')}${tableCell('W',x.wins,'num')}${tableCell('L',x.losses,'num')}${tableCell('T',x.ties,'num')}${tableCell('GF',x.gf,'num')}${tableCell('GA',x.ga,'num')}${tableCell('Diff',`<b>${x.diff>=0?'+':''}${x.diff}</b>`,'num')}</tr>`).join('');
+  const oppRows=opp.filter(x=>matchesSearch([x.opponent])).map(x=>`<tr>${tableCell('Opponent',`<button type="button" class="opponent-link" data-open-opponent="${esc(x.opponent)}">${mark(x.opponent)}</button>`)}${tableCell('Games',x.games,'num')}${tableCell('W',x.wins,'num')}${tableCell('L',x.losses,'num')}${tableCell('T',x.ties,'num')}${tableCell('GF',x.gf,'num')}${tableCell('GA',x.ga,'num')}${tableCell('Diff',`<b>${x.diff>=0?'+':''}${x.diff}</b>`,'num')}</tr>`).join('');
   const locRows=loc.slice(0,10).map(x=>`<tr>${tableCell('Location',esc(x.location))}${tableCell('Games',x.games,'num')}${tableCell('W',x.wins,'num')}${tableCell('L',x.losses,'num')}${tableCell('T',x.ties,'num')}${tableCell('Win %',`${x.winPct}%`,'num')}</tr>`).join('');
   const impactRows=impact.map(x=>`<tr>${tableCell('Availability',esc(x.label))}${tableCell('Games',x.games,'num')}${tableCell('Wins',x.wins,'num')}${tableCell('Losses',x.losses,'num')}${tableCell('Ties',x.ties,'num')}${tableCell('Win %',`${x.winPct}%`,'num')}</tr>`).join('');
   const formHtml=recent.length?recent.map(g=>`<div class="form-dot ${g._result||'T'}" title="${esc(eventTitle(g))} ${g._teamScore??''}-${g._oppScore??''}">${g._result||'—'}</div>`).join(''):'<span class="muted">No scored games</span>';
@@ -604,16 +797,16 @@ function renderStats(){
   $('#statsRange').onchange=e=>{f.range=e.target.value;saveSession();renderStats();};bindCommonActions();
 }
 
-function reportSourceColumns(source){return ({summary:['Metric','Value'],season:['Metric','Value'],roster:['Name','Category','Role','Position'],events:['Date','Time','Event','Type','Opponent','Location','Team Score','Opponent Score','Result','Readiness %'],availability:['Player','Overall %','Rating','Games %','Practices %','Yes','No','Maybe','No Response','Tracked'],stats:['Opponent','Games','Wins','Losses','Ties','Goals For','Goals Against','Goal Diff','Win %']})[source]||[];}
+function reportSourceColumns(source){return ({summary:['Metric','Value'],season:['Metric','Value'],roster:['Name','Category','Role','Position'],events:['Date','Time','Event','Type','Opponent','Location','Team Score','Opponent Score','Result','Readiness %'],availability:['Player','Overall %','Rating','Games %','Practices %','Yes','No','Maybe','No Response','Completed Tracked'],stats:['Opponent','Games','Wins','Losses','Ties','Goals For','Goals Against','Goal Diff','Win %']})[source]||[];}
 function reportNeedsAvailability(source=state.report.source){return ['availability','season'].includes(source);}
 function reportRows(source,range){
   if(reportNeedsAvailability(source)&&!availabilityReady())return [];
   const events=rangeEvents(range);
   if(source==='summary'){const r=recordFor(events);return [['Team',state.data.team?.name||''],['Players',activePlayers().length],['Events',events.length],['Games',events.filter(e=>e._type==='Game').length],['Practices',events.filter(e=>e._type==='Practice').length],['Wins',r.wins],['Losses',r.losses],['Ties',r.ties],['Goals For',r.gf],['Goals Against',r.ga]];}
-  if(source==='season'){const r=recordFor(events),te=events.filter(eventTracksAvailability),a=availabilityCounts(te);return [['Team',state.data.team?.name||''],['Timeframe',currentRangeLabel(range)],['Events',events.length],['Tracked Availability Events',te.length],['Team Availability %',pct(a.yes,a.total)],['Yes Responses',a.yes],['No Responses',a.no],['Maybe Responses',a.maybe],['No Response',a.none],['Wins',r.wins],['Losses',r.losses],['Ties',r.ties],['Goals For',r.gf],['Goals Against',r.ga],['Goal Differential',r.diff]];}
+  if(source==='season'){const r=recordFor(events),te=completedEvents(events.filter(eventTracksAvailability)),a=availabilityCounts(te);return [['Team',state.data.team?.name||''],['Timeframe',currentRangeLabel(range)],['Events',events.length],['Completed Availability Events',te.length],['Team Availability %',a.total?pct(a.yes,a.total):''],['Historical Yes Responses',a.yes],['Historical No Responses',a.no],['Historical Maybe Responses',a.maybe],['Historical No Response',a.none],['Wins',r.wins],['Losses',r.losses],['Ties',r.ties],['Goals For',r.gf],['Goals Against',r.ga],['Goal Differential',r.diff]];}
   if(source==='roster')return state.data.members.map(m=>[memberName(m),isPlayerMember(m)?'Player':'Staff',memberRole(m),memberPosition(m)]);
   if(source==='events')return events.map(e=>{const a=eventTracksAvailability(e)?eventAvailability(e):null;return [fmtDate(e._date,{month:'2-digit',day:'2-digit',year:'numeric'}),fmtTime(e._date),eventTitle(e),e._type,e._opponent||'',e._location||'',e._teamScore??'',e._oppScore??'',e._result||'',a?.pct??''];});
-  if(source==='availability'){const te=events.filter(eventTracksAvailability);return activePlayers().map(p=>{const all=playerAvailability(p,te),g=playerAvailability(p,te.filter(e=>e._type==='Game')),pr=playerAvailability(p,te.filter(e=>e._type==='Practice'));return [memberName(p),all.pct,ratingForPct(all.pct),g.total?g.pct:'',pr.total?pr.pct:'',all.yes,all.no,all.maybe,all.none,all.total];});}
+  if(source==='availability'){const te=completedEvents(events.filter(eventTracksAvailability));return activePlayers().map(p=>{const all=playerAvailability(p,te),g=playerAvailability(p,te.filter(e=>e._type==='Game')),pr=playerAvailability(p,te.filter(e=>e._type==='Practice'));return [memberName(p),all.total?all.pct:'',all.total?ratingForPct(all.pct):'No History',g.total?g.pct:'',pr.total?pr.pct:'',all.yes,all.no,all.maybe,all.none,all.total];});}
   if(source==='stats')return opponentStats(events).map(x=>[x.opponent,x.games,x.wins,x.losses,x.ties,x.gf,x.ga,x.diff,x.winPct]);return [];
 }
 function defaultGroupOptions(source){return ({roster:['none','Category','Role','Position'],events:['none','Type','Opponent','Location'],availability:['none','Rating'],stats:['none','Opponent']})[source]||['none'];}
@@ -700,6 +893,9 @@ function restoreSelection(){
   }else if(sel.type==='player'){
     if(state.derived.membersById.has(String(sel.id)))openPlayerDetail(sel.id,{fromRestore:true});
     else{state.selection={type:null,id:null};saveSession();}
+  }else if(sel.type==='opponent'){
+    if(fixtureGames().some(g=>normalizeOpponentName(g._opponent)===normalizeOpponentName(sel.id)))openOpponentDetail(sel.id,{fromRestore:true});
+    else{state.selection={type:null,id:null};saveSession();}
   }
 }
 function openEventDetail(id,{fromRestore=false}={}){
@@ -741,20 +937,20 @@ function openPlayerDetail(id,{fromRestore=false}={}){
     if(!availabilityLoading()&&state.lifecycle.availability!=='error')ensureAvailability({quiet:true});
     return;
   }
-  const events=trackedEvents('season'),all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice')),trend=playerTrend(p,events);
-  const upcoming=events.filter(e=>toDate(e._date)>=startDay(now())).slice(0,10),hist=[...events].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,20);
-  const teamRows=activePlayers().map(x=>({x,m:playerAvailability(x,events)})).sort((a,b)=>b.m.pct-a.m.pct),rank=teamRows.findIndex(x=>sameId(x.x.id,p.id))+1;
+  const tracked=trackedEvents('season'),events=completedEvents(tracked),all=playerAvailability(p,events),games=playerAvailability(p,events.filter(e=>e._type==='Game')),prac=playerAvailability(p,events.filter(e=>e._type==='Practice')),trend=playerTrend(p,events);
+  const upcoming=tracked.filter(e=>{const d=toDate(e._date);return d&&d>now();}).slice(0,10),hist=[...events].sort((a,b)=>(toDate(b._date)||0)-(toDate(a._date)||0)).slice(0,20);
+  const teamRows=activePlayers().map(x=>({x,m:playerAvailability(x,events)})).filter(x=>x.m.total).sort((a,b)=>b.m.pct-a.m.pct),rank=all.total?teamRows.findIndex(x=>sameId(x.x.id,p.id))+1:0;
   const upcomingRows=upcoming.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}</tr>`).join('');
   const histRows=hist.map(e=>`<tr data-open-event="${esc(e.id)}" class="clickable">${tableCell('Date',fmtShortDate(e._date))}${tableCell('Event',esc(eventTitle(e)))}${tableCell('Type',esc(e._type))}${tableCell('Status',statusBadge(availabilityStatus(e.id,p.id)))}${tableCell('Opponent',esc(e._opponent||'—'))}${tableCell('Location',esc(e._location||'—'))}</tr>`).join('');
-  const html=`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div><div class="profile-actions">${scoreBadge(all.pct)}</div></div><div class="grid grid-4" style="margin-top:16px">${metricCard('Overall',`${all.pct}%`,`${all.yes} Yes of ${all.total}`,'bi-check-circle')}${metricCard('Games',games.total?`${games.pct}%`:'—',games.total?`${games.yes}/${games.total} Yes`:'No tracked games','bi-trophy')}${metricCard('Practices',prac.total?`${prac.pct}%`:'—',prac.total?`${prac.yes}/${prac.total} Yes`:'No tracked practices','bi-cone-striped')}${metricCard('Team Rank',rank?`#${rank}`:'—',`${activePlayers().length} players ranked`,'bi-award')}</div><div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Response Breakdown</h3><p>Every status other than Yes counts against the percentage</p></div></div><div class="card-body"><div class="stat-split"><div class="stat-box"><b>${all.yes}</b><span>Yes</span></div><div class="stat-box"><b>${all.no}</b><span>No</span></div><div class="stat-box"><b>${all.maybe}</b><span>Maybe</span></div><div class="stat-box"><b>${all.none}</b><span>No Response</span></div></div></div></div><div class="card"><div class="card-head"><div><h3>Trend</h3><p>Earlier half compared with recent half</p></div></div><div class="card-body">${trend?`<div class="kpi-inline"><div><b>${trend.old}%</b><span>Earlier</span></div><div><b>${trend.recent}%</b><span>Recent</span></div><div><b style="color:${trend.delta<0?'var(--danger)':trend.delta>0?'var(--success)':'var(--text)'}">${trend.delta>0?'+':''}${trend.delta}</b><span>Change</span></div></div>`:emptyState('bi-graph-up','Not enough history','At least six tracked events are needed for this comparison.')}</div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Upcoming Responses</h3><p>Current TeamSnap availability for future tracked events</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Status</th></tr></thead><tbody>${upcomingRows||`<tr>${tableCell('',emptyState('bi-calendar-check','Nothing upcoming','No upcoming tracked events were returned.'),'')}</tr>`}</tbody></table></div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Availability History</h3><p>Most recent tracked events from TeamSnap</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Type</th><th>Status</th><th>Opponent</th><th>Location</th></tr></thead><tbody>${histRows||`<tr>${tableCell('',emptyState('bi-clock-history','No history','No tracked availability history is available.'),'')}</tr>`}</tbody></table></div></div></div>`;
+  const html=`<div class="profile-head"><div class="avatar">${esc(initials(memberName(p)))}</div><div><h2>${esc(memberName(p))}</h2><p>${esc(memberRole(p))} · ${esc(memberPosition(p))}</p></div><div class="profile-actions">${scoreBadge(all.pct,all.total)}</div></div><div class="grid grid-4" style="margin-top:16px">${metricCard('Overall',all.total?`${all.pct}%`:'—',all.total?`${all.yes} Yes of ${all.total} completed events`:'No completed tracked events','bi-check-circle')}${metricCard('Games',games.total?`${games.pct}%`:'—',games.total?`${games.yes}/${games.total} Yes`:'No completed tracked games','bi-trophy')}${metricCard('Practices',prac.total?`${prac.pct}%`:'—',prac.total?`${prac.yes}/${prac.total} Yes`:'No completed tracked practices','bi-cone-striped')}${metricCard('Team Rank',rank?`#${rank}`:'—',`${teamRows.length} players with completed history`,'bi-award')}</div><div class="grid grid-2" style="margin-top:14px"><div class="card"><div class="card-head"><div><h3>Historical Response Breakdown</h3><p>Completed events only. Upcoming responses do not affect this player’s percentage or rating.</p></div></div><div class="card-body"><div class="stat-split"><div class="stat-box"><b>${all.yes}</b><span>Yes</span></div><div class="stat-box"><b>${all.no}</b><span>No</span></div><div class="stat-box"><b>${all.maybe}</b><span>Maybe</span></div><div class="stat-box"><b>${all.none}</b><span>No Response</span></div></div></div></div><div class="card"><div class="card-head"><div><h3>Trend</h3><p>Earlier half compared with recent half</p></div></div><div class="card-body">${trend?`<div class="kpi-inline"><div><b>${trend.old}%</b><span>Earlier</span></div><div><b>${trend.recent}%</b><span>Recent</span></div><div><b style="color:${trend.delta<0?'var(--danger)':trend.delta>0?'var(--success)':'var(--text)'}">${trend.delta>0?'+':''}${trend.delta}</b><span>Change</span></div></div>`:emptyState('bi-graph-up','Not enough history','At least six tracked events are needed for this comparison.')}</div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Upcoming Responses</h3><p>Current TeamSnap availability for future tracked events</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Status</th></tr></thead><tbody>${upcomingRows||`<tr>${tableCell('',emptyState('bi-calendar-check','Nothing upcoming','No upcoming tracked events were returned.'),'')}</tr>`}</tbody></table></div></div></div><div class="card" style="margin-top:14px"><div class="card-head"><div><h3>Availability History</h3><p>Completed tracked events from TeamSnap</p></div></div><div class="card-body" style="padding:0"><div class="table-wrap" style="border:0;border-radius:0"><table class="data-table"><thead><tr><th>Date</th><th>Event</th><th>Type</th><th>Status</th><th>Opponent</th><th>Location</th></tr></thead><tbody>${histRows||`<tr>${tableCell('',emptyState('bi-clock-history','No history','No tracked availability history is available.'),'')}</tr>`}</tbody></table></div></div></div>`;
   openDrawer(memberName(p),html,true);bindCommonActions();
 }
 
-function reportTitle(){return `${REPORT_TEMPLATES[state.report.template]?.name||'Custom Report'} — ${state.data.team?.name||'Team'}`;}
+function reportTitle(){return `${REPORT_TEMPLATES[state.report.template]?.name||'Custom Report'} — ${state.data.team?teamDisplayName(state.data.team):'Team'}`;}
 function cleanFileName(s){return String(s).replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').toLowerCase();}
 function exportExcel(){
   if(reportNeedsAvailability()&&!availabilityReady()){toast('Report data is still loading','Availability must finish loading before this report can be exported.','info');ensureAvailability({quiet:true});return;}
-  if(!window.XLSX){toast('Excel export unavailable','The Excel library did not load. Check your internet connection and try again.','error');return;}const d=reportTableData();if(!d.headers.length||!d.rows.length){toast('Nothing to export','The report has no visible columns or rows.','error');return;}const aoa=[[reportTitle()],[`Timeframe: ${currentRangeLabel(state.filters.reports.range)}`],[`Generated: ${new Date().toLocaleString()}`],[],d.headers,...d.rows];const ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=d.headers.map((h,i)=>({wch:Math.min(42,Math.max(String(h).length+2,...d.rows.map(r=>String(r[i]??'').length+2)))}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Report');const meta=XLSX.utils.aoa_to_sheet([['Team',state.data.team?.name||''],['Report',reportTitle()],['Timeframe',currentRangeLabel(state.filters.reports.range)],['Generated',new Date().toISOString()],['App Version',VERSION]]);XLSX.utils.book_append_sheet(wb,meta,'Info');XLSX.writeFile(wb,`${cleanFileName(reportTitle())}.xlsx`);toast('Excel exported',`${d.rows.length} rows`,'success');
+  if(!window.XLSX){toast('Excel export unavailable','The Excel library did not load. Check your internet connection and try again.','error');return;}const d=reportTableData();if(!d.headers.length||!d.rows.length){toast('Nothing to export','The report has no visible columns or rows.','error');return;}const aoa=[[reportTitle()],[`Timeframe: ${currentRangeLabel(state.filters.reports.range)}`],[`Generated: ${new Date().toLocaleString()}`],[],d.headers,...d.rows];const ws=XLSX.utils.aoa_to_sheet(aoa);ws['!cols']=d.headers.map((h,i)=>({wch:Math.min(42,Math.max(String(h).length+2,...d.rows.map(r=>String(r[i]??'').length+2)))}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Report');const meta=XLSX.utils.aoa_to_sheet([['Team / Season',state.data.team?teamDisplayName(state.data.team):''],['Report',reportTitle()],['Timeframe',currentRangeLabel(state.filters.reports.range)],['Generated',new Date().toISOString()],['App Version',VERSION]]);XLSX.utils.book_append_sheet(wb,meta,'Info');XLSX.writeFile(wb,`${cleanFileName(reportTitle())}.xlsx`);toast('Excel exported',`${d.rows.length} rows`,'success');
 }
 function exportPdf(){
   if(reportNeedsAvailability()&&!availabilityReady()){toast('Report data is still loading','Availability must finish loading before this report can be exported.','info');ensureAvailability({quiet:true});return;}
@@ -764,9 +960,13 @@ function exportPdf(){
 function openRules(){const host=$('#ruleFields');host.innerHTML=Object.entries(RULE_META).map(([k,[title,desc,unit]])=>`<div><div class="rule-title">${esc(title)}</div><div class="rule-desc">${esc(desc)}</div></div><div class="field" style="margin:0"><input type="number" min="0" step="1" data-rule="${k}" value="${esc(state.rules[k])}"><div class="field-help">${esc(unit)}</div></div>`).join('');openModal('rulesModal');}
 function saveRulesFromModal(){for(const inp of $$('#ruleFields [data-rule]')){const v=Number(inp.value);if(Number.isFinite(v))state.rules[inp.dataset.rule]=v;}saveRules();closeModal('rulesModal');render();toast('Manager rules saved','Attention items were recalculated.','success');}
 function resetRules(){state.rules={...DEFAULT_RULES};saveRules();openRules();toast('Rules reset','Default manager thresholds restored.','success');}
-function accountHtml(){return `<div class="profile-head"><div class="avatar">${esc(initials([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TS'))}</div><div><h2 style="font-size:18px">${esc([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TeamSnap User')}</h2><p>${esc(state.user?.email||'Connected through TeamSnap OAuth')}</p></div></div><div class="divider"></div><div class="small-note"><b>Active team:</b> ${esc(state.data.team?.name||'—')}<br><b>Last refreshed:</b> ${state.lastLoaded?state.lastLoaded.toLocaleString():'—'}<br><b>Access:</b> Read-only TeamSnap API<br><b>App version:</b> ${VERSION}</div>`;}
+function accountHtml(){return `<div class="profile-head"><div class="avatar">${esc(initials([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TS'))}</div><div><h2 style="font-size:18px">${esc([state.user?.first_name,state.user?.last_name].filter(Boolean).join(' ')||state.user?.email||'TeamSnap User')}</h2><p>${esc(state.user?.email||'Connected through TeamSnap OAuth')}</p></div></div><div class="divider"></div><div class="small-note"><b>Active team / season:</b> ${esc(state.data.team?teamDisplayName(state.data.team):'—')}<br><b>Last refreshed:</b> ${state.lastLoaded?state.lastLoaded.toLocaleString():'—'}<br><b>Access:</b> Read-only TeamSnap API<br><b>App version:</b> ${VERSION}</div>`;}
 function bindCommonActions(){
-  $$('[data-open-event]').forEach(x=>x.onclick=e=>{e.stopPropagation();openEventDetail(x.dataset.openEvent);});$$('[data-open-player]').forEach(x=>x.onclick=e=>{e.stopPropagation();openPlayerDetail(x.dataset.openPlayer);});$$('[data-go-view]').forEach(x=>x.onclick=()=>setView(x.dataset.goView));$$('.clickable-attention').forEach(x=>x.onclick=()=>{if(x.dataset.eventId)openEventDetail(x.dataset.eventId);else if(x.dataset.playerId)openPlayerDetail(x.dataset.playerId);});
+  $$('[data-open-event]').forEach(x=>x.onclick=e=>{e.stopPropagation();openEventDetail(x.dataset.openEvent);});
+  $$('[data-open-player]').forEach(x=>x.onclick=e=>{e.stopPropagation();openPlayerDetail(x.dataset.openPlayer);});
+  $$('[data-open-opponent]').forEach(x=>x.onclick=e=>{e.stopPropagation();openOpponentDetail(x.dataset.openOpponent);});
+  $$('[data-go-view]').forEach(x=>x.onclick=()=>setView(x.dataset.goView));
+  $$('.clickable-attention').forEach(x=>x.onclick=()=>{if(x.dataset.eventId)openEventDetail(x.dataset.eventId);else if(x.dataset.playerId)openPlayerDetail(x.dataset.playerId);});
 }
 
 async function disconnect(show=true){
@@ -796,7 +996,7 @@ function connectOAuth(e){
   const u=new URL(AUTH);u.searchParams.set('response_type','token');u.searchParams.set('client_id',clientId);u.searchParams.set('redirect_uri',redirect);u.searchParams.set('scope','read');u.searchParams.set('state',nonce);location.assign(u.toString());
 }
 function normalizeRestoredView(){
-  const validViews=['home','schedule','roster','availability','stats','reports'];
+  const validViews=['home','schedule','fixtures','roster','availability','stats','reports'];
   if(!validViews.includes(state.view))state.view='home';
   $$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===state.view));
   $('#globalSearch').value=state.search||'';$('#clearSearch').classList.toggle('hidden',!state.search);
