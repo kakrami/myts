@@ -223,7 +223,7 @@ main{max-width:1500px;margin:0 auto;padding:24px 20px 48px}.page-head{display:fl
 <div class="toast-wrap" id="toastWrap"></div>
 <script>
 (()=>{'use strict';
-const VERSION='2.6.0';
+const VERSION='2.6.1';
 const TRACE_STORE_KEY='tsmc.trace.v1';
 const API='https://api.teamsnap.com/v3';
 const AUTH='https://auth.teamsnap.com/oauth/authorize';
@@ -426,6 +426,7 @@ function traceCurrent(){return traceLoadStore().families[traceFamilyKey()]||null
 function traceUpdate(mutator){const store=traceLoadStore(),key=traceFamilyKey(),current=store.families[key]||{rows:[],playerMap:{},gameMap:{}};store.families[key]=mutator(current)||current;traceSaveStore(store);return store.families[key];}
 function traceNormText(v){return String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/&/g,' and ').replace(/\b(?:soccer|football|club)\b/g,' ').replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();}
 function traceNormPerson(v){let x=String(v??'').trim();if(x.includes(',')){const p=x.split(',').map(z=>z.trim()).filter(Boolean);if(p.length===2)x=`${p[1]} ${p[0]}`;}return traceNormText(x);}
+function tracePlaceholderPerson(v){const n=traceNormPerson(v);return /^tracer(?: \d+)?$/.test(n)||/^unidentified(?: \d+)?$/.test(n);}
 function traceTokens(v){return new Set(traceNormText(v).split(' ').filter(Boolean));}
 function traceSimilarity(a,b){const A=traceTokens(a),B=traceTokens(b);if(!A.size||!B.size)return 0;let hit=0;for(const x of A)if(B.has(x))hit++;return hit/Math.max(A.size,B.size);}
 function traceMemberJersey(m){for(const k of['jersey_number','jersey','number','uniform_number','jersey_no','uniform_no']){const v=m?.[k];if(v!==undefined&&v!==null&&String(v).trim()!=='')return String(v).trim();}return '';}
